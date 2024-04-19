@@ -8,7 +8,7 @@ router.use(express.json());
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.send({ title: 'Express' });
+  res.send({ title: 'this is the homepage' });
 });
 
 module.exports = router;
