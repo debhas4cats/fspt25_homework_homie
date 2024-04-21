@@ -11,4 +11,46 @@ router.get('/', function(req, res, next) {
   res.send({ title: 'this is the homepage' });
 });
 
+// Endpoint to get homework for a specific subject
+//this will be the endpoint needed for the individual subject pages
+router.get('/subjects/:subjectId/homework', async (req, res) => {
+  const subjectId = req.params.subjectId;
+  const query = `SELECT h.assignment, h.description, h.due_date, h.priority, h.completed, h.pastdue,
+    CONCAT(t.firstname, ' ', t.lastname) AS teacher_name
+    FROM students_subjects_homeworks ssh
+    JOIN homeworks h ON ssh.homeworkID = h.id
+    JOIN teachers t ON ssh.teacherID = t.id
+    WHERE ssh.subjectID = ${subjectId}`;
+  
+  try {
+    const results = await db(query);
+    res.status(200).json({ data: results.data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//Endpoint that will get all homework for a specific student 
+//based on today's date going out 6 days from today
+//this should be the endpoint for the dashboard display
+router.get('/students/:studentId/homework', async (req, res) => {
+  const studentId = req.params.studentId;
+ 
+  const query = `SELECT h.assignment, h.description, h.due_date, h.priority, h.completed, h.pastdue,
+    CONCAT(t.firstname, ' ', t.lastname) AS teacher_name
+    FROM students_subjects_homeworks ssh
+    JOIN homeworks h ON ssh.homeworkID = h.id
+    JOIN teachers t ON ssh.teacherID = t.id
+    WHERE ssh.studentID = ${studentId}
+    AND h.due_date BETWEEN CURDATE() AND CURDATE() + INTERVAL 6 DAY
+    ORDER BY h.due_date;`
+  
+  try {
+    const results = await db(query);
+    res.status(200).json({ data: results.data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

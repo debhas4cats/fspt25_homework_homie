@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var homeworkRouter = require('./routes/homework'); //for the homework.js file in the route folder
+let homeworkRouter = require('./routes/homework'); //for the homework.js file in the route folder
 
 
 const app = express();
