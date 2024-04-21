@@ -94,24 +94,49 @@ INSERT INTO homeworks (assignment, description, due_date, priority, completed, p
 ('Art Appreciation Presentation', 'Prepare a presentation discussing a famous artwork and its significance.', '2024-04-29', 'High', 0, 0);
 
 -- Insert into students_subjects_homeworks table
-INSERT INTO students_subjects_homeworks (studentID, subjectID, homeworkID, teacherID) VALUES
+-- Add entries for Math subject (ID: 1)
+INSERT INTO students_subjects_homeworks (studentID, subjectID, homeworkID, teacherID)
+VALUES
 (1, 1, 1, 1),
 (1, 1, 4, 1),
 (1, 1, 5, 1),
 (1, 1, 6, 1),
-(1, 1, 13, 1),
+(1, 1, 13, 1);
+
+-- Add entries for Science subject (ID: 2)
+INSERT INTO students_subjects_homeworks (studentID, subjectID, homeworkID, teacherID)
+VALUES
 (1, 2, 2, 1),
 (1, 2, 7, 1),
 (1, 2, 8, 1),
 (1, 2, 9, 1),
-(1, 2, 14, 1),
-(1, 4, 15, 1),
-(1, 5, 15, 1),
-(1, 6, 15, 1),
+(1, 2, 14, 1);
+
+-- Add entries for History subject (ID: 3)
+INSERT INTO students_subjects_homeworks (studentID, subjectID, homeworkID, teacherID)
+VALUES
 (1, 3, 3, 2),
 (1, 3, 10, 2),
 (1, 3, 11, 2),
-(1, 3, 12, 2),
+(1, 3, 12, 2);
+
+-- Add entries for German subject (ID: 4)
+INSERT INTO students_subjects_homeworks (studentID, subjectID, homeworkID, teacherID)
+VALUES
+(1, 4, 15, 1),
+(1, 4, 17, 1),
+(1, 4, 18, 1);
+
+-- Add entries for English subject (ID: 5)
+INSERT INTO students_subjects_homeworks (studentID, subjectID, homeworkID, teacherID)
+VALUES
 (1, 5, 16, 4),
-(1, 6, 19, 4),
-(1, 6, 20, 4);
+(1, 5, 19, 4),
+(1, 5, 20, 4);
+
+-- Add entries for Art subject (ID: 6)
+INSERT INTO students_subjects_homeworks (studentID, subjectID, homeworkID, teacherID)
+VALUES
+(1, 6, 21, 3),
+(1, 6, 22, 3),
+(1, 6, 23, 3);
