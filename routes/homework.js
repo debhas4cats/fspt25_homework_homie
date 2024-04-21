@@ -13,6 +13,7 @@ router.get('/', function(req, res, next) {
 
 // Endpoint to get homework for a specific subject
 //this will be the endpoint needed for the individual subject pages
+//snippet needed for Postman test: localhost:5000/homework/subjects/6/homework
 router.get('/subjects/:subjectId/homework', async (req, res) => {
   const subjectId = req.params.subjectId;
   const query = `SELECT h.assignment, h.description, h.due_date, h.priority, h.completed, h.pastdue,
@@ -33,6 +34,7 @@ router.get('/subjects/:subjectId/homework', async (req, res) => {
 //Endpoint that will get all homework for a specific student 
 //based on today's date going out 6 days from today
 //this should be the endpoint for the dashboard display
+//snippet needed for Postman test: localhost:5000/homework/students/1/homework
 router.get('/students/:studentId/homework', async (req, res) => {
   const studentId = req.params.studentId;
  
