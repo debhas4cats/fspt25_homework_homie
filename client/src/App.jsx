@@ -1,13 +1,8 @@
 import React from 'react';
 import './App.css'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import MathComponent from './Component_math';
-import ScienceComponent from './Component_science';
-import HistoryComponent from './Component_history';
-import GermanComponent from './Component_german';
-import EnglishComponent from './Component_english';
-import ArtComponent from './Component_art';
-import Home from './Component_app_homepage';
+import Subject from './components/Subject';
+import Dashboard from './Dashboard';
 
 
 function App() {
@@ -22,13 +17,10 @@ function App() {
 
 
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/math" element={<MathComponent />} />
-          <Route path="/science" element={<ScienceComponent />} />
-          <Route path="/history" element={<HistoryComponent />} />
-          <Route path="/german" element={<GermanComponent />} />
-          <Route path="/english" element={<EnglishComponent />} />
-          <Route path="/art" element={<ArtComponent />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/:subject" element={<Subject />} /> 
+          {/* what comes after the route, you can grab values - you can create variables when you use the colon */}
+          
         </Routes>
     
       </div>
