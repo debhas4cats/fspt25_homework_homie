@@ -50,10 +50,10 @@ background-color: rgb(167, 141, 194);
 position: relative;
 } */
 
-div.title-container {
+/* div.title-container {
 text-align: center;
 transform: translateY(80%);
-}
+} */
 
 .title {
 font-family: 'Adumu', sans-serif;
@@ -67,17 +67,17 @@ text-stroke: .75px black;
 display: block;
 }  
 
-.button-container {
+/* .button-container {
 display: flex;
 justify-content: center;
 align-items: center;
 height: 100%;
 position: relative;
-}
+} */
 
 .rounded-button {
-display: inline-block;
-margin: 0;
+/* display: inline-block; */
+/* margin: auto; */
 padding: 10px 20px;
 border-radius: 30px;
 border: 2px solid black;
@@ -88,33 +88,62 @@ font-family: 'Adumu', sans-serif;
 color: black;
 text-decoration: none;
 transition: background-color 0.3s ease;
-position: absolute; /* Added */
+
 }
 
 .rounded-button:hover {
 background-color: rgb(167, 141, 194);
 }
 
-.rounded-button:nth-child(1) {
-transform: rotate(60deg) translateY(-220px) rotate(-60deg); /* Updated */
+/* .rounded-button:nth-child(1) {
+transform: rotate(60deg) translateY(-220px) rotate(-60deg); 
 }
 
 .rounded-button:nth-child(2) {
-transform: rotate(0deg) translateY(-220px) rotate(0deg); /* Updated */
+transform: rotate(0deg) translateY(-220px) rotate(0deg); 
 }
 
 .rounded-button:nth-child(3) {
-transform: rotate(-60deg) translateY(-220px) rotate(60deg); /* Updated */
+transform: rotate(-60deg) translateY(-220px) rotate(60deg); 
 }
 
 .rounded-button:nth-child(4) {
-transform: rotate(-120deg) translateY(-220px) rotate(120deg); /* Updated */
+transform: rotate(-120deg) translateY(-220px) rotate(120deg); 
 }
 
 .rounded-button:nth-child(5) {
-transform: rotate(-180deg) translateY(-220px) rotate(180deg); /* Updated */
+transform: rotate(-180deg) translateY(-220px) rotate(180deg); 
 }
 
 .rounded-button:nth-child(6) {
-transform: rotate(-240deg) translateY(-220px) rotate(240deg); /* Updated */
-}
+transform: rotate(-240deg) translateY(-220px) rotate(240deg); 
+} */
+/* -------homework description alerts ---------- */
+
+/* .homework-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; 
+  }
+   */
+  .assignment-container {
+    width: 200px; /* Set a fixed width for each assignment */
+    padding: 5px;
+    margin: 10px;
+    border: 2px solid black;
+    border-radius: 15px; /* Adjust border-radius for rounded corners */
+    background-color: white;
+    text-align: left;
+  }
+  
+  
+  .assignment-container h3 {
+    font-size: 11px;
+    margin-bottom: 0px;
+  }
+  .assignment-container p {
+    margin: 0px;
+    font-size: 10px;
+  }
+ /* -------homework description alerts ---------- */
