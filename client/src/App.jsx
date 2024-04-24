@@ -14,8 +14,6 @@ function App() {
       <div>
             {/* Today's date */}
         <div className="date">{today}</div>
-
-
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/:subject" element={<Subject />} /> 
