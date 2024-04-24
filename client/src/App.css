@@ -46,104 +46,101 @@ transition: background-color 0.3s ease;
 background-color: rgb(167, 141, 194);
 }
 
-/* div.title-and-button-container {
-position: relative;
-} */
 
-/* div.title-container {
-text-align: center;
-transform: translateY(80%);
-} */
+.outer-title-container {
+  position: relative;
+  margin-top: 260px; /* Adjust as needed */
+}
+
+.title-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
 
 .title {
-font-family: 'Adumu', sans-serif;
-color: rgb(167, 141, 194);
-font-size: 50px;
--webkit-text-stroke: .75px black;
-text-stroke: .75px black;
+  font-family: 'Adumu', sans-serif;
+  color: rgb(167, 141, 194);
+  font-size: 50px;
+  -webkit-text-stroke: .75px black;
+  text-stroke: .75px black;
 }
 
 .title span {
-display: block;
-}  
-
-/* .button-container {
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100%;
-position: relative;
-} */
+  display: block;
+}
 
 .rounded-button {
-/* display: inline-block; */
-/* margin: auto; */
-padding: 10px 20px;
-border-radius: 30px;
-border: 2px solid black;
-background-color: white;
-cursor: pointer;
-font-size: 16px;
-font-family: 'Adumu', sans-serif;
-color: black;
-text-decoration: none;
-transition: background-color 0.3s ease;
-
+  padding: 10px 20px;
+  border-radius: 30px;
+  border: 2px solid black;
+  background-color: white;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: 'Adumu', sans-serif;
+  color: black;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
 }
 
 .rounded-button:hover {
-background-color: rgb(167, 141, 194);
+  background-color: rgb(167, 141, 194);
 }
 
-/* .rounded-button:nth-child(1) {
-transform: rotate(60deg) translateY(-220px) rotate(-60deg); 
+
+.homework-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 53%;
+  left: 50%;
 }
 
-.rounded-button:nth-child(2) {
-transform: rotate(0deg) translateY(-220px) rotate(0deg); 
-}
-
-.rounded-button:nth-child(3) {
-transform: rotate(-60deg) translateY(-220px) rotate(60deg); 
-}
-
-.rounded-button:nth-child(4) {
-transform: rotate(-120deg) translateY(-220px) rotate(120deg); 
-}
-
-.rounded-button:nth-child(5) {
-transform: rotate(-180deg) translateY(-220px) rotate(180deg); 
-}
-
-.rounded-button:nth-child(6) {
-transform: rotate(-240deg) translateY(-220px) rotate(240deg); 
-} */
-/* -------homework description alerts ---------- */
-
-/* .homework-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap; 
-  }
-   */
-  .assignment-container {
-    width: 200px; /* Set a fixed width for each assignment */
-    padding: 5px;
-    margin: 10px;
-    border: 2px solid black;
-    border-radius: 15px; /* Adjust border-radius for rounded corners */
-    background-color: white;
-    text-align: left;
-  }
   
-  
-  .assignment-container h3 {
-    font-size: 11px;
-    margin-bottom: 0px;
-  }
-  .assignment-container p {
-    margin: 0px;
-    font-size: 10px;
-  }
- /* -------homework description alerts ---------- */
+.assignment-container {
+  width: 200px; /* Set a fixed width for each assignment */
+  padding: 2px;
+  border: 2px solid black;
+  border-radius: 15px; /* Adjust border-radius for rounded corners */
+  background-color: white;
+  text-align: left;
+  position: absolute; /* Position each assignment container absolutely */
+ 
+  /* transform-origin: center; Set the transform origin to the center */
+}
+
+.assignment-container:nth-child(1) {
+  transform: rotate(60deg) translateY(-280px) rotate(-60deg); 
+}
+
+.assignment-container:nth-child(2) {
+  transform: rotate(120deg) translateY(-280px) rotate(-120deg); 
+}
+
+.assignment-container:nth-child(3) {
+  transform: rotate(180deg) translateY(-280px) rotate(-180deg); 
+}
+
+.assignment-container:nth-child(4) {
+  transform: rotate(240deg) translateY(-280px) rotate(-240deg); 
+}
+
+.assignment-container:nth-child(5) {
+  transform: rotate(300deg) translateY(-280px) rotate(-300deg); 
+}
+
+.assignment-container:nth-child(6) {
+  transform: rotate(360deg) translateY(-280px) rotate(-360deg); 
+}
+
+.assignment-container h3 {
+  font-size: 11px;
+  margin-bottom: 0px;
+}
+
+.assignment-container p {
+  margin: 0px;
+  font-size: 10px;
+}
