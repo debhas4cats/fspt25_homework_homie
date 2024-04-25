@@ -97,6 +97,7 @@ function Dashboard() {
                         <li key={index}>
                           {/* the KEY attribute ensures that index is unique for each item in the array for managing and updating the list */}
                           <h3>{assignment.assignment}</h3> 
+                          {/* <h3>{assignment.description}</h3>  */}
                           <p className="assignment-due">Due: {new Date(assignment.due_date).toLocaleDateString()}</p>
                         </li>
                       ))
