@@ -62,5 +62,167 @@ router.get('/students/:studentId/homework', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+//endpoint that will get the subject name from a specific subject id
+//snippet needed for Postman test: localhost:5000/homework/subjects/6
+router.get('/subjects/:subjectId', async (req, res) => {
+  const subjectId = req.params.subjectId;
+  const query = `SELECT name FROM subjects WHERE id = ${subjectId}`;
+  
+  try {
+    const result = await db(query);
+    if (result.data.length === 0) {
+      return res.status(404).json({ error: 'Subject not found' });
+    }
+    res.status(200).json({ subjectName: result.data[0].name });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//POST endpoint to create a new homework assignment
+//VERSION 1
+// router.post('/', async (req, res) => {
+//   const { assignment, description, due_date, priority, subjectId, studentId, teacherId } = req.body;
+
+//   console.log('Received POST request to /homework');
+//   console.log('Request Body:', req.body);
+
+//   const insertHomeworkQuery = `
+//     INSERT INTO homeworks (assignment, description, due_date, priority)
+//     VALUES ('${assignment}', '${description}', '${due_date}', '${priority}')`;
+
+//   try {
+//     console.log('This is my insertHomeworkQuery', insertHomeworkQuery);
+
+//     // Insert new homework assignment into the homeworks table
+//     const result = await db(insertHomeworkQuery);
+
+//     console.log('This is my result', result);
+
+//     if (result.error) {
+//       throw new Error('Failed to add homework');
+//     }
+
+//     const homeworkId = result.data.insertId;
+
+//     // If necessary, insert corresponding record into the students_subjects_homeworks junction table
+//     if (subjectId && studentId && teacherId) {
+//       const insertJunctionQuery = `
+//         INSERT INTO students_subjects_homeworks (studentID, subjectID, teacherID, homeworkID)
+//         VALUES ('${studentId}', '${subjectId}', '${teacherId}', '${homeworkId}')`;
+
+//       console.log('This is my insertJunctionQUERY', insertJunctionQuery);
+//       const junctionResult = await db(insertJunctionQuery);
+
+//       console.log('INSERT JUNCTION RESULTS:', junctionResult);
+//     }
+
+//     // Retrieve the inserted homework data from the database
+//     const getInsertedHomeworkQuery = `
+//       SELECT * FROM homeworks WHERE id = '${homeworkId}'`;
+
+//     const insertedHomework = await db(getInsertedHomeworkQuery);
+
+//     console.log('Inserted homework:', insertedHomework);
+
+//     res.status(201).json({ 
+//       message: 'Homework assignment added successfully', 
+//       homework: insertedHomework.data[0]
+//     });
+//   } catch (error) {
+//     console.error('Error executing query:', error);
+//     res.status(500).json({ error: error.message });
+//   }
+// });
+// VERSION 2
+// router.post('/', async (req, res) => {
+//   const { assignment, description, due_date, priority } = req.body;
+
+//   console.log('Received POST request to /homework');
+//   console.log('Request Body:', req.body);
+
+//   const insertHomeworkQuery = `
+//     INSERT INTO homeworks (assignment, description, due_date, priority)
+//     VALUES ('${assignment}', '${description}', '${due_date}', '${priority}')`;
+
+//   try {
+//     console.log('This is my insertHomeworkQuery', insertHomeworkQuery);
+
+//     // Insert new homework assignment into the homeworks table
+//     const result = await db( `SELECT *FROM homeworks WHERE id= LAST_INSERT_ID();`);
+ 
+//     console.log('This is my result', result);
+
+//     if (result.error) {
+//       throw new Error('Failed to add homework');
+//     }
+
+//     const homeworkId = result.data.insertId;
+
+//     // Retrieve the inserted homework data from the database
+//     const getInsertedHomeworkQuery = `
+//       SELECT * FROM homeworks WHERE id = '${homeworkId}'`;
+
+//     const insertedHomework = await db(getInsertedHomeworkQuery);
+
+//     console.log('Inserted homework:', insertedHomework);
+
+//     res.status(201).json({ 
+//       message: 'Homework assignment added successfully', 
+//       homework: insertedHomework.data[0]
+//     });
+//   } catch (error) {
+//     console.error('Error executing query:', error);
+//     res.status(500).json({ error: error.message });
+//   }
+// });
+// VERSION 3
+router.post('/', async (req, res) => {
+  const { assignment, description, due_date, priority } = req.body;
+
+  console.log('Received POST request to /');
+  console.log('Request Body:', req.body);
+
+  // Convert boolean values to integers
+  const completedInt = 0; // Assuming you've removed completed and pastdue from the request body
+  const pastdueInt = 0;
+
+  const insertHomeworkQuery = `
+    INSERT INTO homeworks (assignment, description, due_date, priority, completed, pastdue)
+    VALUES ('${assignment}', '${description}', '${due_date}', '${priority}', ${completedInt}, ${pastdueInt})`;
+
+  try {
+    console.log('This is my insertHomeworkQuery', insertHomeworkQuery);
+
+    // Insert new homework assignment into the homeworks table
+    const result = await db(insertHomeworkQuery);
+    console.log('This is my result', result);
+
+    // Retrieve the ID of the last inserted record
+    const lastInsertedIdResult = await db('SELECT LAST_INSERT_ID() AS lastInsertId');
+    const lastInsertedId = lastInsertedIdResult.data[0].lastInsertId;
+
+    // Fetch the homework data based on the last inserted ID
+    const fetchHomeworkQuery = `
+      SELECT * FROM homeworks WHERE id = ${lastInsertedId}`;
+
+    // Execute the fetch query to get the last inserted homework's data
+    const fetchedHomeworkResult = await db(fetchHomeworkQuery);
+    const insertedHomework = fetchedHomeworkResult.data[0];
+
+    console.log('Inserted homework:', insertedHomework);
+
+    res.status(201).json({
+      message: 'Homework assignment added successfully',
+      homework: insertedHomework
+    });
+  } catch (error) {
+    console.error("Error executing query:", error);
+    res.status(500).send("Internal server error");
+  }
+});
+
+
+
 
 module.exports = router;
