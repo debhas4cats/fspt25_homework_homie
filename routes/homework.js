@@ -52,7 +52,7 @@ router.get('/students/:studentId/homework', async (req, res) => {
     WHERE ssh.studentID = 1
   
   
-    AND h.due_date BETWEEN CURDATE() AND CURDATE() + INTERVAL 6 DAY
+    AND h.due_date BETWEEN CURDATE() AND CURDATE() + INTERVAL 5 DAY
     ORDER BY h.due_date;`
   
   try {
@@ -78,6 +78,33 @@ router.get('/subjects/:subjectId', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// DELETE endpoint to delete a homework assignment
+// code snippet example needed for Postman test: localhost:5000/homework/homeworks/14
+router.delete('/homeworks/:id', async (req, res) => {
+  const homeworkId = req.params.id;
+
+  try {
+ 
+    const deleteJunctionQuery = `
+      DELETE FROM students_subjects_homeworks
+      WHERE homeworkID = ${homeworkId}`;
+
+    await db(deleteJunctionQuery);
+
+    const deleteHomeworkQuery = `
+      DELETE FROM homeworks
+      WHERE id = ${homeworkId}`;
+
+    await db(deleteHomeworkQuery);
+
+    res.status(200).json({ message: 'Homework assignment deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting homework:', error);
+    res.status(500).json({ error: 'An error occurred while deleting the homework assignment' });
+  }
+});
+
 
 //POST endpoint to create a new homework assignment
 //VERSION 1
