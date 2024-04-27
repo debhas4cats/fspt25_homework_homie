@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../App.css';
+import createMessage from '../utilities/createMessage'; // Import the createMessage function
 
 function Dashboard() {
   
@@ -12,6 +13,10 @@ function Dashboard() {
     { id: 5, name: "English", assignments: null },
     { id: 6, name: "Art", assignments: null }
   ]);
+    // State to track whether the floating div should be shown
+    const [showFloatingDiv, setShowFloatingDiv] = useState(false);
+    // State to store the assignment data for the floating div
+    const [hoveredAssignment, setHoveredAssignment] = useState(null);
   //This initializes a state variable subjects using the useState hook.
   // The initial state is an array of subject objects as NULL.
 
@@ -27,7 +32,7 @@ function Dashboard() {
           return { subjectId: subject.id, data: data.data }; // create an object that associates a subject's ID with its corresponding homework data. 
         });
          // after fetching data from all subjects, we gather them
-         //and ALL SETLLED allows us to wait for all promises to resolve or reject
+         //and ALL SETTLED allows us to wait for all promises to resolve or reject
          // store the results of the promises in a variable called results
         const results = await Promise.allSettled(promises); 
        
@@ -57,7 +62,7 @@ function Dashboard() {
 
 
   return (
-    <div>
+    <div className='outer-container'>
       <div className='outer-title-container'>
         <div className='title-container'>
           <h1 className='title'>
@@ -82,39 +87,49 @@ function Dashboard() {
                   The subject name is displayed as button text. */}
                   <Link to={`/${subject.name.toLowerCase()}`} className="rounded-button">{subject.name}</Link>
                   {/* create an unordered list where assignments will be displayed */}
+
                   <ul>
-                    {/*  iterate through each assignment for the subject
-                      and sort the assignments by their due date and map them into list elements.
-                      first check if the assignments are not null
-                      2nd check if assignments has items */}
-                  {subject.assignments !== null ? ( 
-                    subject.assignments.length > 0 ? (
+                    {subject.assignments && subject.assignments.length > 0 && (
                       subject.assignments
-                      .slice() //create a shallow copy of the assignments array
-                      .sort((a, b) => new Date(a.due_date) - new Date(b.due_date)) // sort assignments by due date
-                      .slice(0, 3) // Limit the list to the first 3 items
-                      .map((assignment, index) => ( // map through subjects and process the position of assignment and create list
-                        <li key={index}>
-                          {/* the KEY attribute ensures that index is unique for each item in the array for managing and updating the list */}
-                          <h3>{assignment.assignment}</h3> 
-                          {/* <h3>{assignment.description}</h3>  */}
-                          <p className="assignment-due">Due: {new Date(assignment.due_date).toLocaleDateString()}</p>
-                        </li>
-                      ))
-                      ) : (
-                        <li> No assignments </li> //add a message for subjects with no assignments
-                      )
-                    ) : (
-                      <li>Loading...</li>
+                        .slice()
+                        .sort((a, b) => new Date(a.due_date) - new Date(b.due_date))
+                        .slice(0, 3)
+                        .map((assignment, index) => (
+                          <li
+                            className="assignment-message"
+                            key={index}
+                            onMouseEnter={() => {
+                              setHoveredAssignment(assignment);
+                              setShowFloatingDiv(true);
+                            }}
+                            onMouseLeave={() => setShowFloatingDiv(false)}
+                          >
+                            {createMessage([assignment])}
+                          </li>
+                        ))
                     )}
-                  </ul>
+                </ul>
+                 
                 </div>
               ))}
               </div>
+
+              <div className='floating-div-outer-container'>
+                {/* Floating div */}
+                  {showFloatingDiv && hoveredAssignment && (
+                    <div className="floating-div">
+                      <h3>{hoveredAssignment.assignment}</h3>
+                      <p>{hoveredAssignment.description}</p>
+                      <p>Teacher: {hoveredAssignment.teacher_name}</p>
+                      <p className="assignment-due">Due: {new Date(hoveredAssignment.due_date).toLocaleDateString()}</p>
+                    </div>
+                  )}
+                </div>
      
 
     </div>
   );
 }
+
 
 export default Dashboard;
