@@ -94,10 +94,7 @@ INSERT INTO homeworks (assignment, description, due_date, priority, completed, p
 ('Art Appreciation Presentation', 'Prepare a presentation discussing a famous artwork and its significance.', '2024-04-29', 'High', 0, 0);
 
 -- Insert into students_subjects_homeworks table
-<<<<<<< HEAD
-=======
 
->>>>>>> kecia
 -- Add entries for Math subject (ID: 1)
 INSERT INTO students_subjects_homeworks (studentID, subjectID, homeworkID, teacherID)
 VALUES
@@ -143,8 +140,4 @@ INSERT INTO students_subjects_homeworks (studentID, subjectID, homeworkID, teach
 VALUES
 (1, 6, 21, 3),
 (1, 6, 22, 3),
-<<<<<<< HEAD
 (1, 6, 23, 3);
-=======
-(1, 6, 23, 3);
->>>>>>> kecia
