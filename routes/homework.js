@@ -112,7 +112,7 @@ router.post('/', async (req, res) => {
   //I need to collect everything I will need for this in my req.body
   const { assignment, description, due_date, priority, studentId, subjectId, teacherId } = req.body;
 
-console.log('THIS IS THE REQ.BODY:', req.body);
+// console.log('THIS IS THE REQ.BODY:', req.body);
 
   try {
     //I will await db() a new variable that I will use to insert the new homework into the homeworks table
@@ -121,15 +121,10 @@ console.log('THIS IS THE REQ.BODY:', req.body);
     VALUES ('${assignment}', '${description}', '${due_date}', '${priority}');
     SELECT LAST_INSERT_ID() AS id;
    `);
+// console.log('This is my ADDHOMEWORKRESULT', addHomeworkResult);
+// console.log('This is my addHomeworkResultID', addHomeworkResult.data[0].id);
 
-console.log('This is my ADDHOMEWORKRESULT', addHomeworkResult);
-console.log('This is my addHomeworkResultID', addHomeworkResult.data[0].id);
-//then I will get back the results of what I inserted as well as a message that the homework was successfully added
-//     const lastInsertIdQuery = await db(`SELECT * FROM homeworks WHERE id = LAST_INSERT_ID();`) ;
-
-// console.log('This is my lastInsertIdQuery', lastInsertIdQuery);
- 
-  //if the homework wasn't successfully added, I will throw an error with a message that the homework wasn't successfully added
+//if the homework wasn't successfully added, I will throw an error with a message that the homework wasn't successfully added
     if (addHomeworkResult.error) {
       throw new Error('Failed to add homework');
     }
@@ -144,7 +139,7 @@ console.log('This is my addHomeworkResultID', addHomeworkResult.data[0].id);
 //if the homework id was successfully added, I will get back the results of what I inserted as well as a message
       const InsertedHomeworkQuery = await db(`SELECT * FROM students_subjects_homeworks WHERE homeworkID = LAST_INSERT_ID();`) ;
 
-console.log('This is my INSERTEDHOMEWORKQUERY', InsertedHomeworkQuery);
+// console.log('This is my INSERTEDHOMEWORKQUERY', InsertedHomeworkQuery);
 //if the homework wasn't successfully added, I will throw an error with a message that the homework wasn't successfully added
     if (insertJunctionQuery.error) {
       throw new Error('Failed to add entry to junction table');
@@ -157,6 +152,53 @@ console.log('This is my INSERTEDHOMEWORKQUERY', InsertedHomeworkQuery);
   } catch (error) {
 console.error('Error executing query:', error);
     res.status(500).json({ error: error.message });
+  }
+});
+
+// PUT endpoint to update a homework assignment
+//code snippet example needed for Postman test: localhost:5000/homework/{homework_id}
+router.put('/:id', async (req, res) => {
+  // Extract the ID of the homework entry to update
+  const homeworkId = req.params.id;
+
+  // Extract the fields to update from the request body
+  const { assignment, description, due_date, priority, completed } = req.body;
+
+  try {
+    // Initialize an empty array to store the field updates
+    const updates = [];
+
+    // Construct the UPDATE query dynamically based on the fields present in the request body
+    if (assignment) updates.push(`assignment = '${assignment}'`);
+    if (description) updates.push(`description = '${description}'`);
+    if (due_date) updates.push(`due_date = '${due_date}'`);
+    if (priority) updates.push(`priority = '${priority}'`);
+    if (completed !== undefined) updates.push(`completed = ${completed ? 1 : 0}`);
+
+    // Check if any fields were provided for update
+    if (updates.length === 0) {
+      return res.status(400).json({ error: 'No fields provided for update' });
+    }
+
+    // Join the updates array into a comma-separated string
+    const setClause = updates.join(', ');
+
+    // Construct the UPDATE query
+    const updateQuery = `
+      UPDATE homeworks 
+      SET 
+        ${setClause}
+      WHERE id = ${homeworkId}`;
+
+    // Execute the UPDATE query
+    await db(updateQuery);
+
+    // If the update is successful, send a success response
+    res.status(200).json({ message: 'Homework assignment updated successfully' });
+  } catch (error) {
+    // If an error occurs during the update, send an error response
+    console.error('Error updating homework:', error);
+    res.status(500).json({ error: 'An error occurred while updating the homework assignment' });
   }
 });
 
