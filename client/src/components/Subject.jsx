@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useParams} from 'react-router-dom';
-import '../App.css'
+import '../App.css';
 
 function SubjectComponent() {
   const {subject} = useParams();
