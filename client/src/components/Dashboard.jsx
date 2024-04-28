@@ -59,10 +59,69 @@ function Dashboard() {
     fetchData(); //call fetchData() when the component mounts 
   }, []); //second argument of useEffect means it will only run once on mount
   
+  const tallyAssignments = () => {
+    // keep track of how many assignments fall into each category
+    let lateCount = 0;
+    let todayCount = 0;
+    let tomorrowCount = 0;
 
+   //get today's date using new Date()
+  //set the time for today to midnight, so it's exactly at the start of the day
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set time to midnight
+  
+    //// set up tomorrow's date by copying today's date and adding 1 day to it
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    // go through each subject
+    // for each subject, check if it has any assignments
+    // if there are assignments, go through each assignment  
+    // for each assignment, create a due date object based on its due_date
+    // set the time for the due date to midnight, so we're only comparing dates
+    subjects.forEach(subject => {
+      if (subject.assignments) {
+        subject.assignments.forEach(assignment => {
+          const dueDate = new Date(assignment.due_date);
+          dueDate.setHours(0, 0, 0, 0); // Set time to midnight
+
+
+    // compare the due date with today and tomorrow to figure out if it's late, due today, or due tomorrow.
+    // if the due date is before today, it's late, so increase lateCount
+    // if it's the same as today, increase todayCount.
+    // if it's the same as tomorrow, increase tomorrowCount
+          
+          if (dueDate < today) {
+            lateCount++;
+          } else if (dueDate.getTime() === today.getTime()) {
+            todayCount++;
+          } else if (dueDate.getTime() === tomorrow.getTime()) {
+            tomorrowCount++;
+          }
+        });
+      }
+    });
+  // return an object containing the counts for late, today, and tomorrow assignments
+    return { lateCount, todayCount, tomorrowCount };
+  };
+  //outside the function, take the properties lateCount, todayCount, and tomorrowCount from the object 
+  //returned by tallyAssignments() and assign them to variables with the same names
+  const { lateCount, todayCount, tomorrowCount } = tallyAssignments();
+  
+  
 
   return (
     <div className='outer-container'>
+
+    {/* display the tally of assignments that are late, due today, due tomorrow */}
+       <div className="assignment-scoreboard">
+          <h2>Scoreboard:</h2>
+          <div className="due-date">Late: {lateCount}</div>
+          <div className="due-date">Due Today: {todayCount}</div>
+          <div className="due-date">Due Tomorrow: {tomorrowCount}</div>
+      </div>
+
+
       <div className='outer-title-container'>
         <div className='title-container'>
           <h1 className='title'>
@@ -70,8 +129,9 @@ function Dashboard() {
             <span>HOMIE</span>
           </h1>
           </div>
-        </div>
-     
+      </div>
+
+      
        
           {/*  display a title, and for each subject, 
               create a container showing the subject's name as a link 
@@ -114,6 +174,7 @@ function Dashboard() {
               ))}
               </div>
 
+              {/* "post it" note containing details of assignment based on where user hovers */}
               <div className='floating-div-outer-container'>
                 {/* Floating div */}
                   {showFloatingDiv && hoveredAssignment && (

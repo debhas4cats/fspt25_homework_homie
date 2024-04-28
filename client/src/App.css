@@ -171,3 +171,24 @@ background-color: rgb(167, 141, 194);
   font-size: 14px;
   margin-top: 20px;
 }
+
+/* -----assignment scoreboard ---- */
+.assignment-scoreboard {
+  font-family: 'Adumu', sans-serif;
+  padding-left: 11px;
+  position: absolute;
+  top: 40px;
+  display: flex; /* Set display to flex */
+  flex-direction: column; /* Arrange children in a column */
+  align-items: flex-start; 
+}
+
+div.due-date {
+  font-family: 'Adumu', sans-serif;
+  padding: 10px 20px;
+  border: 2px solid black;
+  border-radius: 20px;
+  font-size: 16px;
+  background-color: white;
+  margin-bottom: 20px;
+  }
