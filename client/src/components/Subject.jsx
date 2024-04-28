@@ -4,21 +4,29 @@ import '../App.css';
 
 function SubjectComponent() {
   const [homework, setHomework] = useState([]);
+  const [newHomework, setNewHomework] = useState({
+    assignment: '',
+    description: '',
+    dueDate: '',
+    priority: '',
+    completed:'',
+    pastdue: '',
+  });
   const { subject } = useParams();
 
   useEffect(() => {
-  },[]);
+    fetchHomeworkForSubject(subject);
+  }, [subject]);
 
-  const getHomeworks = () => {
-    fetch(`/api/homeworks?subject=${subject}`)
-      .then((res) => res.json())
-      .then((homeworks) => {
-        setHomeworks(homeworks);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  async function fetchHomeworkForSubject(subjectId) {
+    try {
+      const response = await fetch(`https://example.com/api/subjects/${subjectId}/homework`);
+      const data = await response.json();
+      setHomework(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -27,14 +35,14 @@ function SubjectComponent() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log('New homework:', newHomework);
     // Logic to add new homework
     // You can send a POST request to your API with newHomework data
-    console.log('New homework:', newHomework);
   };
 
   const deleteHomework = (id) => {
-    // Logic to delete homework with the specified ID
     console.log('Deleting homework with ID:', id);
+    // Logic to delete homework with the specified ID
   };
 
   return (
@@ -56,7 +64,7 @@ function SubjectComponent() {
               className="form-control"
               id="assignment"
               name="assignment"
-              value={homework.assignment}
+              value={newHomework.assignment}
               onChange={handleInputChange}
             />
           </div>
@@ -67,7 +75,7 @@ function SubjectComponent() {
               className="form-control"
               id="description"
               name="description"
-              value={homework.description}
+              value={newHomework.description}
               onChange={handleInputChange}
             />
           </div>
@@ -78,18 +86,51 @@ function SubjectComponent() {
               className="form-control"
               id="duedate"
               name="dueDate"
-              value={homework.dueDate}
+              value={newHomework.dueDate}
               onChange={handleInputChange}
             />
+            <div className="form-group">
+              <label htmlFor="priority">Priority</label>
+              <input
+                type="text"
+                className="form-control"
+                id="priority"
+                name="priority"
+                value={newHomework.priority}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="completed">Completed</label>
+              <input
+                type="text"
+                className="form-control"
+                id="completed"
+                name="completed"
+                value={newHomework.completed}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="pastdue">Past Due</label>
+              <input
+                type="text"
+                className="form-control"
+                id="pastdue"
+                name="pastdue"
+                value={newHomework.pastdue}
+                onChange={handleInputChange}
+              />
+            </div>
           </div>
           <button type="submit" className="btn btn-primary">Add Homework</button>
         </form>
       </div>
       <ul className="list-group">
-        {homework.map((homework) => (
-          <li className="list-group-item" key={homework.id}>
-            {homework.assignment}
-            <button onClick={() => deleteHomework(homework.id)}>Delete</button>
+        {homework.map((hw) => (
+          <li className="list-group-item" key={hw.id}>
+            {hw.assignment}
+            <button onClick={() => deleteHomework(hw.id)}>Delete</button>
           </li>
         ))}
       </ul>
@@ -98,6 +139,7 @@ function SubjectComponent() {
 }
 
 export default SubjectComponent;
+
 // const HOMEWORK_INITIAL_STATE = {
 //   assignment: '',
 //   description: '',
