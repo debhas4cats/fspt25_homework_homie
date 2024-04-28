@@ -105,151 +105,59 @@ router.delete('/homeworks/:id', async (req, res) => {
   }
 });
 
-
-//POST endpoint to create a new homework assignment
-//VERSION 1
-// router.post('/', async (req, res) => {
-//   const { assignment, description, due_date, priority, subjectId, studentId, teacherId } = req.body;
-
-//   console.log('Received POST request to /homework');
-//   console.log('Request Body:', req.body);
-
-//   const insertHomeworkQuery = `
-//     INSERT INTO homeworks (assignment, description, due_date, priority)
-//     VALUES ('${assignment}', '${description}', '${due_date}', '${priority}')`;
-
-//   try {
-//     console.log('This is my insertHomeworkQuery', insertHomeworkQuery);
-
-//     // Insert new homework assignment into the homeworks table
-//     const result = await db(insertHomeworkQuery);
-
-//     console.log('This is my result', result);
-
-//     if (result.error) {
-//       throw new Error('Failed to add homework');
-//     }
-
-//     const homeworkId = result.data.insertId;
-
-//     // If necessary, insert corresponding record into the students_subjects_homeworks junction table
-//     if (subjectId && studentId && teacherId) {
-//       const insertJunctionQuery = `
-//         INSERT INTO students_subjects_homeworks (studentID, subjectID, teacherID, homeworkID)
-//         VALUES ('${studentId}', '${subjectId}', '${teacherId}', '${homeworkId}')`;
-
-//       console.log('This is my insertJunctionQUERY', insertJunctionQuery);
-//       const junctionResult = await db(insertJunctionQuery);
-
-//       console.log('INSERT JUNCTION RESULTS:', junctionResult);
-//     }
-
-//     // Retrieve the inserted homework data from the database
-//     const getInsertedHomeworkQuery = `
-//       SELECT * FROM homeworks WHERE id = '${homeworkId}'`;
-
-//     const insertedHomework = await db(getInsertedHomeworkQuery);
-
-//     console.log('Inserted homework:', insertedHomework);
-
-//     res.status(201).json({ 
-//       message: 'Homework assignment added successfully', 
-//       homework: insertedHomework.data[0]
-//     });
-//   } catch (error) {
-//     console.error('Error executing query:', error);
-//     res.status(500).json({ error: error.message });
-//   }
-// });
-// VERSION 2
-// router.post('/', async (req, res) => {
-//   const { assignment, description, due_date, priority } = req.body;
-
-//   console.log('Received POST request to /homework');
-//   console.log('Request Body:', req.body);
-
-//   const insertHomeworkQuery = `
-//     INSERT INTO homeworks (assignment, description, due_date, priority)
-//     VALUES ('${assignment}', '${description}', '${due_date}', '${priority}')`;
-
-//   try {
-//     console.log('This is my insertHomeworkQuery', insertHomeworkQuery);
-
-//     // Insert new homework assignment into the homeworks table
-//     const result = await db( `SELECT *FROM homeworks WHERE id= LAST_INSERT_ID();`);
- 
-//     console.log('This is my result', result);
-
-//     if (result.error) {
-//       throw new Error('Failed to add homework');
-//     }
-
-//     const homeworkId = result.data.insertId;
-
-//     // Retrieve the inserted homework data from the database
-//     const getInsertedHomeworkQuery = `
-//       SELECT * FROM homeworks WHERE id = '${homeworkId}'`;
-
-//     const insertedHomework = await db(getInsertedHomeworkQuery);
-
-//     console.log('Inserted homework:', insertedHomework);
-
-//     res.status(201).json({ 
-//       message: 'Homework assignment added successfully', 
-//       homework: insertedHomework.data[0]
-//     });
-//   } catch (error) {
-//     console.error('Error executing query:', error);
-//     res.status(500).json({ error: error.message });
-//   }
-// });
-// VERSION 3
+// POST endpoint to add a new homework assignment
+//I want to add new homework to the homeworks table in MySQL database
 router.post('/', async (req, res) => {
-  const { assignment, description, due_date, priority } = req.body;
+  //I need to collect everything I will need for this in my req.body
+  const { assignment, description, due_date, priority, studentId, subjectId, teacherId } = req.body;
 
-  console.log('Received POST request to /');
-  console.log('Request Body:', req.body);
-
-  // Convert boolean values to integers
-  const completedInt = 0; // Assuming you've removed completed and pastdue from the request body
-  const pastdueInt = 0;
-
-  const insertHomeworkQuery = `
-    INSERT INTO homeworks (assignment, description, due_date, priority, completed, pastdue)
-    VALUES ('${assignment}', '${description}', '${due_date}', '${priority}', ${completedInt}, ${pastdueInt})`;
+console.log('THIS IS THE REQ.BODY:', req.body);
 
   try {
-    console.log('This is my insertHomeworkQuery', insertHomeworkQuery);
+    //I will await db() a new variable that I will use to insert the new homework into the homeworks table
+    const addHomeworkResult = await db(`
+    INSERT INTO homeworks (assignment, description, due_date, priority)
+    VALUES ('${assignment}', '${description}', '${due_date}', '${priority}');
+    SELECT LAST_INSERT_ID() AS id;
+   `);
 
-    // Insert new homework assignment into the homeworks table
-    const result = await db(insertHomeworkQuery);
-    console.log('This is my result', result);
+console.log('This is my ADDHOMEWORKRESULT', addHomeworkResult);
+console.log('This is my addHomeworkResultID', addHomeworkResult.data[0].id);
+//then I will get back the results of what I inserted as well as a message that the homework was successfully added
+//     const lastInsertIdQuery = await db(`SELECT * FROM homeworks WHERE id = LAST_INSERT_ID();`) ;
 
-    // Retrieve the ID of the last inserted record
-    const lastInsertedIdResult = await db('SELECT LAST_INSERT_ID() AS lastInsertId');
-    const lastInsertedId = lastInsertedIdResult.data[0].lastInsertId;
+// console.log('This is my lastInsertIdQuery', lastInsertIdQuery);
+ 
+  //if the homework wasn't successfully added, I will throw an error with a message that the homework wasn't successfully added
+    if (addHomeworkResult.error) {
+      throw new Error('Failed to add homework');
+    }
+    //from the results of the successful await db() call, I will take the id of the homework that was just added as and create a variable. 
+    const homeworkId = addHomeworkResult.data[0].insertId;
 
-    // Fetch the homework data based on the last inserted ID
-    const fetchHomeworkQuery = `
-      SELECT * FROM homeworks WHERE id = ${lastInsertedId}`;
+   //I will then use that vaiable as well as the subjectID and teacherID and insert them into the junction table students_subjects_homeworks
+   //to do this I need a query to insert the new homework into the junction table students_subjects_homeworks 
+   const insertJunctionQuery = await db(`
+      INSERT INTO students_subjects_homeworks (studentID, subjectID, homeworkID, teacherID)
+      VALUES ('${studentId}', '${subjectId}', '${homeworkId}','${teacherId}')`);
+//if the homework id was successfully added, I will get back the results of what I inserted as well as a message
+      const InsertedHomeworkQuery = await db(`SELECT * FROM students_subjects_homeworks WHERE homeworkID = LAST_INSERT_ID();`) ;
 
-    // Execute the fetch query to get the last inserted homework's data
-    const fetchedHomeworkResult = await db(fetchHomeworkQuery);
-    const insertedHomework = fetchedHomeworkResult.data[0];
+console.log('This is my INSERTEDHOMEWORKQUERY', InsertedHomeworkQuery);
+//if the homework wasn't successfully added, I will throw an error with a message that the homework wasn't successfully added
+    if (insertJunctionQuery.error) {
+      throw new Error('Failed to add entry to junction table');
+    }
 
-    console.log('Inserted homework:', insertedHomework);
-
-    res.status(201).json({
-      message: 'Homework assignment added successfully',
-      homework: insertedHomework
+    res.status(201).json({ 
+      message: 'Homework assignment added successfully', 
+      homework: InsertedHomeworkQuery.data[0]
     });
   } catch (error) {
-    console.error("Error executing query:", error);
-    res.status(500).send("Internal server error");
+console.error('Error executing query:', error);
+    res.status(500).json({ error: error.message });
   }
 });
-
-
 
 
 module.exports = router;
