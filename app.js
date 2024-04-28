@@ -4,9 +4,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var homeworkRouter = require('./routes/homework'); //for the homework.js file in the route folder
-
-
 const app = express();
 
 app.use(cors()); 
@@ -18,13 +15,8 @@ app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.get("/", function(req, res, next) {
+app.get("/api", function(req, res, next) {
     res.send("Access the API at path /homework");
   });
-
-app.use('/homework', homeworkRouter); 
-
-
-
 
 module.exports = app;
