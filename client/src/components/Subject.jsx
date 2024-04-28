@@ -9,7 +9,7 @@ function SubjectComponent() {
     description: '',
     dueDate: '',
     priority: '',
-    completed:'',
+    completed: '',
     pastdue: '',
   });
   const { subject } = useParams();
@@ -20,7 +20,7 @@ function SubjectComponent() {
 
   async function fetchHomeworkForSubject(subjectId) {
     try {
-      const response = await fetch(`https://example.com/api/subjects/${subjectId}/homework`);
+      const response = await fetch(`/api/subjects/${subjectId}/homework`);
       const data = await response.json();
       setHomework(data);
     } catch (error) {
@@ -35,11 +35,10 @@ function SubjectComponent() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('New homework:', newHomework);
+    console.log('Newhomework:', newHomework);
     // Logic to add new homework
     // You can send a POST request to your API with newHomework data
   };
-
   const deleteHomework = (id) => {
     console.log('Deleting homework with ID:', id);
     // Logic to delete homework with the specified ID
@@ -50,7 +49,7 @@ function SubjectComponent() {
       <Link to="/">
         <button className="home-rounded-button">HOME</button>
       </Link>
-    
+
       <h2>{subject} Component</h2>
       <p>Teacher name</p>
       <p>{subject}</p>
@@ -89,48 +88,59 @@ function SubjectComponent() {
               value={newHomework.dueDate}
               onChange={handleInputChange}
             />
-            <div className="form-group">
-              <label htmlFor="priority">Priority</label>
-              <input
-                type="text"
-                className="form-control"
-                id="priority"
-                name="priority"
-                value={newHomework.priority}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="completed">Completed</label>
-              <input
-                type="text"
-                className="form-control"
-                id="completed"
-                name="completed"
-                value={newHomework.completed}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="pastdue">Past Due</label>
-              <input
-                type="text"
-                className="form-control"
-                id="pastdue"
-                name="pastdue"
-                value={newHomework.pastdue}
-                onChange={handleInputChange}
-              />
-            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="priority">Priority</label>
+            <input
+              type="text"
+              className="form-control"
+              id="priority"
+              name="priority"
+              value={newHomework.priority}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="completed">Completed</label>
+            <input
+              type="text"
+              className="form-control"
+              id="completed"
+              name="completed"
+              value={newHomework.completed}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="pastdue">Past Due</label>
+            <input
+              type="text"
+              className="form-control"
+              id="pastdue"
+              name="pastdue"
+              value={newHomework.pastdue}
+              onChange={handleInputChange}
+            />
           </div>
           <button type="submit" className="btn btn-primary">Add Homework</button>
         </form>
       </div>
-      <ul className="list-group">
+      <ul className="list-group mt-3">
         {homework.map((hw) => (
-          <li className="list-group-item" key={hw.id}>
-            {hw.assignment}
-            <button onClick={() => deleteHomework(hw.id)}>Delete</button>
+          <li key={hw.id} className="list-group-item d-flex">
+            <div className="d-flex w-100 justify-content-between">
+              <h5 className="mb-1">{hw.assignment}</h5>
+              <small>{hw.description}</small>
+            </div>
+            <div className="d-flex w-100 justify-content-between">
+              <small>{hw.dueDate}</small>
+              <small>{hw.priority}</small>
+              <small>{hw.completed}</small>
+              <small>{hw.pastdue}</small>
+              <button className="btn btn-danger" onClick={() => deleteHomework(hw.id)}>Delete</button>
+              <button className="btn btn-success">Edit</button>
+              <button className="btn btn-primary">View</button>
+            </div>
           </li>
         ))}
       </ul>
@@ -139,82 +149,3 @@ function SubjectComponent() {
 }
 
 export default SubjectComponent;
-
-// const HOMEWORK_INITIAL_STATE = {
-//   assignment: '',
-//   description: '',
-//   dueDate: '', // Corrected typo
-// };
-  // const [newHomework, setNewHomework] = useState(HOMEWORK_INITIAL_STATE);
-  // const [editHomework, setEditHomework] = useState(null);
-  // Define functions outside of getHomeworks
-  
-
-  
-
-  
-
-  // const addHomework = async () => {
-  //   try {
-  //     const response = await fetch('/api/homeworks', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify(newHomework)
-  //     });
-  //     const homeworks = await response.json();
-  //     setHomework(homeworks);
-  //     setNewHomework(HOMEWORK_INITIAL_STATE);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
-  // const handleHomeworkSelect = async id => {
-  //   try {
-  //     const response = await fetch(`/api/homeworks/${id}`);
-  //     const homework = await response.json();
-  //     setEditHomework(homework);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
-  // const updateHomework = async () => {
-  //   try {
-  //     const response = await fetch(`/api/homeworks/${editHomework.id}`, {
-  //       method: 'PUT',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify(editHomework)
-  //     });
-  //     const homeworks = await response.json();
-  //     setHomework(homeworks);
-  //     setEditHomework(null);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
-  // const deleteHomework = async id => {
-  //   try {
-  //     const response = await fetch(`/api/homeworks/${id}`, {
-  //       method: 'DELETE'
-  //     });
-  //     const homeworks = await response.json();
-  //     setHomework(homeworks);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-    // const handleInputChange = event => {
-  //   const { name, value } = event.target;
-  //   setHomework(prevState => ({ ...prevState, [name]: value }));
-  // };
-
-  //  const handleSubmit = event => {
-  //   event.preventDefault();
-  //   addhomework();
-  // };
