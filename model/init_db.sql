@@ -94,7 +94,6 @@ INSERT INTO homeworks (assignment, description, due_date, priority, completed, p
 ('Art Appreciation Presentation', 'Prepare a presentation discussing a famous artwork and its significance.', '2024-04-29', 'High', 0, 0);
 
 -- Insert into students_subjects_homeworks table
-
 -- Add entries for Math subject (ID: 1)
 INSERT INTO students_subjects_homeworks (studentID, subjectID, homeworkID, teacherID)
 VALUES

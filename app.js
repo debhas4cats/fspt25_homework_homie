@@ -23,13 +23,8 @@ app.use("/api/auth", authRouter);
 app.use('/homework', homeworkRouter); 
 app.use('/api/student', studentRouter);
 
-app.use((req, res, next) => {
-  console.log('Received request:', req.method, req.url);
-  next();
-});
-
-app.get("/", function(req, res, next) {
-  res.send("Access the API at path /student");
-});
+app.get("/api", function(req, res, next) {
+    res.send("Access the API at path /homework");
+  });
 
 module.exports = app;
