@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import '../App.css';
+import PropTypes from 'prop-types'; // If you're using PropTypes
 
 function SubjectComponent() {
   const [homework, setHomework] = useState([]);
@@ -9,9 +9,10 @@ function SubjectComponent() {
     description: '',
     dueDate: '',
     priority: '',
-    completed: '',
-    pastdue: '',
+    completed: false,
+    pastdue: false,
   });
+
   const { subject } = useParams();
 
   useEffect(() => {
@@ -20,7 +21,7 @@ function SubjectComponent() {
 
   async function fetchHomeworkForSubject(subjectId) {
     try {
-      const response = await fetch(`/api/subjects/${subjectId}/homework`);
+      const response = await fetch(`/api/homework/subject/${subjectId}`);
       const data = await response.json();
       setHomework(data);
     } catch (error) {
@@ -33,15 +34,29 @@ function SubjectComponent() {
     setNewHomework({ ...newHomework, [name]: value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     console.log('Newhomework:', newHomework);
     // Logic to add new homework
     // You can send a POST request to your API with newHomework data
+    // Reset form fields after submission
+    setNewHomework({
+      assignment: '',
+      description: '',
+      dueDate: '',
+      priority: '',
+      completed: false,
+      pastdue: false,
+    });
   };
-  const deleteHomework = (id) => {
+
+  const deleteHomework = async (id) => {
     console.log('Deleting homework with ID:', id);
-    // Logic to delete homework with the specified ID
+    try {
+      // Logic to delete homework with the specified ID
+    } catch (error) {
+      console.error('Error deleting homework:', error);
+    }
   };
 
   return (
@@ -79,11 +94,11 @@ function SubjectComponent() {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="duedate">Due Date</label>
+            <label htmlFor="dueDate">Due Date</label>
             <input
-              type="text"
+              type="date"
               className="form-control"
-              id="duedate"
+              id="dueDate"
               name="dueDate"
               value={newHomework.dueDate}
               onChange={handleInputChange}
@@ -91,55 +106,76 @@ function SubjectComponent() {
           </div>
           <div className="form-group">
             <label htmlFor="priority">Priority</label>
-            <input
-              type="text"
+            <select
               className="form-control"
               id="priority"
               name="priority"
               value={newHomework.priority}
               onChange={handleInputChange}
-            />
+            >
+              <option value="">Select Priority</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
           </div>
           <div className="form-group">
-            <label htmlFor="completed">Completed</label>
-            <input
-              type="text"
-              className="form-control"
-              id="completed"
-              name="completed"
-              value={newHomework.completed}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="pastdue">Past Due</label>
-            <input
-              type="text"
-              className="form-control"
-              id="pastdue"
-              name="pastdue"
-              value={newHomework.pastdue}
-              onChange={handleInputChange}
-            />
-          </div>
+  <label htmlFor="priority">Priority</label>
+  <select
+    className="form-control"
+    id="priority"
+    name="priority"
+    value={newHomework.priority}
+    onChange={handleInputChange}
+  >
+    <option value="">Select Priority</option>
+    <option value="low">Low</option>
+    <option value="medium">Medium</option>
+    <option value="high">High</option>
+  </select>
+</div>
+
+{/* Add the completed and pastdue fields here */}
+<div className="form-check">
+  <input
+    type="checkbox"
+    className="form-check-input"
+    id="completed"
+    name="completed"
+    checked={newHomework.completed}
+    onChange={handleInputChange}
+  />
+  <label className="form-check-label" htmlFor="completed">Completed</label>
+</div>
+<div className="form-check">
+  <input
+    type="checkbox"
+    className="form-check-input"
+    id="pastdue"
+    name="pastdue"
+    checked={newHomework.pastdue}
+    onChange={handleInputChange}
+  />
+  <label className="form-check-label" htmlFor="pastdue">Past Due</label>
+</div>
+          {/* Add more fields here */}
           <button type="submit" className="btn btn-primary">Add Homework</button>
         </form>
       </div>
       <ul className="list-group mt-3">
         {homework.map((hw) => (
-          <li key={hw.id} className="list-group-item d-flex">
-            <div className="d-flex w-100 justify-content-between">
-              <h5 className="mb-1">{hw.assignment}</h5>
-              <small>{hw.description}</small>
+          <li key={hw.id} className="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <h5>{hw.assignment}</h5>
+              <p>{hw.description}</p>
             </div>
-            <div className="d-flex w-100 justify-content-between">
-              <small>{hw.dueDate}</small>
-              <small>{hw.priority}</small>
-              <small>{hw.completed}</small>
-              <small>{hw.pastdue}</small>
+            <div>
+              <p>Due Date: {hw.dueDate}</p>
+              <p>Priority: {hw.priority}</p>
+          
+              {/* Other details */}
               <button className="btn btn-danger" onClick={() => deleteHomework(hw.id)}>Delete</button>
-              <button className="btn btn-success">Edit</button>
-              <button className="btn btn-primary">View</button>
+              {/* Other buttons */}
             </div>
           </li>
         ))}
@@ -147,5 +183,10 @@ function SubjectComponent() {
     </div>
   );
 }
+
+// PropTypes definition (if you're using PropTypes)
+SubjectComponent.propTypes = {
+  // Define your PropTypes here
+};
 
 export default SubjectComponent;
