@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import PropTypes from 'prop-types'; // If you're using PropTypes
 
 function SubjectComponent() {
   const [homework, setHomework] = useState([]);
@@ -16,24 +15,22 @@ function SubjectComponent() {
   const { subject } = useParams();
 
   useEffect(() => {
-    fetchHomeworkForSubject(subject);
+    fetchHomeworkForSubject();
   }, [subject]);
 
-  async function fetchHomeworkForSubject(subjectId) {
+  async function fetchHomeworkForSubject() {
     try {
-      const response = await fetch(`/api/homework/subject/${subjectId}`);
+      const response = await fetch('/api/homework/subjects/6/homework');
       const data = await response.json();
-      setHomework(data);
+      console.log(data);
+      setHomework(data.data);
     } catch (error) {
       console.error(error);
-    }
-  }
-
+  };}
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewHomework({ ...newHomework, [name]: value });
   };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log('Newhomework:', newHomework);
@@ -49,7 +46,6 @@ function SubjectComponent() {
       pastdue: false,
     });
   };
-
   const deleteHomework = async (id) => {
     console.log('Deleting homework with ID:', id);
     try {

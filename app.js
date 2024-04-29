@@ -22,7 +22,7 @@ app.get("/", function(req, res, next) {
     res.send("Access the API at path /homework");
   });
 
-app.use('/homework', homeworkRouter); 
+app.use('/api/homework', homeworkRouter); 
 
 
 
