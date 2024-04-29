@@ -8,8 +8,19 @@ var bcrypt = require("bcrypt");
 
 const supersecret = process.env.SUPER_SECRET;
 
-  // LOGIN student
-  router.post("api/login", async (req, res) => {
+//endpoint to get all students
+//code snippet for testing in Postman: localhost:5000/api/student
+router.get("/", async function(req, res, next) {
+  try {
+    const result = await db("SELECT * FROM students;");
+    res.send(result.data);
+  } catch (err) {
+    res.status(500).send(err)
+  }
+});
+
+  // POST: LOGIN student
+  router.post("/login", async (req, res) => {
     const { username, password } = req.body;
   
     try {
@@ -25,7 +36,7 @@ const supersecret = process.env.SUPER_SECRET;
         if (!correctPassword) throw new Error("Incorrect password");
   
         var token = jwt.sign({ user_id }, supersecret);
-        res.send({ message: `Hello, ${firstname}`, token });
+        res.send({ message: `Hello, ${user.firstname}`, token });
       } else {
         throw new Error("Student does not exist");
       }
@@ -33,3 +44,5 @@ const supersecret = process.env.SUPER_SECRET;
       res.status(400).send({ message: err.message });
     }
   });
+
+module.exports = router;

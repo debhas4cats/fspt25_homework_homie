@@ -4,6 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var indexRouter = require('./routes/index');
+var authRouter = require('./routes/auth');
+
 const app = express();
 
 app.use(cors()); 
@@ -13,11 +16,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
-app.use('/homework', homeworkRouter); 
-app.use('/api/student', studentRouter);
+app.use('/', indexRouter);
+app.use("/api/auth", authRouter);
 
-app.get("/api", function(req, res, next) {
-    res.send("Access the API at path /homework");
+
+app.get("/", function(req, res, next) {
+    res.send("Access the API at path /student");
   });
 
 module.exports = app;
