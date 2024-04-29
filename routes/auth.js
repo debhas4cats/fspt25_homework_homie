@@ -8,17 +8,6 @@ var bcrypt = require("bcrypt");
 
 const supersecret = process.env.SUPER_SECRET;
 
-//endpoint to get all students
-//code snippet for testing in Postman: localhost:5000/api/student
-router.get("/", async function(req, res, next) {
-  try {
-    const result = await db("SELECT * FROM students;");
-    res.send(result.data);
-  } catch (err) {
-    res.status(500).send(err)
-  }
-});
-
   // POST: LOGIN student
   router.post("/login", async (req, res) => {
     const { username, password } = req.body;
