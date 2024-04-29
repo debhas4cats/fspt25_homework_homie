@@ -24,7 +24,7 @@ function Dashboard() {
     const fetchData = async () => { // use async/await to fetch data for each subject
       try {
         const promises = subjects.map(async subject => { // loop through each subject 
-          const response = await fetch(`http://localhost:5000/homework/subjects/${subject.id}/homework`); // for each subject we fetch homework data 
+          const response = await fetch(`http://localhost:4000/homework/subjects/${subject.id}/students/1/homework`); // for each subject we fetch homework data 
           if (!response.ok) { // if the response from the server is not okay -- we throw an error to handle
             throw new Error(`Failed to fetch homework data for ${subject.name}`);
           }
