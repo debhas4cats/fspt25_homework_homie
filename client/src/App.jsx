@@ -6,24 +6,16 @@ import Dashboard from './components/Dashboard'; // import a component called Das
 
 
 function App() {
-<<<<<<< HEAD
-
-=======
   // get today's date and format it
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const today = new Date().toLocaleDateString(undefined, options);
  
->>>>>>> proofing
   return (
     <Router>{/* Router component is used to wrap all our routes */}
       <div>
             {/* Today's date */}
         <div className="date">{today}</div>
 
-<<<<<<< HEAD
-      
-      <h1>Homework Homie</h1>
-=======
 
         <Routes>{/* Routes component holds all our defined routes */}
           <Route path="/" element={<Dashboard />} /> {/* Route for Dashboard, which is shown when the URL is / */}
@@ -31,7 +23,6 @@ function App() {
           {/* :subject captures whatever comes after the route, so you can grab values from the URL */}
           
         </Routes>
->>>>>>> proofing
     
       </div>
 
