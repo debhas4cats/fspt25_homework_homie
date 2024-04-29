@@ -6,7 +6,10 @@ import Dashboard from './components/Dashboard'; // import a component called Das
 
 
 function App() {
-
+  // get today's date and format it
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const today = new Date().toLocaleDateString(undefined, options);
+ 
   return (
     <Router>{/* Router component is used to wrap all our routes */}
       <div>
