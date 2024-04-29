@@ -24,11 +24,14 @@ function Dashboard() {
     const fetchData = async () => { // use async/await to fetch data for each subject
       try {
         const promises = subjects.map(async subject => { // loop through each subject 
-          const response = await fetch(`http://localhost:5000/homework/subjects/${subject.id}/homework`); // for each subject we fetch homework data 
+
+          //                                           MAKE SURE TO CHANGE STUDENT ID TO BE ${student.id} when login is initialized......
+          const response = await fetch(`http://localhost:5000/homework/subjects/${subject.id}/students/1/homework`); // for each subject we fetch homework data HARDCODED STUDENT ID 1 for now
           if (!response.ok) { // if the response from the server is not okay -- we throw an error to handle
             throw new Error(`Failed to fetch homework data for ${subject.name}`);
           }
           const data = await response.json(); //waits for response from the server to be fully fetched and parsed as JSON and store as variable DATA
+          // console.log(`Homework data for ${subject.name}:`, data); // console logging the data received just in case
           return { subjectId: subject.id, data: data.data }; // create an object that associates a subject's ID with its corresponding homework data. 
         });
          // after fetching data from all subjects, we gather them
@@ -156,12 +159,15 @@ function Dashboard() {
                         .slice(0, 3)
                         .map((assignment, index) => (
                           <li
-                            className="assignment-message"
-                            key={index}
-                            onMouseEnter={() => {
-                              setHoveredAssignment(assignment);
-                              setShowFloatingDiv(true);
-                            }}
+                          // li can have different styles based on whether the assignment is late or not
+                          // if due date is in the past (is true), assigns the li class 'late'
+                          // if due date is not in the past (is false) -- no additional li class will be added
+                              className={`assignment-message ${new Date(assignment.due_date) < new Date() ? 'late' : ''}`}
+                              key={index}
+                              onMouseEnter={() => {
+                                setHoveredAssignment(assignment);
+                                setShowFloatingDiv(true);
+                              }}
                             onMouseLeave={() => setShowFloatingDiv(false)}
                           >
                             {createMessage([assignment])}
@@ -178,12 +184,15 @@ function Dashboard() {
               <div className='floating-div-outer-container'>
                 {/* Floating div */}
                   {showFloatingDiv && hoveredAssignment && (
-                    <div className="floating-div">
+                    // floating div can have different styles based on whether the assignment is late or not
+                    // if due date is in the past (is true), assigns the div class 'late'
+                    // if due date is not in the past (is false) -- no additional div class will be added
+                    <div className={`floating-div ${new Date(hoveredAssignment.due_date) < new Date() ? 'late' : ''}`}>
                       <h3>{hoveredAssignment.assignment}</h3>
                       <p>{hoveredAssignment.description}</p>
                       <p>Teacher: {hoveredAssignment.teacher_name}</p>
                       <p className="assignment-due">Due: {new Date(hoveredAssignment.due_date).toLocaleDateString()}</p>
-                    </div>
+                  </div>
                   )}
                 </div>
      
