@@ -6,14 +6,20 @@ import Dashboard from './components/Dashboard'; // import a component called Das
 
 
 function App() {
+
   return (
     <Router>{/* Router component is used to wrap all our routes */}
       <div>
             {/* Today's date */}
         <div className="date">{today}</div>
 
-      
-      <h1>Homework Homie</h1>
+
+        <Routes>{/* Routes component holds all our defined routes */}
+          <Route path="/" element={<Dashboard />} /> {/* Route for Dashboard, which is shown when the URL is / */}
+          <Route path="/:subject" element={<Subject />} /> {/* Route for the Subject component, which is shown when the URL has something after /, like /math or /science */}
+          {/* :subject captures whatever comes after the route, so you can grab values from the URL */}
+          
+        </Routes>
     
       </div>
 
