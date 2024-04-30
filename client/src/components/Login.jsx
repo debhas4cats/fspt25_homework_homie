@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
 
-export default function Login() {
+export default function Login({setUserData}) {
     
     const [ credentials, setCredentials ] = useState({
         username: "",
@@ -8,6 +10,8 @@ export default function Login() {
     });
 
     const [data, setData] = useState(null);
+
+    const navigate = useNavigate();
 
     const { username, password } = credentials;
 
@@ -17,6 +21,13 @@ export default function Login() {
     };
 
     const login = async () => {
+        
+      if (!username) {
+        alert("Please create an account first");
+        navigate("/CreateNewAccountPage");
+      }  else if (username === "" || password === "") {
+        alert("Please fill in all fields");
+      } else {
         try {
           const { data } = await axios("/api/auth/login", {
             method: "POST",
@@ -25,6 +36,9 @@ export default function Login() {
     
           //store it locally
           localStorage.setItem("token", data.token);
+          const userData = data.student;
+          setUserData(userData);
+          navigate("./Dashboard");
           console.log(data.message, data.token);
           setData(data.message);
         } catch (error) {
@@ -32,19 +46,32 @@ export default function Login() {
           setData(error.message);
         }
       };
+    }
 
+    const logout = () => {
+      //remove the token from local storage
+      localStorage.removeItem("token");
+      alert("You have been successfully logged out");
+    };
 
-
+    const handleNavigateToRegisterNewStudent = () => {
+      navigate("./RegisterNewStudent");
+    }
+    
     return (
     <>
-    <div className="row gx-5">
-      <div className="col col-md-6 offset-md-3">
+    <h3>Login</h3>
+    <div className="login">
+      <div className="login-form">
+        <form>
         <input
           value={username}
           onChange={handleChange}
           name="username"
           type="text"
           className="form-control mb-2"
+          placeholder='username'
+          autoComplete='off'
         /> 
         <input
           value={password}
@@ -52,8 +79,16 @@ export default function Login() {
           name="password"
           type="password"
           className="form-control mb-2"
+          placeholder='password'
+          autoComplete='off'
         />
-        <button type="button" class="btn btn-primary" onClick={login}>Submit</button>
+        <button type="button" className="login-button" onClick={login}>Submit</button>
+        <p className="register-option">
+          Not registered? 
+          <br></br>
+          <Link to="./RegisterNewStudent" onClick={handleNavigateToRegisterNewStudent} className="link-to-add-new-acct">Create an account</Link> 
+        </p>
+        </form>
       </div>
       </div>
 

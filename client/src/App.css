@@ -192,3 +192,23 @@ div.due-date {
   background-color: white;
   margin-bottom: 20px;
   }
+
+  /* -----login page----- */
+
+  .login-button {
+    background-color: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin: 5px;
+  }
+
+  /* -----registration page----- */
+
+  .registration-form {
+    list-style: none;
+  }
+
+  .register-option {
+    font-size: 14px;
+  }
