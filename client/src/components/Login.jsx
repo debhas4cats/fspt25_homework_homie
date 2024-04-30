@@ -20,6 +20,7 @@ export default function Login({setUserData}) {
     setCredentials({ ...credentials, [name]: value });
     };
 
+    // LOGIN
     const login = async () => {
         
       if (!username) {
@@ -48,13 +49,15 @@ export default function Login({setUserData}) {
       };
     }
 
+    // LOGOUT
     const logout = () => {
       //remove the token from local storage
       localStorage.removeItem("token");
       alert("You have been successfully logged out");
     };
 
-    const handleNavigateToRegisterNewStudent = () => {
+    // LINK TO REGISTRATION FORM
+    const handleNavigateToRegisterNewStudent = () => { // moves the user to the registration form if they don't have an account
       navigate("./RegisterNewStudent");
     }
     

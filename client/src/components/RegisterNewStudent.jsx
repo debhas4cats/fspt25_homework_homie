@@ -49,7 +49,8 @@ const handleSubmit = async (e) => {
  await addPlayer();
 }
 
-const handleNavigateToLogin = () => { 
+// LINK TO LOGIN FORM
+const handleNavigateToLogin = () => {  // moves the user to the login page if they have an account already
     navigate("./");
   }
 

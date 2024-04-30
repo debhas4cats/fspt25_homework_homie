@@ -22,10 +22,13 @@ function App() {
 
 
         <Routes>{/* Routes component holds all our defined routes */}
-          <Route path="/" element={<Login setUserData = { setUserData }/>} />
+          <Route path="/" element={<Login setUserData = { setUserData }/>} /> 
+          {/*Route for main page, which features a login form and the link to registration page if student is not added to database*/}
           <Route path="/RegisterNewStudent" element={<RegisterNewStudent />} />
-          <Route path="/dashboard" element={<Dashboard userData = { userData } />} /> {/* Route for Dashboard, which is shown when the URL is / */}
-          <Route path="/:subject" element={<Subject />} /> {/* Route for the Subject component, which is shown when the URL has something after /, like /math or /science */}
+          <Route path="/dashboard" element={<Dashboard userData = { userData } />} /> 
+          {/* Route for Dashboard, which is shown when the student is logged in */}
+          <Route path="/:subject" element={<Subject />} /> 
+          {/* Route for the Subject component, which is shown when the URL has something after /, like /math or /science */}
           {/* :subject captures whatever comes after the route, so you can grab values from the URL */}
         </Routes>
     
