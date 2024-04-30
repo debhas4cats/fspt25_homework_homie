@@ -24,10 +24,10 @@ router.get('/subjects/:subjectId/students/:studentId/homework', async (req, res)
     JOIN homeworks h ON ssh.homeworkID = h.id
     JOIN teachers t ON ssh.teacherID = t.id
     WHERE ssh.subjectID = ${subjectId}
-   AND ssh.studentID = ${studentId}`;
+     AND ssh.studentID = 1`;
     //for after authentication is implemented
-     
-     // AND ssh.studentID = 1`;
+    //  AND ssh.studentID = ${studentId}`;
+    
      //WHERE statement needs to be hard coded with studentID 1 until after authentication is implemented
   try {
     const results = await db(query);
@@ -202,5 +202,15 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-
+//GET endpoint to get all the subjects
+//Code snippet for Postman test: localhost:5000/homework/subjects
+router.get('/subjects', async (req, res) => {
+  const query = `SELECT * FROM subjects`;
+  try {
+    const results = await db(query);
+    res.status(200).json({ data: results.data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 module.exports = router;
