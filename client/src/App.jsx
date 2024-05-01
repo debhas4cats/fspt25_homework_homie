@@ -19,6 +19,10 @@ function App() {
       <div>
             {/* Today's date */}
         <div className="date">{today}</div>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/:subject" element={<Subject />} /> 
+          {/* what comes after the route, you can grab values - you can create variables when you use the colon */}
 
 
         <Routes>{/* Routes component holds all our defined routes */}
@@ -30,6 +34,7 @@ function App() {
           <Route path="/:subject" element={<Subject />} /> 
           {/* Route for the Subject component, which is shown when the URL has something after /, like /math or /science */}
           {/* :subject captures whatever comes after the route, so you can grab values from the URL */}
+
         </Routes>
     
       </div>
