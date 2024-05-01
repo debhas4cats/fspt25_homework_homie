@@ -19,11 +19,6 @@ function App() {
       <div>
             {/* Today's date */}
         <div className="date">{today}</div>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/:subject" element={<Subject />} /> 
-          {/* what comes after the route, you can grab values - you can create variables when you use the colon */}
-
         <Routes>{/* Routes component holds all our defined routes */}
           <Route path="/" element={<Login setUserData = { setUserData }/>} /> 
           {/*Route for main page, which features a login form and the link to registration page if student is not added to database*/}
@@ -35,12 +30,11 @@ function App() {
           {/* :subject captures whatever comes after the route, so you can grab values from the URL */}
 
         </Routes>
-    
+        
       </div>
 
-
     </Router>
-  );
+  )
 }
 
 export default App;
