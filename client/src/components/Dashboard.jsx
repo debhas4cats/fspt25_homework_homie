@@ -118,6 +118,20 @@ function Dashboard() {
   //returned by tallyAssignments() and assign them to variables with the same names
   const { lateCount, todayCount, tomorrowCount } = tallyAssignments();
 
+  function isLate(dueDate) {
+    const today = new Date();
+    return dueDate < today && !isSameDay(dueDate, today);
+  }
+  
+  function isSameDay(date1, date2) {
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
+    );
+  }
+  
+
   return (
     <div className="outer-container">
       {/* display the tally of assignments that are late, due today, due tomorrow */}
@@ -167,26 +181,26 @@ function Dashboard() {
                     .slice()
                     .sort((a, b) => new Date(a.due_date) - new Date(b.due_date))
                     .slice(0, 3)
-                    .map((assignment, index) => (
+                    .map((assignment, index) => {
+                      const dueDate = new Date(assignment.due_date);
+                      const today = new Date();
+                      const isLate = dueDate < today && !isSameDay(dueDate, today);
+                      return (
                       <li
                         // li can have different styles based on whether the assignment is late or not
                         // if due date is in the past (is true), assigns the li class 'late'
                         // if due date is not in the past (is false) -- no additional li class will be added
-                        className={`assignment-message ${
-                          new Date(assignment.due_date) < new Date()
-                            ? "late"
-                            : ""
-                        }`}
+                        className={`assignment-message ${isLate ? "late" : ""}`}
                         key={index}
                         onMouseEnter={() => {
                           setHoveredAssignment(assignment);
                           setShowFloatingDiv(true);
                         }}
-                        onMouseLeave={() => setShowFloatingDiv(false)}
-                      >
+                        onMouseLeave={() => setShowFloatingDiv(false)}>
                         {createMessage([assignment])}
                       </li>
-                    ))}
+                       );
+                    })}
               </ul>
             </div>
           )
@@ -200,11 +214,7 @@ function Dashboard() {
           // floating div can have different styles based on whether the assignment is late or not
           // if due date is in the past (is true), assigns the div class 'late'
           // if due date is not in the past (is false) -- no additional div class will be added
-          <div
-            className={`floating-div ${
-              new Date(hoveredAssignment.due_date) < new Date() ? "late" : ""
-            }`}
-          >
+          <div className={`floating-div ${isLate(new Date(hoveredAssignment.due_date)) ? "late" : ""}`}>
             <h3>{hoveredAssignment.assignment}</h3>
             <p>{hoveredAssignment.description}</p>
             <p>Teacher: {hoveredAssignment.teacher_name}</p>
