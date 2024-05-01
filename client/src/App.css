@@ -1,84 +1,35 @@
 /* --- fonts ----*/
 @font-face {
-font-family: 'Adumu';
-src: local('Adumu'), url('./fonts/adumu/Adumu.ttf') format('truetype');
-font-weight: normal;
-font-style: normal;
-}
-
-body {
-background-color: #fff;
-background-image:
-linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-linear-gradient(rgba(0, 0, 0, 0.02) 2px, transparent 2px),
-linear-gradient(90deg, rgba(0, 0, 0, 0.02) 2px, transparent 2px);
-background-size: 20px 20px, 20px 20px, 1px 1px, 1px 1px;
-}
-
-div.date {
-font-family: 'Adumu', sans-serif;
-display: inline-block;
-padding: 10px 20px;
-border: 2px solid black;
-border-radius: 20px;
-font-size: 16px;
-background-color: white;
-margin-bottom: 40px;
-margin-left: 10px;
-}
-
-button.home-rounded-button {
-background-color: #ffffff;
-color: black;
-text-decoration: none;
-border: 2px solid black;
-border-radius: 20px;
-cursor: pointer;
-font-size: 16px;
-font-family: 'Adumu', sans-serif;
-transition: background-color 0.3s;
-margin: 10px;
-padding: 10px 20px;
-transition: background-color 0.3s ease;
-}
-
-.home-rounded-button:hover {
-background-color: rgb(167, 141, 194);
-}
-
-
-.outer-title-container {
-  margin-top: 260px; /* Adjust as needed */
-}
-
-.title-container {
-  text-align: center;
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, -10%);
-}
-
-.title {
+  font-family: 'Adumu';
+  src: local('Adumu'), url('./fonts/adumu/Adumu.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  }
+  
+  body {
+  background-color: #fff;
+  background-image:
+  linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+  linear-gradient(rgba(0, 0, 0, 0.02) 2px, transparent 2px),
+  linear-gradient(90deg, rgba(0, 0, 0, 0.02) 2px, transparent 2px);
+  background-size: 20px 20px, 20px 20px, 1px 1px, 1px 1px;
+  }
+  
+  div.date {
   font-family: 'Adumu', sans-serif;
-  color: rgb(167, 141, 194);
-  font-size: 50px;
-  -webkit-text-stroke: .75px black;
-  text-stroke: .75px black;
-}
-
-.title span {
-  display: block;
-}
-
-.rounded-button {
-  padding: 10px 10px;
-  border-radius: 20px;
+  display: inline-block;
+  padding: 10px 20px;
   border: 2px solid black;
+  border-radius: 20px;
+  font-size: 16px;
   background-color: white;
-  cursor: pointer;
-  font-size: 20px;
-  font-family: 'Adumu', sans-serif;
+  margin-bottom: 40px;
+  margin-left: 10px;
+  }
+  
+  button.home-rounded-button {
+  background-color: #ffffff;
   color: black;
   text-decoration: none;
   transition: background-color 0.3s ease;
@@ -194,7 +145,14 @@ background-color: rgb(167, 141, 194);
 }
 
 div.due-date {
+=======
+  border: 2px solid black;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
   font-family: 'Adumu', sans-serif;
+  transition: background-color 0.3s;
+  margin: 10px;
   padding: 10px 20px;
   border: 2px solid black;
   border-radius: 20px;
@@ -221,4 +179,185 @@ div.due-date {
 
   .register-option {
     font-size: 14px;
+  transition: background-color 0.3s ease;
   }
+  
+  .home-rounded-button:hover {
+  background-color: rgb(167, 141, 194);
+  }
+  
+  
+  .outer-title-container {
+    margin-top: 260px; /* Adjust as needed */
+  }
+  
+  .title-container {
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -10%);
+  }
+  
+  .title {
+    font-family: 'Adumu', sans-serif;
+    color: rgb(167, 141, 194);
+    font-size: 50px;
+    -webkit-text-stroke: .75px black;
+    text-stroke: .75px black;
+  }
+  
+  .title span {
+    display: block;
+  }
+  
+  .rounded-button {
+    padding: 10px 10px;
+    border-radius: 20px;
+    border: 2px solid black;
+    background-color: white;
+    cursor: pointer;
+    font-size: 20px;
+    font-family: 'Adumu', sans-serif;
+    color: black;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    text-align: center;
+  }
+  
+  .rounded-button:hover {
+    background-color: rgb(167, 141, 194);
+  }
+  
+  
+  .homework-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+    
+  .assignment-container {
+    width: 220px; /* Set a fixed width for each assignment */
+    padding: 2px;
+    border: 2px solid black;
+    border-radius: 20px; /* Adjust border-radius for rounded corners */
+    background-color: white;
+    position: absolute; /* Position each assignment container absolutely */
+    display: flex; /* Use flexbox to align items */
+    flex-direction: column; /* Stack children vertically */
+  }
+  
+  .assignment-container:nth-child(1) {
+    transform: rotate(60deg) translateY(-320px) rotate(-60deg); 
+  }
+  
+  .assignment-container:nth-child(2) {
+    transform: rotate(120deg) translateY(-320px) rotate(-120deg); 
+  }
+  
+  .assignment-container:nth-child(3) {
+    transform: rotate(180deg) translateY(-280px) rotate(-180deg); 
+  }
+  
+  .assignment-container:nth-child(4) {
+    transform: rotate(240deg) translateY(-320px) rotate(-240deg); 
+  }
+  
+  .assignment-container:nth-child(5) {
+    transform: rotate(300deg) translateY(-320px) rotate(-300deg); 
+  }
+  
+  .assignment-container:nth-child(6) {
+    transform: rotate(360deg) translateY(-280px) rotate(-360deg); 
+  }
+  
+  
+  /* -----assignment message----- */
+  
+  .assignment-container ul {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left: 20px;
+  }
+  
+  .assignment-container li.assignment-message {
+    margin: 10px 0;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .assignment-container li.assignment-message.late {
+    margin: 10px 0;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  /* -------floating div ------- */
+  
+  
+  .floating-div {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -10%);
+    width: 250px; /* Set a fixed width for the floating div */
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 20px; /* Adjust border-radius for rounded corners */
+    background-color: rgb(237, 251, 152);
+    text-align: left;
+  }
+  
+  .floating-div.late {
+    background-color: rgb(255, 135, 122); /* Red background color for late assignments */
+  }
+  
+  .floating-div h3 {
+    font-size: 17px;
+    margin-bottom: 0px;
+    margin-top: 10px;
+  }
+  
+  .floating-div p {
+    font-size: 14px;
+    margin-top: 20px;
+  }
+  
+  /* -----assignment scoreboard ---- */
+  .assignment-scoreboard {
+    font-family: 'Adumu', sans-serif;
+    padding-left: 11px;
+    position: absolute;
+    top: 40px;
+    display: flex; /* Set display to flex */
+    flex-direction: column; /* Arrange children in a column */
+    align-items: flex-start; 
+  }
+  
+  div.due-date {
+    font-family: 'Adumu', sans-serif;
+    padding: 10px 20px;
+    border: 2px solid black;
+    border-radius: 20px;
+    font-size: 16px;
+    background-color: white;
+    margin-bottom: 20px;
+    }
+  
+    /* -----login page----- */
+  
+    .login-button {
+      background-color: black;
+      color: white;
+      border: 1px solid black;
+      border-radius: 10px;
+      margin: 5px;
+    }
+  
+    /* -----registration page----- */
+  
+    .registration-form {
+      list-style: none;
+    }
+  
+    .register-option {
+      font-size: 14px;
+    }
