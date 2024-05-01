@@ -21,7 +21,7 @@ font-family: 'Adumu', sans-serif;
 display: inline-block;
 padding: 10px 20px;
 border: 2px solid black;
-border-radius: 30px;
+border-radius: 20px;
 font-size: 16px;
 background-color: white;
 margin-bottom: 40px;
@@ -33,7 +33,7 @@ background-color: #ffffff;
 color: black;
 text-decoration: none;
 border: 2px solid black;
-border-radius: 30px;
+border-radius: 20px;
 cursor: pointer;
 font-size: 16px;
 font-family: 'Adumu', sans-serif;
@@ -42,79 +42,153 @@ margin: 10px;
 padding: 10px 20px;
 transition: background-color 0.3s ease;
 }
+
 .home-rounded-button:hover {
 background-color: rgb(167, 141, 194);
 }
 
-/* div.title-and-button-container {
-position: relative;
-} */
 
-div.title-container {
-text-align: center;
-transform: translateY(80%);
+.outer-title-container {
+  margin-top: 260px; /* Adjust as needed */
+}
+
+.title-container {
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -10%);
 }
 
 .title {
-font-family: 'Adumu', sans-serif;
-color: rgb(167, 141, 194);
-font-size: 50px;
--webkit-text-stroke: .75px black;
-text-stroke: .75px black;
+  font-family: 'Adumu', sans-serif;
+  color: rgb(167, 141, 194);
+  font-size: 50px;
+  -webkit-text-stroke: .75px black;
+  text-stroke: .75px black;
 }
 
 .title span {
-display: block;
-}  
-
-.button-container {
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100%;
-position: relative;
+  display: block;
 }
 
 .rounded-button {
-display: inline-block;
-margin: 0;
-padding: 10px 20px;
-border-radius: 30px;
-border: 2px solid black;
-background-color: white;
-cursor: pointer;
-font-size: 16px;
-font-family: 'Adumu', sans-serif;
-color: black;
-text-decoration: none;
-transition: background-color 0.3s ease;
-position: absolute; /* Added */
+  padding: 10px 10px;
+  border-radius: 20px;
+  border: 2px solid black;
+  background-color: white;
+  cursor: pointer;
+  font-size: 20px;
+  font-family: 'Adumu', sans-serif;
+  color: black;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  text-align: center;
 }
 
 .rounded-button:hover {
-background-color: rgb(167, 141, 194);
+  background-color: rgb(167, 141, 194);
 }
 
-.rounded-button:nth-child(1) {
-transform: rotate(60deg) translateY(-220px) rotate(-60deg); /* Updated */
+
+.homework-container {
+  display: flex;
+  justify-content: center;
 }
 
-.rounded-button:nth-child(2) {
-transform: rotate(0deg) translateY(-220px) rotate(0deg); /* Updated */
+  
+.assignment-container {
+  width: 200px; /* Set a fixed width for each assignment */
+  padding: 2px;
+  border: 2px solid black;
+  border-radius: 20px; /* Adjust border-radius for rounded corners */
+  background-color: white;
+  position: absolute; /* Position each assignment container absolutely */
+  display: flex; /* Use flexbox to align items */
+  flex-direction: column; /* Stack children vertically */
 }
 
-.rounded-button:nth-child(3) {
-transform: rotate(-60deg) translateY(-220px) rotate(60deg); /* Updated */
+.assignment-container:nth-child(1) {
+  transform: rotate(60deg) translateY(-300px) rotate(-60deg); 
 }
 
-.rounded-button:nth-child(4) {
-transform: rotate(-120deg) translateY(-220px) rotate(120deg); /* Updated */
+.assignment-container:nth-child(2) {
+  transform: rotate(120deg) translateY(-300px) rotate(-120deg); 
 }
 
-.rounded-button:nth-child(5) {
-transform: rotate(-180deg) translateY(-220px) rotate(180deg); /* Updated */
+.assignment-container:nth-child(3) {
+  transform: rotate(180deg) translateY(-300px) rotate(-180deg); 
 }
 
-.rounded-button:nth-child(6) {
-transform: rotate(-240deg) translateY(-220px) rotate(240deg); /* Updated */
+.assignment-container:nth-child(4) {
+  transform: rotate(240deg) translateY(-300px) rotate(-240deg); 
 }
+
+.assignment-container:nth-child(5) {
+  transform: rotate(300deg) translateY(-300px) rotate(-300deg); 
+}
+
+.assignment-container:nth-child(6) {
+  transform: rotate(360deg) translateY(-300px) rotate(-360deg); 
+}
+
+
+/* -----assignment message----- */
+
+.assignment-container ul {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-left: 20px;
+}
+
+.assignment-container li.assignment-message {
+  margin: 10px 0;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+/* -------floating div ------- */
+
+
+.floating-div {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -10%);
+  width: 250px; /* Set a fixed width for the floating div */
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 20px; /* Adjust border-radius for rounded corners */
+  background-color: rgb(237, 251, 152);
+  text-align: left;
+}
+
+.floating-div h3 {
+  font-size: 17px;
+  margin-bottom: 0px;
+  margin-top: 10px;
+}
+
+.floating-div p {
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+/* -----assignment scoreboard ---- */
+.assignment-scoreboard {
+  font-family: 'Adumu', sans-serif;
+  padding-left: 11px;
+  position: absolute;
+  top: 40px;
+  display: flex; /* Set display to flex */
+  flex-direction: column; /* Arrange children in a column */
+  align-items: flex-start; 
+}
+
+div.due-date {
+  font-family: 'Adumu', sans-serif;
+  padding: 10px 20px;
+  border: 2px solid black;
+  border-radius: 20px;
+  font-size: 16px;
+  background-color: white;
+  margin-bottom: 20px;
+  }

@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
+=======
+import React from 'react';
+import { Link, useParams} from 'react-router-dom';
+import '../App.css';
+>>>>>>> proofing
 
 function SubjectComponent() {
   const [homework, setHomework] = useState([]);
