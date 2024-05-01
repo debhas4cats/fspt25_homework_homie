@@ -1,4 +1,8 @@
 /node_modules
 /dist
 .env
+<<<<<<< HEAD
 .DS_store
+=======
+.DS_store
+>>>>>>> 003b869 (adding stuff)

@@ -40,6 +40,7 @@
   transition: background-color 0.3s;
   margin: 10px;
   padding: 10px 20px;
+<<<<<<< HEAD
   border: 2px solid black;
   border-radius: 20px;
   font-size: 16px;
@@ -66,6 +67,9 @@
   .register-option {
     font-size: 14px;
     transition: background-color 0.3s ease;
+=======
+  transition: background-color 0.3s ease;
+>>>>>>> 003b869 (adding stuff)
   }
   
   .home-rounded-button:hover {
