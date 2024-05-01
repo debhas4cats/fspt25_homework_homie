@@ -116,47 +116,34 @@ function SubjectComponent() {
             </select>
           </div>
           <div className="form-group">
-  <label htmlFor="priority">Priority</label>
-  <select
-    className="form-control"
-    id="priority"
-    name="priority"
-    value={newHomework.priority}
-    onChange={handleInputChange}
-  >
-    <option value="">Select Priority</option>
-    <option value="low">Low</option>
-    <option value="medium">Medium</option>
-    <option value="high">High</option>
-  </select>
-</div>
+    </div>
 
-{/* Add the completed and pastdue fields here */}
-<div className="form-check">
-  <input
-    type="checkbox"
-    className="form-check-input"
-    id="completed"
-    name="completed"
-    checked={newHomework.completed}
-    onChange={handleInputChange}
-  />
-  <label className="form-check-label" htmlFor="completed">Completed</label>
-</div>
-<div className="form-check">
-  <input
-    type="checkbox"
-    className="form-check-input"
-    id="pastdue"
-    name="pastdue"
-    checked={newHomework.pastdue}
-    onChange={handleInputChange}
-  />
+    {/* Add the completed and pastdue fields here */}
+    <div className="form-check">
+      <input
+      type="checkbox"
+      className="form-check-input"
+      id="completed"
+      name="completed"
+      checked={newHomework.completed}
+      onChange={handleInputChange}
+    />
+    <label className="form-check-label" htmlFor="completed">Completed</label>
+    </div>
+    <div className="form-check">
+      <input
+        type="checkbox"
+        className="form-check-input"
+        id="pastdue"
+        name="pastdue"
+        checked={newHomework.pastdue}
+        onChange={handleInputChange}
+      />
   <label className="form-check-label" htmlFor="pastdue">Past Due</label>
-</div>
-          {/* Add more fields here */}
-          <button type="submit" className="btn btn-primary">Add Homework</button>
-        </form>
+    </div>
+    {/* Add more fields here */}
+      <button type="submit" className="btn btn-primary">Add Homework</button>
+      </form>
       </div>
       <ul className="list-group mt-3">
         {homework.map((hw) => (
@@ -168,7 +155,6 @@ function SubjectComponent() {
             <div>
               <p>Due Date: {hw.dueDate}</p>
               <p>Priority: {hw.priority}</p>
-          
               {/* Other details */}
               <button className="btn btn-danger" onClick={() => deleteHomework(hw.id)}>Delete</button>
               {/* Other buttons */}
