@@ -4,20 +4,57 @@ import "../App.css";
 import createMessage from "../utilities/createMessage"; // Import the createMessage function
 
 function Dashboard() {
-  const [subjects, setSubjects] = useState([
-    { id: 1, name: "Math", assignments: null },
-    { id: 2, name: "Science", assignments: null },
-    { id: 3, name: "History", assignments: null },
-    { id: 4, name: "German", assignments: null },
-    { id: 5, name: "English", assignments: null },
-    { id: 6, name: "Art", assignments: null },
-  ]);
+  // const [subjects, setSubjects] = useState([
+  //    { id: 1, name: "Math", assignments: null },
+  //    { id: 2, name: "Science", assignments: null },
+  //   { id: 3, name: "History", assignments: null },
+  //   { id: 4, name: "German", assignments: null },
+  //   { id: 5, name: "English", assignments: null },
+  //    { id: 6, name: "Art", assignments: null },
+  //  ]);
   // State to track whether the floating div should be shown
   const [showFloatingDiv, setShowFloatingDiv] = useState(false);
   // State to store the assignment data for the floating div
   const [hoveredAssignment, setHoveredAssignment] = useState(null);
   //This initializes a state variable subjects using the useState hook.
   // The initial state is an array of subject objects as NULL.
+
+//refactoring the subjects state variable to take in the data from the GET subjects endpoint
+const [subjects, setSubjects] = useState([]);
+
+useEffect(() => {
+  // Fetch subjects data from backend
+  const fetchSubjectsData = async () => {
+    try {
+      const response = await fetch("http://localhost:4000/homework/subjects");
+console.log('THIS IS MY RESPONSE', response)
+      if (!response.ok) {
+        throw new Error("Failed to fetch subjects");
+      }
+      const responseData = await response.json();
+      // if (!Array.isArray(responseData.data)) {
+      //   throw new Error("Data is not an array");
+      // }
+console.log('THIS IS MY RESPONSEDATA', responseData)
+      const data = responseData.data.data; // Access data.data
+console.log('THIS IS MY DATA', data)
+      // Map over the fetched subjects and initialize the subjects state
+      setSubjects(data.map(subject => ({
+        id: subject.subjectID, // Assuming subjectID is the ID of the subject
+        name: subject.subject_name,
+        teacher: `${subject.firstname} ${subject.lastname}`, // Combine first and last name
+        assignments: null // Initially set assignments to null
+      })));
+      console.log('Updated subjects state:', subjects);
+    } catch (error) {
+console.error("Error fetching subjects:", error);
+    }
+  };
+
+  fetchSubjectsData();
+}, []);
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -141,19 +178,16 @@ function Dashboard() {
               create a container showing the subject's name as a link 
               and a list of assignments sorted by due date */}
       <div className="homework-container">
-        {subjects.map(
-          (
-            subject //map through each subject in the subjects array and render content for each subject
-          ) => (
-            // make a container for each subject's assignments
-            <div key={subject.id} className="assignment-container">
+        {/* line modified to take in the subjects from the useEffect to fetchSubjects and modify the useState for Subjects */}
+        {subjects.map((subject, index) => (
+  <div key={`${subject.id}_${index}`} className="assignment-container">
               {/*  create a link to a page related to the subject
                 the to prop of Link component is set to /${subject.name.toLowerCase()}
                   which will navigate to a route based on the subject name in lowercase because
                   converting the subject name to lowercase, ensures that the URL will be consistent and predictable
                   The subject name is displayed as button text. */}
               <Link
-                to={`/${subject.name.toLowerCase()}`}
+                to={`/${subject.name.toLowerCase()}?teacher=${encodeURIComponent(subject.teacher)}`} // Pass teacher's name as a URL parameter
                 className="rounded-button"
               >
                 {subject.name}
@@ -177,7 +211,7 @@ function Dashboard() {
                             ? "late"
                             : ""
                         }`}
-                        key={index}
+                        key={`${subject.id}_${index}`} // Use a unique key combining subject ID and index
                         onMouseEnter={() => {
                           setHoveredAssignment(assignment);
                           setShowFloatingDiv(true);
@@ -190,7 +224,7 @@ function Dashboard() {
               </ul>
             </div>
           )
-        )}
+       ) }
       </div>
 
       {/* "post it" note containing details of assignment based on where user hovers */}

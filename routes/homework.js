@@ -202,16 +202,33 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-//GET endpoint to get all the subjects
+// GET endpoint to get all the subjects
 //Code snippet for Postman test: localhost:5000/homework/subjects
+// router.get('/subjects', async (req, res) => {
+//   const query = `SELECT * FROM subjects`;
+//   try {
+//     const results = await db(query);
+//     res.status(200).json({ data: results.data });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
+
+
 router.get('/subjects', async (req, res) => {
-  const query = `SELECT * FROM subjects`;
+  const query = `
+  SELECT DISTINCT subjects.id  AS subjectID, subjects.name AS subject_name, teachers.firstname, teachers.lastname
+FROM students_subjects_homeworks
+JOIN subjects ON students_subjects_homeworks.subjectID = subjects.id
+JOIN teachers ON students_subjects_homeworks.teacherID = teachers.id;
+  `;
   try {
     const results = await db(query);
-    res.status(200).json({ data: results.data });
+    res.status(200).json({ data: results });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 module.exports = router;
 
