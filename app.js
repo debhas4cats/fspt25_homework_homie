@@ -8,7 +8,6 @@ var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
 let homeworkRouter = require('./routes/homework'); //for the homework.js file in the route folder
 const studentRouter = require('./routes/student');
-
 const app = express();
 
 app.use(cors()); 
@@ -38,6 +37,8 @@ app.use('/api/homework', homeworkRouter);
 
 app.get("/", function(req, res, next) {
   res.send("Access the API at path /student");
+});
+
 });
 
 module.exports = app;
