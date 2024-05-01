@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import '../App.css';
+
 function SubjectComponent() {
   const [homework, setHomework] = useState([]);
   const [newHomework, setNewHomework] = useState({
