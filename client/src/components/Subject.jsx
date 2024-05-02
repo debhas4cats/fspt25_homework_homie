@@ -80,7 +80,14 @@ function SubjectComponent() {
   const deleteHomework = async (id) => {
     console.log('Deleting homework with ID:', id);
     try {
-      // Logic to delete homework with the specified ID
+      const response = await fetch(`http://localhost:4000/homework/homeworks/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete homework');
+      }
+      // Remove the deleted homework from the state
+      setHomework(homework.filter(hw => hw.id !== id));
     } catch (error) {
       console.error('Error deleting homework:', error);
     }

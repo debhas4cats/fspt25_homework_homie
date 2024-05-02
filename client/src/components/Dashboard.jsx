@@ -6,7 +6,6 @@ import ClickableDate from './ClickableDate'; // Import the ClickableDate compone
 import PencilSVG from '../assets/pencil.svg'; // Import the pencil SVG
 // Import other icons
 import { BulbSVG, StarSVG, MagnifySVG, ArrowSVG } from './Icons'; // Changed the import path
-
 import axios from "axios";
 
 function Dashboard({ userData }) { // receiving the userdata as prop
