@@ -77,17 +77,17 @@ function SubjectComponent() {
               value={newHomework.assignment}
               onChange={handleInputChange}
             />
-          </div>
-          <div className="form-group">
-            <label htmlFor="description">Description</label>
-            <input
-              type="text"
-              className="form-control"
-              id="description"
-              name="description"
-              value={newHomework.description}
-              onChange={handleInputChange}
-            />
+    </div>
+    <div className="form-group">
+        <label htmlFor="description">Description</label>
+        <input
+        type="text"
+        className="form-control"
+        id="description"
+        name="description"
+        value={newHomework.description}
+        onChange={handleInputChange}
+        />
           </div>
           <div className="form-group">
             <label htmlFor="dueDate">Due Date</label>

@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
 let homeworkRouter = require('./routes/homework'); //for the homework.js file in the route folder
 const studentRouter = require('./routes/student');
+
 const app = express();
 
 app.use(cors()); 
@@ -19,7 +20,7 @@ app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use("/api/auth", authRouter);
-app.use('/homework', homeworkRouter); 
+app.use('/api/homework', homeworkRouter); 
 app.use('/api/student', studentRouter);
 
 app.use((req, res, next) => {

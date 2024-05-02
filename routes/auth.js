@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var jwt = require("jsonwebtoken");
-var studentLoggedIn = require("../guards/studentLoggedIn");
+var studentIsLoggedIn = require("../guards/studentIsLoggedIn");
 var db = require("../model/helper");
 require("dotenv").config();
 var bcrypt = require("bcrypt");
@@ -32,6 +32,14 @@ const supersecret = process.env.SUPER_SECRET;
     } catch (err) {
       res.status(400).send({ message: err.message });
     }
+  });
+
+  // GET info of one student
+  router.get("/profile", studentIsLoggedIn, async function(req, res, next) {
+    let studentId = req.user_id;
+    const result = await db(`SELECT * FROM students where id = ${studentId}`)
+
+    res.send(result.data[0]);
   });
 
 module.exports = router;

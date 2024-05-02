@@ -5,7 +5,6 @@ var bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 
-
 //endpoint to get all students
 // code snippet for testing in Postman: localhost:5000/api/student
 router.get("/", async function(req, res, next) {
@@ -16,6 +15,8 @@ router.get("/", async function(req, res, next) {
     res.status(500).send(err)
   }
 });
+
+// GET one student info - Must be protected
 
 /* POST a new student */
 
@@ -42,4 +43,6 @@ router.post("/", async function(req, res, next) {
       res.status(500).send(err)
     }
   });
+
+
   module.exports = router;
