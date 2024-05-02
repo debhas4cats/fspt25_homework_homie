@@ -32,7 +32,6 @@ export default function Login({setUserData}) {
             if (response.status === 200) {
                 localStorage.setItem("token", data.token);
                 setUserData(data.student);
-<<<<<<< HEAD
                 // console.log("UserData in Login component:", data.student); // log userData here
                 navigate("/dashboard");
             } else {
@@ -42,19 +41,10 @@ export default function Login({setUserData}) {
         } catch (error) {
             console.error("Login error:", error);
             setError("An error occurred during login"); // set error message
-=======
-                console.log("UserData in Login component:", data.student); // Log userData here
+                console.log("UserData in Login component:", data.student); // log userData here
                 navigate("/dashboard");
-            } else {
-                // Handle other status codes here
-                setError(data.message); // Set error message
-            }
-        } catch (error) {
-            console.error("Login error:", error);
-            setError("An error occurred during login"); // Set error message
->>>>>>> b5c10cc (updated login, app, dashboard, auth for john doe info to load)
         }
-    };
+    }
 
     return (
         <>
@@ -97,8 +87,4 @@ export default function Login({setUserData}) {
             )}
         </>
     );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> b5c10cc (updated login, app, dashboard, auth for john doe info to load)
