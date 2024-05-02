@@ -187,7 +187,7 @@ function SubjectComponent() {
       </ul>
     </div>
   );
-}
+} 
 
 // PropTypes definition (if you're using PropTypes)
 SubjectComponent.propTypes = {
