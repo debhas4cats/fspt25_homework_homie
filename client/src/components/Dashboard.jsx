@@ -18,7 +18,7 @@ function Dashboard() {
   const [hoveredAssignment, setHoveredAssignment] = useState(null);
   //This initializes a state variable subjects using the useState hook.
   // The initial state is an array of subject objects as NULL.
-
+  const [forceRender, setForceRender] = useState(0); // Initialize forceRender state variable
 //refactoring the subjects state variable to take in the data from the GET subjects endpoint
 const [subjects, setSubjects] = useState([]);
 
@@ -36,7 +36,7 @@ console.log('THIS IS MY RESPONSE', response)
       //   throw new Error("Data is not an array");
       // }
 console.log('THIS IS MY RESPONSEDATA', responseData)
-      const data = responseData.data.data; // Access data.data
+      const data =  responseData.data.data; // Access data.data
 console.log('THIS IS MY DATA', data)
       // Map over the fetched subjects and initialize the subjects state
       setSubjects(data.map(subject => ({
@@ -46,6 +46,7 @@ console.log('THIS IS MY DATA', data)
         assignments: null // Initially set assignments to null
       })));
       console.log('Updated subjects state:', subjects);
+   
     } catch (error) {
 console.error("Error fetching subjects:", error);
     }
@@ -54,7 +55,10 @@ console.error("Error fetching subjects:", error);
   fetchSubjectsData();
 }, []);
 
-
+//this useEffect is to correct the rendering glitch. It will log subjects whenever a change is made to the subjects state variable.
+useEffect(() => {
+  console.log("Updated subjects state in 2nd UseEffect:", subjects);
+}, [subjects]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -187,7 +191,7 @@ console.error("Error fetching subjects:", error);
                   converting the subject name to lowercase, ensures that the URL will be consistent and predictable
                   The subject name is displayed as button text. */}
               <Link
-                to={`/${subject.name.toLowerCase()}?teacher=${encodeURIComponent(subject.teacher)}`} // Pass teacher's name as a URL parameter
+                to={`/${subject.name}?teacher=${encodeURIComponent(subject.teacher)}`} // Pass teacher's name as a URL parameter
                 className="rounded-button"
               >
                 {subject.name}

@@ -9,8 +9,7 @@ function SubjectComponent() {
   const teacher = searchParams.get('teacher');
   console.log(teacher);
   return (
-    <div>
-      <Link to="/">
+    <div><Link to="/">
         <button className="home-rounded-button">HOME</button>
       </Link>
     
