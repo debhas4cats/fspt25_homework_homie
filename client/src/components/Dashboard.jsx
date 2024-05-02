@@ -191,14 +191,11 @@ function Dashboard({ userData }) {//receive student data as a prop from login
               create a container showing the subject's name as a link 
               and a list of assignments sorted by due date */}
       <div className="homework-container">
+        {/* line modified to take in the subjects from the useEffect to fetchSubjects and modify the useState for Subjects */}
         
-        {subjects.map(
-          (
-            subject //map through each subject in the subjects array and render content for each subject
-          ) => (
-            // make a container for each subject's assignments
-            <div key={subject.id} className="assignment-container">
-              {/*  create a link to a page related to the subject
+        {subjects.map((subject) => ( //map through each subject in the subjects array and render content for each subject
+         <div key={subject.id} className="assignment-container">
+            {/*  create a link to a page related to the subject
                 the to prop of Link component is set to /${subject.name.toLowerCase()}
                   which will navigate to a route based on the subject name in lowercase because
                   converting the subject name to lowercase, ensures that the URL will be consistent and predictable
