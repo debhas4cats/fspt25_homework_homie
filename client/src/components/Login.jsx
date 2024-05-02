@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
-export default function Login({ setUserData }) {
+export default function Login({setUserData}) {
     const [credentials, setCredentials] = useState({
         username: "",
         password: ""
