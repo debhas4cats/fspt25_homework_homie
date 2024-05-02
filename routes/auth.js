@@ -25,7 +25,9 @@ const supersecret = process.env.SUPER_SECRET;
         if (!correctPassword) throw new Error("Incorrect password");
   
         var token = jwt.sign({ user_id }, supersecret);
-        res.send({ message: `Hello, ${user.firstname}`, token });
+        // Log the user data before sending the response
+        console.log("User data:", user);
+        res.send({ message: `Hello, ${user.firstname}`, token, student: user });//To send the student data along with the response, you need to fetch the user data from the database and include it in the response object.
       } else {
         throw new Error("Student does not exist");
       }

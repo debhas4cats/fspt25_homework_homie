@@ -151,6 +151,13 @@
     font-weight: bold;
     cursor: pointer;
   }
+
+  .no-assignments-message{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 14px;
+  }
   
   /* -------floating div ------- */
   

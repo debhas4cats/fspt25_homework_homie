@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import "../App.css";
 import createMessage from "../utilities/createMessage"; // Import the createMessage function
 
-function Dashboard() {
-  const [subjects, setSubjects] = useState([
+function Dashboard({ userData }) {//receive student data as a prop from login
+   const [subjects, setSubjects] = useState([
     { id: 1, name: "Math", assignments: null },
     { id: 2, name: "Science", assignments: null },
     { id: 3, name: "History", assignments: null },
@@ -20,13 +20,15 @@ function Dashboard() {
   // The initial state is an array of subject objects as NULL.
 
   useEffect(() => {
+    console.log("userData:", userData); // Log userData to check if it's being passed correctly
+    if (!userData) return; // Ensure userData is available
     const fetchData = async () => {
       // use async/await to fetch data for each subject
       try {
         const promises = subjects.map(async (subject) => {
           // loop through each subject
           const response = await fetch(
-            `http://localhost:4000/homework/subjects/${subject.id}/students/1/homework`
+            `http://localhost:4000/homework/subjects/${subject.id}/students/${userData.id}/homework`
           ); // for each subject we fetch homework data
           if (!response.ok) {
             // if the response from the server is not okay -- we throw an error to handle
@@ -35,7 +37,7 @@ function Dashboard() {
             );
           }
           const data = await response.json(); //waits for response from the server to be fully fetched and parsed as JSON and store as variable DATA
-          // console.log(`Homework data for ${subject.name}:`, data); // console logging the data received just in case
+          console.log(`Homework data for ${subject.name}${userData.id}:`, data); // console logging the data received just in case
           return { subjectId: subject.id, data: data.data }; // create an object that associates a subject's ID with its corresponding homework data.
         });
         // after fetching data from all subjects, we gather them
@@ -155,6 +157,7 @@ function Dashboard() {
               create a container showing the subject's name as a link 
               and a list of assignments sorted by due date */}
       <div className="homework-container">
+        
         {subjects.map(
           (
             subject //map through each subject in the subjects array and render content for each subject
@@ -173,7 +176,9 @@ function Dashboard() {
                 {subject.name}
               </Link>
               {/* create an unordered list where assignments will be displayed */}
-
+                {/* Check if there are assignments */}
+                {subject.assignments && subject.assignments.length > 0 ? (
+                        // If there are assignments, render them
               <ul>
                 {subject.assignments &&
                   subject.assignments.length > 0 &&
@@ -202,10 +207,13 @@ function Dashboard() {
                        );
                     })}
               </ul>
-            </div>
-          )
-        )}
-      </div>
+                ) : (
+                  // If there are no assignments, render the message
+                  <div className="no-assignments-message">No assignments available</div>
+                )}
+              </div>
+            ))}
+          </div>
 
       {/* "post it" note containing details of assignment based on where user hovers */}
       <div className="floating-div-outer-container">

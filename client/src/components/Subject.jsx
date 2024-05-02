@@ -11,15 +11,18 @@ function SubjectComponent() {
     completed: false,
     pastdue: false,
   });
-  const { subject } = useParams();
+  const { subject } = useParams(); // Accessing subject ID from URL params
 
   useEffect(() => {
     fetchHomeworkForSubject();
-  }, [subject]);
+  }, [subject]); // Fetch homework whenever subject changes
 
   async function fetchHomeworkForSubject() {
     try {
-      const response = await fetch('/api/homework/subjects/6/homework');
+      const response = await fetch(`http://localhost:4000/homework/subjects/${subject.id}/students/${student.id}/homework`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch homework data for ${subject}`);
+      }
       const data = await response.json();
       console.log(data);
       setHomework(data.data);
@@ -48,7 +51,14 @@ function SubjectComponent() {
   const deleteHomework = async (id) => {
     console.log('Deleting homework with ID:', id);
     try {
-      // Logic to delete homework with the specified ID
+      const response = await fetch(`http://localhost:4000/homework/homeworks/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete homework');
+      }
+      // Remove the deleted homework from the state
+      setHomework(homework.filter(hw => hw.id !== id));
     } catch (error) {
       console.error('Error deleting homework:', error);
     }
@@ -56,7 +66,7 @@ function SubjectComponent() {
 
   return (
     <div>
-      <Link to="/">
+      <Link to="/dashboard">
         <button className="home-rounded-button">HOME</button>
       </Link>
 
