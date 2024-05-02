@@ -13,37 +13,10 @@ function App() {
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const today = new Date().toLocaleDateString(undefined, options);
 
-   const [userData, setUserData] = useState(() => { //userData is the current state value. setUserData is a function used to update the state
-    //arrow function is used as the initial state and it checks the local storage for a key named "userData" 
-    //if there is value stored for "userData" in the local storage (storedUserData)
-    // it parses the JSON string into a JavaScript object
-    const storedUserData = localStorage.getItem("userData"); 
-    // returned value from the arrow function will be used as the initial value for userData
-    // if not, it returns null
-    return storedUserData ? JSON.parse(storedUserData) : null;
-  });
-
+  const [ userData, setUserData ] = useState(null);
   useEffect(() => {
-    // console.log("userData in App.jsx:", userData); // Log userData here. Must be removed to avoid sharing user data before logging in
-    if (userData) {
-      localStorage.setItem("userData", JSON.stringify(userData));
-    }
-  }, [userData]);
-
-  // function to get user data from backend
-  const fetchUserData = async () => {
-    try {
-      const token = localStorage.getItem("token"); // retrieve token from local storage
-      const response = await axios.get("/api/student", { // GET request to receive data of one student
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      setUserData(response.data); // update user data state with fetched data
-    } catch(error) {
-      console.error("Error fetching user data", error);
-    }
-  }
+    console.log("userData in App.jsx:", userData); // Log userData here
+  }, []); 
   
   useEffect(() => {
     fetchUserData(); // fetch user data when component mounts
