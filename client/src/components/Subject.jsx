@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React from 'react';
+import { Link, useParams, useLocation} from 'react-router-dom';
 import '../App.css';
 
 function SubjectComponent() {
@@ -94,8 +94,7 @@ function SubjectComponent() {
   };
 
   return (
-    <div>
-      <Link to="/dashboard">
+    <div><Link to="/dashboard">
         <button className="home-rounded-button">HOME</button>
       </Link>
       <div className="container">
