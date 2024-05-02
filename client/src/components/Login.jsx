@@ -32,15 +32,15 @@ export default function Login({ setUserData }) {
             if (response.status === 200) {
                 localStorage.setItem("token", data.token);
                 setUserData(data.student);
-                console.log("UserData in Login component:", data.student); // Log userData here
+                console.log("UserData in Login component:", data.student); // log userData here
                 navigate("/dashboard");
             } else {
-                // Handle other status codes here
-                setError(data.message); // Set error message
+                // handle other status codes here
+                setError(data.message); // set error message
             }
         } catch (error) {
             console.error("Login error:", error);
-            setError("An error occurred during login"); // Set error message
+            setError("An error occurred during login"); // set error message
         }
     };
 

@@ -70,7 +70,7 @@ function Dashboard({ userData }) {//receive student data as a prop from login
     };
 
     fetchData(); //call fetchData() when the component mounts
-  }, []); //second argument of useEffect means it will only run once on mount
+  }, []); //second argument 
 
   const tallyAssignments = () => {
     // keep track of how many assignments fall into each category
