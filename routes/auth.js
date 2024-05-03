@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var jwt = require("jsonwebtoken");
-var studentIsLoggedIn = require("../guards/studentIsLoggedIn");
+var studentIsLoggedIn = require("../guards/studentLoggedIn");
 var db = require("../model/helper");
 require("dotenv").config();
 var bcrypt = require("bcrypt");
@@ -25,21 +25,15 @@ const supersecret = process.env.SUPER_SECRET;
         if (!correctPassword) throw new Error("Incorrect password");
   
         var token = jwt.sign({ user_id }, supersecret);
-        res.send({ message: `Hello, ${user.firstname}`, token });
+        // Log the user data before sending the response
+        console.log("User data:", user);
+        res.send({ message: `Hello, ${user.firstname}`, token, student: user });//To send the student data along with the response, you need to fetch the user data from the database and include it in the response object.
       } else {
         throw new Error("Student does not exist");
       }
     } catch (err) {
       res.status(400).send({ message: err.message });
     }
-  });
-
-  // GET info of one student
-  router.get("/student", studentIsLoggedIn, async function(req, res, next) {
-    let studentId = req.user_id;
-    const result = await db(`SELECT * FROM students where id = ${studentId}`)
-
-    res.send(result.data[0]);
   });
 
 module.exports = router;
