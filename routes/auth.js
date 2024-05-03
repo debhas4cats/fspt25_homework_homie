@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var jwt = require("jsonwebtoken");
-var studentIsLoggedIn = require("../guards/studentLoggedIn");
+var studentIsLoggedIn = require("../guards/studentIsLoggedIn");
 var db = require("../model/helper");
 require("dotenv").config();
 var bcrypt = require("bcrypt");
