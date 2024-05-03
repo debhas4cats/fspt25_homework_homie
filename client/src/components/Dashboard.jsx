@@ -27,7 +27,7 @@ useEffect(() => {
   const fetchSubjectsData = async () => {
     try {
       const response = await fetch("http://localhost:4000/homework/subjects");
-console.log('THIS IS MY RESPONSE', response)
+// console.log('THIS IS MY RESPONSE', response)
       if (!response.ok) {
         throw new Error("Failed to fetch subjects");
       }
@@ -35,9 +35,9 @@ console.log('THIS IS MY RESPONSE', response)
       // if (!Array.isArray(responseData.data)) {
       //   throw new Error("Data is not an array");
       // }
-console.log('THIS IS MY RESPONSEDATA', responseData)
+// console.log('THIS IS MY RESPONSEDATA', responseData)
       const data =  responseData.data.data; // Access data.data
-console.log('THIS IS MY DATA', data)
+// console.log('THIS IS MY DATA', data)
       // Map over the fetched subjects and initialize the subjects state
       setSubjects(data.map(subject => ({
         id: subject.subjectID, // Assuming subjectID is the ID of the subject
@@ -45,7 +45,7 @@ console.log('THIS IS MY DATA', data)
         teacher: `${subject.firstname} ${subject.lastname}`, // Combine first and last name
         assignments: null // Initially set assignments to null
       })));
-      console.log('Updated subjects state:', subjects);
+      // console.log('Updated subjects state:', subjects);
    
     } catch (error) {
 console.error("Error fetching subjects:", error);
@@ -56,9 +56,9 @@ console.error("Error fetching subjects:", error);
 }, []);
 
 //this useEffect is to correct the rendering glitch. It will log subjects whenever a change is made to the subjects state variable.
-useEffect(() => {
-  console.log("Updated subjects state in 2nd UseEffect:", subjects);
-}, [subjects]);
+// useEffect(() => {
+//   // console.log("Updated subjects state in 2nd UseEffect:", subjects);
+// }, [subjects]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,7 +83,7 @@ useEffect(() => {
         //and ALL SETTLED allows us to wait for all promises to resolve or reject
         // store the results of the promises in a variable called results
         const results = await Promise.allSettled(promises);
-
+console.log('THIS IS MY RESULTS', results)
         //update the state of subjects using SETSUBJECTS
         setSubjects((prevSubjects) => {
           //loop through each subject in the previous state
