@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';// import React library to use its features
 import './App.css';  // import CSS file for styling
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'; // import components from react-router-dom for routing
+import axios from 'axios';
 import Subject from './components/Subject'; // import a component called Subject
 import Dashboard from './components/Dashboard'; // import a component called Dashboard
 import Login from './components/Login';
@@ -23,12 +24,31 @@ function App() {
   });
 
   useEffect(() => {
-    console.log("userData in App.jsx:", userData); // Log userData here
+    // console.log("userData in App.jsx:", userData); // Log userData here. Must be removed to avoid sharing user data before logging in
     if (userData) {
       localStorage.setItem("userData", JSON.stringify(userData));
     }
   }, [userData]);
+
+  // function to get user data from backend
+  const fetchUserData = async () => {
+    try {
+      const token = localStorage.getItem("token"); // retrieve token from local storage
+      const response = await axios.get("/api/student", { // GET request to receive data of one student
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setUserData(response.data); // update user data state with fetched data
+    } catch(error) {
+      console.error("Error fetching user data", error);
+    }
+  }
   
+  useEffect(() => {
+    fetchUserData(); // fetch user data when component mounts
+  }, []);
+
   return (
     <Router>{/* Router component is used to wrap all our routes */}
       <div>

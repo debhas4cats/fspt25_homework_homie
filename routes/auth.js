@@ -36,4 +36,8 @@ const supersecret = process.env.SUPER_SECRET;
     }
   });
 
+  router.get("/secure", studentIsLoggedIn, (req, res) => {
+    res.send("This route is secure!");
+  });
+
 module.exports = router;
