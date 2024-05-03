@@ -35,7 +35,7 @@ const supersecret = process.env.SUPER_SECRET;
   });
 
   // GET info of one student
-  router.get("/profile", studentIsLoggedIn, async function(req, res, next) {
+  router.get("/student", studentIsLoggedIn, async function(req, res, next) {
     let studentId = req.user_id;
     const result = await db(`SELECT * FROM students where id = ${studentId}`)
 

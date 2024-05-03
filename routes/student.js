@@ -17,6 +17,16 @@ router.get("/", async function(req, res, next) {
 });
 
 // GET one student info - Must be protected
+//endpoint to get student by id
+// code snippet for postman localhost:4000/api/student/3
+router.get("/:id", async function(req, res, next) {
+  try {
+    const result = await db(`SELECT * FROM students WHERE id = ${req.params.id};`);
+    res.send(result.data);
+  } catch (err) {
+    res.status(500).send(err)
+  }
+});
 
 /* POST a new student */
 
