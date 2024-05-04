@@ -75,8 +75,6 @@ function Dashboard({ userData }) { // receiving the userdata as prop
     }
   };
 
-
-
   function isLate(dueDate) {
     const today = new Date();
     return dueDate < today && !isSameDay(dueDate, today);
