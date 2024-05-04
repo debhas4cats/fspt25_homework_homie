@@ -6,7 +6,7 @@
   font-style: normal;
   }
   
-  body {
+body {
   background-color: #fff;
   background-image:
   linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
@@ -15,8 +15,12 @@
   linear-gradient(90deg, rgba(0, 0, 0, 0.02) 2px, transparent 2px);
   background-size: 20px 20px, 20px 20px, 1px 1px, 1px 1px;
   }
-  
-  div.date {
+/* --- calendar ----*/
+.clickable-date {
+  position: relative; /* Set position to relative */
+}
+
+button.date {
   font-family: 'Adumu', sans-serif;
   display: inline-block;
   padding: 10px 20px;
@@ -26,7 +30,71 @@
   background-color: white;
   margin-bottom: 40px;
   margin-left: 10px;
-  }
+  cursor: pointer;
+}
+
+.calendar-container {
+  position: absolute;
+  top: 400%; /* Position the calendar container just below the date */
+  left: 14px;
+  z-index: 1; /* Ensure the calendar appears on top of other elements */
+  display: flex;
+  flex-direction: column;
+}
+
+
+button.close-calendar {
+  width: 100%; /* Make the button fill the container width */
+  font-family: 'Adumu', sans-serif;
+  padding: 10px;
+  border: none;
+  background-color: #ffffff;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 15px; /* Ensure the border-radius is specified correctly */
+  border: 2px solid black;
+}
+
+.events-for-date {
+  margin-top: 15px;
+}
+
+.event {
+  display: flex;
+  justify-content: space-between; /* Put space between event and delete button */
+  align-items: center; /* Vertically center items */
+  margin-bottom: 5px; /* Add some margin between events */
+}
+
+
+button.add-event {
+  width: 44%; /* Make the button fill the container width */
+  font-family: 'Adumu', sans-serif;
+  padding: 2px;
+  background-color: #ffffff;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 10px; /* Ensure the border-radius is specified correctly */
+  border: 1.5px solid black;
+}
+
+button.event-delete {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.highlight-date {
+  width: 35px; /* Adjust width as needed */
+  height: 4px; /* Adjust height as needed */
+  background-color: rgb(167, 141, 194);
+ 
+}
+
+  /* --- calendar ----*/
   
   button.home-rounded-button {
   background-color: #ffffff;
@@ -43,7 +111,7 @@
   transition: background-color 0.3s ease;
   }
   
-  .home-rounded-button:hover {
+ button:hover {
   background-color: rgb(167, 141, 194);
   }
   

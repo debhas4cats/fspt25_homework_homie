@@ -5,6 +5,8 @@ import Subject from './components/Subject'; // import a component called Subject
 import Dashboard from './components/Dashboard'; // import a component called Dashboard
 import Login from './components/Login';
 import RegisterNewStudent from './components/RegisterNewStudent';
+import ClickableDate from './components/ClickableDate'; // Import the ClickableDate component
+
 
 
 function App() {
@@ -32,8 +34,8 @@ function App() {
   return (
     <Router>{/* Router component is used to wrap all our routes */}
       <div>
-            {/* Today's date */}
-        <div className="date">{today}</div>
+            {/* Today's date and calendar*/}
+            <ClickableDate />
 
 
         <Routes>{/* Routes component holds all our defined routes */}
