@@ -14,7 +14,7 @@ const supersecret = process.env.SUPER_SECRET;
   
     try {
       const results = await db(
-        `SELECT * FROM students WHERE username = "${username}"`
+        `SELECT * FROM students WHERE username = '${username}'`
       );
       const user = results.data[0];
       if (user) {

@@ -46,7 +46,7 @@ const handleChange = (e) => {
 //handleSumbit for adding new student input into the addStudent function
 const handleSubmit = async (e) => {
   e.preventDefault();
- await addPlayer();
+  await addNewStudent(newStudent);
 }
 
 // LINK TO LOGIN FORM

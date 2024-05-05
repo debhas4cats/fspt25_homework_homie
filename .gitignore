@@ -2,7 +2,11 @@
 /dist
 .env
 <<<<<<< HEAD
+<<<<<<< HEAD
 .DS_store
 =======
 .DS_store
 >>>>>>> 003b869 (adding stuff)
+=======
+.DS_store
+>>>>>>> 0a65347 (homework)

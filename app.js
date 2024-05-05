@@ -20,26 +20,6 @@ app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use("/api/auth", authRouter);
-app.use('/homework', homeworkRouter);
+app.use('/api/homework', homeworkRouter); 
 app.use('/api/student', studentRouter);
-
-app.use('/api/calendar', calendarRouter); // Use the calendarRouter for /api/calendar routes
-
-app.use((req, res, next) => {
-  console.log('Received request:', req.method, req.url);
-  next();
-});
-
-app.get("/", function(req, res, next) {
-  res.send("Access the API at path /homework");
-});
-
-app.get("/api/homework", function(req, res, next) {
-  res.send("Access the homework API");
-});
-
-app.get("/api/student", function(req, res, next) {
-  res.send("Access the student API");
-});
-
 module.exports = app;
