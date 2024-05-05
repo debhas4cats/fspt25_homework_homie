@@ -13,17 +13,12 @@ function App() {
   const today = new Date().toLocaleDateString(undefined, options);
 
   const [ userData, setUserData ] = useState(null);
-  
+
   return (
     <Router>{/* Router component is used to wrap all our routes */}
       <div>
             {/* Today's date */}
         <div className="date">{today}</div>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/:subject" element={<Subject />} /> 
-          {/* what comes after the route, you can grab values - you can create variables when you use the colon */}
-
         <Routes>{/* Routes component holds all our defined routes */}
           <Route path="/" element={<Login setUserData = { setUserData }/>} /> 
           {/*Route for main page, which features a login form and the link to registration page if student is not added to database*/}

@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 // Endpoint to get homework for a specific subject
 //this will be the endpoint needed for the individual subject pages
 //snippet needed for Postman test: localhost:5000/homework/subjects/6/homework
-router.get('/subjects/:subjectId/students/:studentId/homework', async (req, res) => {
+router.get('/subjects/3/students/3/homework', async (req, res) => {
   const subjectId = req.params.subjectId;
   //for after authentication is implemented
   const studentId = req.params.studentId;
