@@ -38,6 +38,43 @@ function Dashboard() {
         // Fetch homework data for each subject
         data.forEach((subject) => {
           getHomework(subject.subjectID);
+        const promises = subjects.map(async (subject) => {
+          // loop through each subject
+          constresponse = await fetch(
+            `http://localhost:4000/homework/subject/${subject.id}/students/1/homework`
+          ); // for each subject we fetch homework data
+          if (!response.ok) {
+            // if the response from the server is not okay -- we throw an error to handle
+            throw new Error(
+              `Failed to fetch homework data for ${subject.name}`
+            );
+          }
+          const data = await response.json(); //waits for response from the server to be fully fetched and parsed as JSON and store as variable DATA
+          // console.log(`Homework data for ${subject.name}:`, data); // console logging the data received just in case
+          return { subjectId: subject.id, data: data.data }; // create an object that associates a subject's ID with its corresponding homework data.
+        });
+        // after fetching data from all subjects, we gather them
+        //and ALL SETTLED allows us to wait for all promises to resolve or reject
+        // store the results of the promises in a variable called results
+        const results = await Promise.allSettled(promises);
+
+        //update the state of subjects using SETSUBJECTS
+        setSubjects((prevSubjects) => {
+          //loop through each subject in the previous state
+          return prevSubjects.map((prevSubject) => {
+            //find its corresponding results in the RESULTS
+            const result = results.find(
+              (result) =>
+                result.value && result.value.subjectId === prevSubject.id
+            );
+            // if we find a result for the subject and it's VALID
+            if (result && result.value && result.value.data) {
+              // if VALID, update the subjects assignment with that data
+              // if there's no result or the result does have data, keep the subject unchanged
+              return { ...prevSubject, assignments: result.value.data };
+            }
+            return prevSubject;
+          });
         });
       } catch (error) {
         console.error("Error fetching subjects:", error);
@@ -123,6 +160,20 @@ function Dashboard() {
   //returned by tallyAssignments() and assign them to variables with the same names
   const { lateCount, todayCount, tomorrowCount } = tallyAssignments();
 
+  function isLate(dueDate) {
+    const today = new Date();
+    return dueDate < today && !isSameDay(dueDate, today);
+  }
+  
+  function isSameDay(date1, date2) {
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
+    );
+  }
+  
+
   return (
     <div className="outer-container">
       {/* display the tally of assignments that are late, due today, due tomorrow */}
@@ -192,6 +243,45 @@ function Dashboard() {
             </ul>
           </div>
         ))}
+              <Link
+                to={`/${subject.name.toLowerCase()}`}
+                className="rounded-button"
+              >
+                {subject.name}
+              </Link>
+              {/* create an unordered list where assignments will be displayed */}
+
+              <ul>
+                {subject.assignments &&
+                  subject.assignments.length > 0 &&
+                  subject.assignments
+                    .slice()
+                    .sort((a, b) => new Date(a.due_date) - new Date(b.due_date))
+                    .slice(0, 3)
+                    .map((assignment, index) => {
+                      const dueDate = new Date(assignment.due_date);
+                      const today = new Date();
+                      const isLate = dueDate < today && !isSameDay(dueDate, today);
+                      return (
+                      <li
+                        // li can have different styles based on whether the assignment is late or not
+                        // if due date is in the past (is true), assigns the li class 'late'
+                        // if due date is not in the past (is false) -- no additional li class will be added
+                        className={`assignment-message ${isLate ? "late" : ""}`}
+                        key={index}
+                        onMouseEnter={() => {
+                          setHoveredAssignment(assignment);
+                          setShowFloatingDiv(true);
+                        }}
+                        onMouseLeave={() => setShowFloatingDiv(false)}>
+                        {createMessage([assignment])}
+                      </li>
+                       );
+                    })}
+              </ul>
+            </div>
+          )
+        )}
       </div>
 
       {/* "post it" note containing details of assignment based on where user hovers */}
@@ -201,11 +291,7 @@ function Dashboard() {
           // floating div can have different styles based on whether the assignment is late or not
           // if due date is in the past (is true), assigns the div class 'late'
           // if due date is not in the past (is false) -- no additional div class will be added
-          <div
-            className={`floating-div ${
-              new Date(hoveredAssignment.due_date) < new Date() ? "late" : ""
-            }`}
-          >
+          <div className={`floating-div ${isLate(new Date(hoveredAssignment.due_date)) ? "late" : ""}`}>
             <h3>{hoveredAssignment.assignment}</h3>
             <p>{hoveredAssignment.description}</p>
             <p>Teacher: {hoveredAssignment.teacher_name}</p>
