@@ -91,7 +91,6 @@ function SubjectComponent() {
     } catch (error) {
       console.error('Error deleting homework:', error);
     }
-  };
 
   return (
     <div><Link to="/dashboard">
@@ -120,6 +119,7 @@ function SubjectComponent() {
       </div>
     </div>
   );
+}
 }
 
 export default SubjectComponent;
