@@ -196,6 +196,7 @@ function ClickableDate() {
 
   // Render the component
   return (
+
     <div className="clickable-date">
       <div>
         {/* Conditional rendering for the HOME and date buttons */}
