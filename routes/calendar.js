@@ -129,7 +129,6 @@ router.put('/:id', async (req, res) => {
 });
 
 
-
 // Delete a calendar event
 router.delete('/:id', async (req, res) => {
     const eventId = req.params.id;
