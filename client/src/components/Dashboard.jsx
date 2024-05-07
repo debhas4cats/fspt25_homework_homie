@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../App.css";
 import Scoreboard from "./Scoreboard"; //Import the scoreboard
 import HomeworkAlertContainer from "./HomeworkAlertContainer"; //Import the Homework Alert Boxes
+import ClickableDate from './ClickableDate'; // Import the ClickableDate component
 import axios from "axios";
 
 function Dashboard() {
@@ -96,6 +97,10 @@ function Dashboard() {
 
   return (
     <div className="outer-container">
+      <div className="date-container">
+          {/* Render ClickableDate component */}
+          <ClickableDate clickable={true} />
+      </div>
       {/* display the tally of assignments that are late, due today, due tomorrow */}
       <Scoreboard subjects={subjects} />
 
