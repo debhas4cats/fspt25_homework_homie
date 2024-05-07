@@ -8,6 +8,7 @@ const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const homeworkRouter = require('./routes/homework');
 const studentRouter = require('./routes/student');
+const calendarRouter = require('./routes/calendar'); // Assuming your router file is named calendarRouter.js
 
 const app = express();
 
@@ -21,6 +22,8 @@ app.use('/', indexRouter);
 app.use("/api/auth", authRouter);
 app.use('/homework', homeworkRouter);
 app.use('/api/student', studentRouter);
+
+app.use('/api/calendar', calendarRouter); // Use the calendarRouter for /api/calendar routes
 
 app.use((req, res, next) => {
   console.log('Received request:', req.method, req.url);
