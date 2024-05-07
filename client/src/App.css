@@ -82,7 +82,6 @@ button.date {
     color: rgb(167, 141, 194);
     font-size: 50px;
     -webkit-text-stroke: .75px black;
-    text-stroke: .75px black;
   }
   
   .title span {
