@@ -42,4 +42,37 @@ router.post("/", async function(req, res, next) {
       res.status(500).send(err)
     }
   });
+
+//needed to update JOHN DOE PASSWORD SO IT COULD BE HASHED 
+//   router.put("/:username/password", async function(req, res, next) {
+//     const { password } = req.body;
+//     const { username } = req.params;
+    
+//     if (!password) {
+//         res.status(400).send({
+//             message: "Please provide a new password",
+//         });
+//         return;
+//     }
+
+//     try {
+//         // Hash the new password
+//         const hash = await bcrypt.hash(password, 10); // Use 10 salt rounds
+
+//         // Update the password only using interpolated query
+//         await db(
+//             `UPDATE students 
+//             SET password = '${hash}' 
+//             WHERE username = '${username}';`
+//         );
+
+//         res.send({
+//             message: "Password updated successfully"
+//         });
+//     } catch (err) {
+//         res.status(500).send(err);
+//     }
+// });
+
+
   module.exports = router;
