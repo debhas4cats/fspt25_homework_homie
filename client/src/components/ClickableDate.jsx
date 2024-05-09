@@ -44,8 +44,8 @@ function ClickableDate() {
         const fetchedEvents = response.data.map(event => ({
           id: event.id,
           title: event.title,
-          start: new Date(event.start), // Ensure start and end properties are proper Date objects
-          end: new Date(event.end), // Ensure start and end properties are proper Date objects
+          start: new Date(event.start),
+          end: new Date(event.end),
         }));
         setState(prevState => ({ ...prevState, events: fetchedEvents }));
       } catch (error) {
@@ -55,7 +55,8 @@ function ClickableDate() {
     if (isCalendarRoute) {
       fetchEvents();
     }
-  }, [isCalendarRoute]);
+  }, [isCalendarRoute]); // Include isCalendarRoute in the dependency array
+  
 
   // Handles date change
   const handleDateChange = newDate => {
