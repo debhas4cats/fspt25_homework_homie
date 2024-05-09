@@ -44,8 +44,8 @@ function ClickableDate() {
         const fetchedEvents = response.data.map(event => ({
           id: event.id,
           title: event.title,
-          start: new Date(event.start),
-          end: new Date(event.end),
+          start: new Date(event.start), // Ensure start and end properties are proper Date objects
+          end: new Date(event.end), // Ensure start and end properties are proper Date objects
         }));
         setState(prevState => ({ ...prevState, events: fetchedEvents }));
       } catch (error) {
