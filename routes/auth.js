@@ -33,7 +33,7 @@ const supersecret = process.env.SUPER_SECRET;
         var token = jwt.sign(tokenPayload, supersecret);
         // Log the user data before sending the response
         console.log("User data:", user);
-        res.send({ message: `Hello, ${user.firstname}`, student: tokenPayload });//To send the student data along with the response, you need to fetch the user data from the database and include it in the response object.
+        res.send({ message: `Hello, ${user.firstname}`, token, student: tokenPayload });//To send the student data along with the response, you need to fetch the user data from the database and include it in the response object.
       } else {
         throw new Error("Student does not exist");
       }
