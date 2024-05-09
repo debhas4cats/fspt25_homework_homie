@@ -1,13 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams, useLocation} from 'react-router-dom';
+import axios from 'axios';
 import '../App.css';
 
+
+
 function SubjectComponent() {
-  const {subject} = useParams();
+  
+  const {subject, subjectId} = useParams();
+  // console.log(subject);
+  // console.log(subjectId);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const teacher = searchParams.get('teacher');
+  const studentId = searchParams.get('studentId'); // Extract studentId from query params
   console.log(teacher);
+
+
+  
+  
+ 
+    
   return (
     <div><Link to="/">
         <button className="home-rounded-button">HOME</button>
@@ -16,8 +29,12 @@ function SubjectComponent() {
       <h2>{subject} Component</h2>
       <p>Your {subject} teacher is:</p>
       <p>{teacher}</p>
+
+     
+  
     </div>
   );
-} 
+};
 
 export default SubjectComponent;
+

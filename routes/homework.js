@@ -29,8 +29,6 @@ router.get('/subjects/:subjectId/students/:studentId/homework', async (req, res)
      console.log('THIS IS THE QUERY', query)
     //for after authentication is implemented
     //  AND ssh.studentID = ${studentId}`;
-    
-     //WHERE statement needs to be hard coded with studentID 1 until after authentication is implemented
   try {
     const results = await db(query, [subjectId, studentId]);
     console.log('THIS IS THE RESULTS', query)

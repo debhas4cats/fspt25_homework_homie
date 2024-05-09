@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "../App.css";
 import createMessage from "../utilities/createMessage"; // Import the createMessage function
 import axios from "axios";
+import SubjectComponent from "./Subject";
 
 function Dashboard() {
   // State to track whether the floating div should be shown
@@ -25,6 +26,7 @@ function Dashboard() {
         }
         const responseData = await response.json();
         const data = responseData.data.data; // Access data.data
+        console.log('This is the data', data)
 
         // Map over the fetched subjects and initialize the subjects state
         setSubjects(
@@ -215,6 +217,7 @@ function Dashboard() {
           </div>
         )}
       </div>
+      <SubjectComponent />
     </div>
   );
 }
