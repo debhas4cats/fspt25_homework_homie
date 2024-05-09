@@ -9,12 +9,12 @@ var bcrypt = require("bcrypt");
 const supersecret = process.env.SUPER_SECRET;
 
   // POST: LOGIN student
-  router.post("/login", studentIsLoggedIn, async (req, res) => {
+  router.post("/login", async (req, res) => {
     const { username, password } = req.body;
   
     try {
       const results = await db(
-        `SELECT * FROM students WHERE username = '${username}'`
+        `SELECT * FROM students WHERE username = "${username}"`
       );
       const user = results.data[0];
       if (user) {
@@ -30,10 +30,10 @@ const supersecret = process.env.SUPER_SECRET;
           avatar: user.avatar
         };
   
-        var token = jwt.sign({ user_id }, supersecret);
+        var token = jwt.sign(tokenPayload, supersecret);
         // Log the user data before sending the response
         console.log("User data:", user);
-        res.send({ message: `Hello, ${user.firstname}`, token, student: user });//To send the student data along with the response, you need to fetch the user data from the database and include it in the response object.
+        res.send({ message: `Hello, ${user.firstname}`, student: tokenPayload });//To send the student data along with the response, you need to fetch the user data from the database and include it in the response object.
       } else {
         throw new Error("Student does not exist");
       }

@@ -19,7 +19,7 @@ function SubjectComponent() {
 
   async function fetchHomeworkForSubjects() {
     try {
-      const response = await fetch(`/api/homework/subjects/6/students/${studentId}/homework`);
+      const response = await fetch(`/api/homework/subjects/6/students/studentId/homework`);
       if (!response.ok) {
         throw new Error('Failed to fetch homework data');
       }
@@ -88,7 +88,7 @@ function SubjectComponent() {
 
   return (
     <div>
-      <Link to="/">
+      <Link to="/dashboard">
         <button className="home-rounded-button">HOME</button>
       </Link>
       <div className="container">
