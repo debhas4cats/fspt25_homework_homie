@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';// import React library to use its features
 import './App.css';  // import CSS file for styling
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'; // import components from react-router-dom for routing
-import axios from 'axios';
 import Subject from './components/Subject'; // import a component called Subject
 import Dashboard from './components/Dashboard'; // import a component called Dashboard
 import Login from './components/Login';
@@ -15,13 +14,27 @@ function App() {
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const today = new Date().toLocaleDateString(undefined, options);
 
-  const [ userData, setUserData ] = useState(null);
+   const [userData, setUserData] = useState(() => { //userData is the current state value. setUserData is a function used to update the state
+    //arrow function is used as the initial state and it checks the local storage for a key named "userData" 
+    //if there is value stored for "userData" in the local storage (storedUserData)
+    // it parses the JSON string into a JavaScript object
+    const storedUserData = localStorage.getItem("userData"); 
+    // returned value from the arrow function will be used as the initial value for userData
+    // if not, it returns null
+    return storedUserData ? JSON.parse(storedUserData) : null;
+  });
 
+  useEffect(() => {
+    console.log("userData in App.jsx:", userData); // Log userData here
+    if (userData) {
+      localStorage.setItem("userData", JSON.stringify(userData));
+    }
+  }, [userData]);
+  
   return (
     <Router>{/* Router component is used to wrap all our routes */}
       <div>
-            {/* Today's date */}
-        <div className="date">{today}</div>
+            
         <Routes>{/* Routes component holds all our defined routes */}
           <Route path="/" element={<Login setUserData = { setUserData }/>} /> 
           {/*Route for main page, which features a login form and the link to registration page if student is not added to database*/}
@@ -41,4 +54,4 @@ function App() {
   );
 }
 
-export default App;
+export default App;ß

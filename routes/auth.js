@@ -9,7 +9,7 @@ var bcrypt = require("bcrypt");
 const supersecret = process.env.SUPER_SECRET;
 
   // POST: LOGIN student
-  router.post("/login", async (req, res) => {
+  router.post("/login", studentIsLoggedIn, async (req, res) => {
     const { username, password } = req.body;
   
     try {

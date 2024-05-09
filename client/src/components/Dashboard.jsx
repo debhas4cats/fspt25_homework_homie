@@ -7,31 +7,8 @@ import axios from "axios";
 
 function Dashboard() {
 
-  useEffect(() => {
-    console.log("userData:", userData); // Log userData to check if it's being passed correctly
-    if (!userData) return; // Ensure userData is available
-    const fetchData = async () => {
-      // use async/await to fetch data for each subject
-      try {
-        const promises = subjects.map(async (subject) => {
-          // loop through each subject
-          constresponse = await fetch(
-            `http://localhost:4000/homework/subject/${subject.id}/students/1/homework`
-          ); // for each subject we fetch homework data
-          if (!response.ok) {
-            // if the response from the server is not okay -- we throw an error to handle
-            throw new Error(
-              `Failed to fetch homework data for ${subject.name}`
-            );
-          }
-          const data = await response.json(); //waits for response from the server to be fully fetched and parsed as JSON and store as variable DATA
-          console.log(`Homework data for ${subject.name}${userData.id}:`, data); // console logging the data received just in case
-          return { subjectId: subject.id, data: data.data }; // create an object that associates a subject's ID with its corresponding homework data.
-        });
-        // after fetching data from all subjects, we gather them
-        //and ALL SETTLED allows us to wait for all promises to resolve or reject
-        // store the results of the promises in a variable called results
-        const results = await Promise.allSettled(promises);
+  //refactoring the subjects state variable to take in the data from the GET subjects endpoint
+  const [subjects, setSubjects] = useState([]);
 
   useEffect(() => {
     // Fetch subjects data from backend
