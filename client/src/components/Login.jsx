@@ -32,7 +32,7 @@ export default function Login({setUserData}) {
             if (response.status === 200) {
                 localStorage.setItem("token", data.token);
                 setUserData(data.student);
-                console.log("UserData in Login component:", data.student); // log userData here
+                // console.log("UserData in Login component:", data.student); // log userData here
                 navigate("/dashboard");
             } else {
                 // handle other status codes here

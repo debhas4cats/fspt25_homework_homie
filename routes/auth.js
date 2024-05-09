@@ -23,11 +23,17 @@ const supersecret = process.env.SUPER_SECRET;
         const correctPassword = await bcrypt.compare(password, user.password);
   
         if (!correctPassword) throw new Error("Incorrect password");
+
+        const tokenPayload = {
+          user_id,
+          username: user.username,
+          avatar: user.avatar
+        };
   
-        var token = jwt.sign({ user_id }, supersecret);
+        var token = jwt.sign(tokenPayload, supersecret);
         // Log the user data before sending the response
         console.log("User data:", user);
-        res.send({ message: `Hello, ${user.firstname}`, token, student: user });//To send the student data along with the response, you need to fetch the user data from the database and include it in the response object.
+        res.send({ message: `Hello, ${user.firstname}`, student: tokenPayload });//To send the student data along with the response, you need to fetch the user data from the database and include it in the response object.
       } else {
         throw new Error("Student does not exist");
       }

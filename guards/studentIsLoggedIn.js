@@ -22,10 +22,12 @@ function studentIsLoggedIn(req, res, next) {
         } else {
           //if the token is valid, get the user profile from the token
           //everything is awesome
-          const user_id = decoded.userid;
+          const { user_id, username, avatar } = decoded;
           //I want to provide the user_id to the next function
+            req.user_id = user_id;
+            req.username = username;
+            req.avatar = avatar;
           //I can do this by adding a new property to the req object and the value will be the user_id decoded from the token
-          req.user_id = user_id;
         //I want to call the next function.  
           next();
       }
