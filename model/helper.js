@@ -1,67 +1,57 @@
 require("dotenv").config();
 const mysql = require("mysql");
 
-module.exports = async function db(query) {
-  const results = {
-    data: [],
-    error: null
-  };
-  let promise = await new Promise((resolve, reject) => {
-    const DB_HOST = process.env.DB_HOST;
-    const DB_USER = process.env.DB_USER;
-    const DB_PASS = process.env.DB_PASS;
-    const DB_NAME = process.env.DB_NAME;
+// Create a MySQL connection pool
+const pool = mysql.createPool({ //a connection pool is more efficient for handling multiple queries
+    connectionLimit: 10, // Adjust this according to your needs
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER || "root",
+    password: process.env.DB_PASS || "root",
+    database: process.env.DB_NAME || "homework",
+    multipleStatements: true
+});
 
-    const con = mysql.createConnection({
-      host: DB_HOST,
-      user: DB_USER || "root",
-      password: DB_PASS,
-      database: DB_NAME,
-      multipleStatements: true
+// Wrap MySQL query with a promise
+module.exports = function db(query, values = []) {
+    return new Promise((resolve, reject) => { // returns a promise for better handling of asynchronous operations
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.error('Error connecting to database:', err);
+                reject(err);
+                return;
+            }
+
+            connection.query(query, values, (err, result) => {
+                if (err) {
+                    console.error('Error executing query:', err);
+                    connection.release();
+                    reject(err);
+                    return;
+                }
+
+                connection.release();
+
+                const results = {
+                    data: [],
+                    error: null
+                };
+
+                // Process the result
+                if (!result.length) {
+                    if (result.affectedRows === 0) {
+                        results.error = "Action not complete";
+                    }
+                } else if (result[0].constructor.name == "RowDataPacket") {
+                    // Push each row (RowDataPacket) to data
+                    result.forEach(row => results.data.push(row));
+                } else if (result[0].constructor.name == "OkPacket") {
+                    // Push the first item in result list to data (this accounts for situations
+                    // such as when the query ends with SELECT LAST_INSERT_ID() and returns an insertId)
+                    results.data.push(result[0]);
+                }
+
+                resolve(results);
+            });
+        });
     });
-
-    con.connect(function(err) {
-      if (err) {
-        console.error('Error connecting to database:', err);
-        return;
-      }
-      console.log('Connected to database');
-
-      con.query(query, function(err, result) {
-        if (err) {
-          results.error = err;
-          console.log('Error executing query:', err);
-          reject(err);
-          con.end();
-          return;
-        }
-
-        if (!result.length) {
-          if (result.affectedRows === 0) {
-            results.error = "Action not complete";
-            console.log(err);
-            reject(err);
-            con.end();
-            return;
-          }
-
-          // push the result (which should be an OkPacket) to data
-          // germinal - removed next line because it returns an array in an array when empty set
-          // results.data.push(result);
-        } else if (result[0].constructor.name == "RowDataPacket") {
-          // push each row (RowDataPacket) to data
-          result.forEach(row => results.data.push(row));
-        } else if (result[0].constructor.name == "OkPacket") {
-          // push the first item in result list to data (this accounts for situations
-          // such as when the query ends with SELECT LAST_INSERT_ID() and returns an insertId)
-          results.data.push(result[0]);
-        }
-
-        con.end();
-        resolve(results);
-      });
-    });
-  });
-
-  return promise;
 };

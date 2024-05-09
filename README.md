@@ -53,3 +53,7 @@ The following technologies were used to develop Homework Homie:
 - You can test your client app in `http://localhost:5173`
 
 - You can test the backend in Postman with the following: `http://localhost:5000/homework`
+
+## Login and New Student Auth for Backend
+
+- you will need to run 'npm install bcrypt jsonwebtoken'
