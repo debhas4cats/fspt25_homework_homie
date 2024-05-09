@@ -8,8 +8,6 @@ import Login from './components/Login';
 import RegisterNewStudent from './components/RegisterNewStudent';
 import ClickableDate from './components/ClickableDate'; // Import the ClickableDate component
 
-
-
 function App() {
   // get today's date and format it
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -55,9 +53,6 @@ function App() {
   return (
     <Router>{/* Router component is used to wrap all our routes */}
       <div>
-            {/* Today's date */}
-        <div className="date">{today}</div>
-
 
         <Routes>{/* Routes component holds all our defined routes */}
           <Route path="/" element={<Login setUserData = { setUserData }/>} /> 

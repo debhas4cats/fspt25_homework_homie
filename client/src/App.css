@@ -6,7 +6,7 @@
   font-style: normal;
   }
   
-  body {
+body {
   background-color: #fff;
   background-image:
   linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
@@ -15,8 +15,22 @@
   linear-gradient(90deg, rgba(0, 0, 0, 0.02) 2px, transparent 2px);
   background-size: 20px 20px, 20px 20px, 1px 1px, 1px 1px;
   }
-  
-  div.date {
+/* --- calendar ----*/
+.clickable-date {
+  position: relative; /* Set position to relative */
+
+}
+.event-input-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px; /* Adjust as needed */
+}
+
+.event-input {
+  text-align: center;
+}
+
+button.date {
   font-family: 'Adumu', sans-serif;
   display: inline-block;
   padding: 10px 20px;
@@ -26,7 +40,115 @@
   background-color: white;
   margin-bottom: 40px;
   margin-left: 10px;
-  }
+  cursor: pointer;
+}
+
+.outer-calendar-container {
+  display: flex;
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+}
+
+.calendar-container {
+ background-color: #eff4f7;
+}
+
+.rbc-header {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px !important;
+  background: #17405d;
+}
+
+.rbc-allday-cell {
+  display: none;
+}
+
+.rbc-time-header-cell .rbc-today {
+  background-color: #04aa6d !important;
+}
+
+.rbc-time-slot {
+  color: #000000;
+}
+
+.rbc-time-slot:not(.rbc-today .rbc-time-slot) {
+  background-color: #ffffff;
+}
+
+.rbc-event,
+.rbc-background-event {
+  padding: 0px !important;
+  border: none !important;
+}
+
+.rbc-event-label {
+  display: none !important;
+}
+
+.rbc-events-container {
+  width: 100% !important;
+}
+
+.rbc-day-slot .rbc-time-slot:after {
+  content: "";
+  width: 100%;
+  border-top: 1px solid #aba6b6;
+  display: block;
+}
+
+.rbc-time-content .rbc-event {
+  text-align: center;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: wrap;
+  font-size: 11px;
+}
+
+.toolbar {
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 50px;
+}
+
+
+.custom-date-arrow {
+  display: flex;
+}
+
+.custom-date-arrow button {
+  margin-right: 40px;
+}
+
+.day-or-week-button {
+  display: flex;
+}
+button.today{
+  margin-right: 20px;
+}
+.day-or-week-button button {
+  margin-right: 20px;
+}
+
+.date-text {
+  margin-right: 50px;
+  margin-left: 50px;
+}
+.custom-date-picker {
+  border: 1px solid #3a1010;
+  cursor: pointer;
+}
+
+.react-datepicker__input-container {
+  opacity: 0;
+}
+
+  /* --- calendar ----*/
   
   button.home-rounded-button {
   background-color: #ffffff;
@@ -40,35 +162,10 @@
   transition: background-color 0.3s;
   margin: 10px;
   padding: 10px 20px;
-  border: 2px solid black;
-  border-radius: 20px;
-  font-size: 16px;
-  background-color: white;
-  margin-bottom: 20px;
-  }
-
-  /* -----login page----- */
-
-  .login-button {
-    background-color: black;
-    color: white;
-    border: 1px solid black;
-    border-radius: 10px;
-    margin: 5px;
-  }
-
-  /* -----registration page----- */
-
-  .registration-form {
-    list-style: none;
-  }
-
-  .register-option {
-    font-size: 14px;
-    transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
   }
   
-  .home-rounded-button:hover {
+ button:hover {
   background-color: rgb(167, 141, 194);
   }
   
@@ -174,6 +271,13 @@
     font-size: 12px;
     font-weight: bold;
     cursor: pointer;
+  }
+
+  .no-assignments-message{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 14px;
   }
   
   /* -------floating div ------- */
