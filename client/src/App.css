@@ -18,6 +18,16 @@ body {
 /* --- calendar ----*/
 .clickable-date {
   position: relative; /* Set position to relative */
+
+}
+.event-input-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px; /* Adjust as needed */
+}
+
+.event-input {
+  text-align: center;
 }
 
 button.date {
@@ -61,11 +71,11 @@ button.date {
 }
 
 .rbc-time-slot {
-  color: #74a4c3;
+  color: #000000;
 }
 
 .rbc-time-slot:not(.rbc-today .rbc-time-slot) {
-  background-color: #eff4f7;
+  background-color: #ffffff;
 }
 
 .rbc-event,
@@ -85,23 +95,27 @@ button.date {
 .rbc-day-slot .rbc-time-slot:after {
   content: "";
   width: 100%;
-  border-top: 1px solid #fbb3ec;
+  border-top: 1px solid #aba6b6;
   display: block;
 }
 
 .rbc-time-content .rbc-event {
+  text-align: center;
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: wrap;
+  font-size: 11px;
 }
 
 .toolbar {
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 50px;
 }
+
 
 .custom-date-arrow {
   display: flex;
