@@ -148,6 +148,14 @@ button.today{
   opacity: 0;
 }
 
+.delete-button-container {
+  text-align: center;
+}
+
+.delete-button {
+  display: inline-block;
+}
+
   /* --- calendar ----*/
   
   button.home-rounded-button {
@@ -350,3 +358,57 @@ button.today{
     .register-option {
       font-size: 14px;
     }
+
+   /* -----dashboard greeting pencil----- */
+.greeting-container {
+  position: absolute;
+  top: 20px;
+  right: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.greeting-text {
+  font-family: 'Adumu', sans-serif;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.pencil-icon {
+  width: 150px;
+  height: 150px;
+}
+   /* -----corner icons----- */
+
+  .bulb-icon,
+  .star-icon,
+  .magnify-icon,
+  .arrow-icon {
+    width: 50px;
+    height: 50px;
+ 
+    position: absolute;
+  }
+  
+  .bulb-icon {
+    top: 350px;
+    left: 20px;
+  
+  }
+  
+  .star-icon {
+    top: 9px;
+    left:260px;
+
+  }
+  
+  .magnify-icon {
+    bottom: 20px;
+    right: 20px;
+
+  }
+  
+  .arrow-icon {
+    bottom: 20px;
+    left: 20px; 
+  }
