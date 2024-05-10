@@ -243,6 +243,14 @@ button.today{
   opacity: 0;
 }
 
+.delete-button-container {
+  text-align: center;
+}
+
+.delete-button {
+  display: inline-block;
+}
+
   /* --- calendar ----*/
   
   button.home-rounded-button {
