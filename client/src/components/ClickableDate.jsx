@@ -22,6 +22,7 @@ function ClickableDate() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [view, setView] = useState(Views.WEEK);
+  
 
   const location = useLocation();
   const isCalendarRoute = location.pathname === '/calendar';
@@ -65,74 +66,65 @@ function ClickableDate() {
 
   const handleAddEvent = async () => {
     if (newEventTitle.trim() !== '' && selectedSlot) {
-      const newEvent = {
-        title: newEventTitle,
-        start: selectedSlot.start,
-        end: selectedSlot.end,
-      };
-  
-      try {
-        const response = await axios.post('/api/calendar', newEvent);
-        const createdEvent = {
-          ...newEvent,
-          id: response.data.id // Assign the ID returned from the server
+        const newEvent = {
+            title: newEventTitle,
+            start: selectedSlot.start,
+            end: selectedSlot.end,
         };
-        setEvents([...events, createdEvent]);
-        setNewEventTitle('');
-        setSelectedSlot(null);
-      } catch (error) {
-        console.error('Error adding event:', error);
-      }
-    } else {
-      alert('Event title cannot be empty!');
-    }
-  };
+  
+        try {
+            const response = await axios.post('/api/calendar', newEvent);
+            // console.log("Server Response:", response.data); // Log the server response
+            
+            // Get the ID of the newly created event from the last element of the data array
+            const newEventId = response.data.data[response.data.data.length - 1].id;
+            console.log("New Event ID:", newEventId); // Log the ID of the created event
+            
+            // Create the event object with the received ID
+            const createdEvent = {
+                ...newEvent,
+                id: newEventId
+            };
 
-  const handleDeleteEvent = async () => {
-    try {
-      let eventIdToDelete;
-      if (selectedEvent && selectedEvent.id) {
-        eventIdToDelete = selectedEvent.id;
-      } else if (selectedSlot && selectedSlot.event && selectedSlot.event.id) {
-        eventIdToDelete = selectedSlot.event.id;
-      } else if (selectedSlot && !selectedSlot.event && selectedSlot.id) {
-        // If the selected slot is empty but has an ID (typically for all-day events)
-        eventIdToDelete = selectedSlot.id;
-      } else {
-        console.error('Invalid delete operation: Missing event ID');
-        return;
-      }
+            // Update the events array with the newly created event
+            setEvents([...events, createdEvent]);
+            setNewEventTitle('');
+            setSelectedEvent(createdEvent); // Set the selected event immediately
+            setSelectedSlot(null);
+        } catch (error) {
+            console.error('Error adding event:', error);
+        }
+    } else {
+        alert('Event title cannot be empty!');
+    }
+};
+
+
   
-      await axios.delete(`/api/calendar/${eventIdToDelete}`);
-      const updatedEvents = events.filter((event) => event.id !== eventIdToDelete);
-      setEvents(updatedEvents);
-      setSelectedEvent(null); // Reset selected event
-      setSelectedSlot(null); // Reset selected slot
+  
+  const handleDeleteEvent = async eventIdToDelete => {
+    try {
+        console.log("Deleting Event with ID:", eventIdToDelete); // Log the ID
+        if (eventIdToDelete) {
+            await axios.delete(`/api/calendar/${eventIdToDelete}`);
+            setEvents(prevEvents => prevEvents.filter(event => event.id !== eventIdToDelete));
+            setSelectedEvent(null);
+            setSelectedSlot(null);
+        }
     } catch (error) {
-      console.error('Error deleting event:', error);
+        console.error('Error deleting event:', error);
     }
   };
   
-  
+
   const renderDeleteButton = () => {
     if (selectedEvent) {
-      return (
-        <button onClick={() => handleDeleteEvent(selectedEvent.id)}>Delete</button>
-      );
-    } else if (selectedSlot && selectedSlot.event) {
-      // If the selected slot has an event (not empty)
-      return (
-        <button onClick={() => handleDeleteEvent(selectedSlot.event.id)}>Delete</button>
-      );
-    } else if (selectedSlot && !selectedSlot.event) {
-      // If the selected slot is empty
-      return (
-        <button onClick={() => handleDeleteEvent(selectedSlot.id)}>Delete</button>
-      );
+      return <button onClick={() => handleDeleteEvent(selectedEvent.id)}>Delete</button>;
     } else {
       return null;
     }
   };
+  
   
 
   const handleViewChange = newView => {
@@ -208,7 +200,7 @@ function ClickableDate() {
   
       <div className='delete-button-container'>
         <div className='delete-button'>
-          {renderDeleteButton()}
+          {renderDeleteButton(selectedEvent ? selectedEvent.id : null)}
         </div>
       </div>
 
