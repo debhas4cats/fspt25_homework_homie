@@ -22,13 +22,23 @@ body {
 }
 .event-input-container {
   display: flex;
-  justify-content: center;
-  margin-bottom: 20px; /* Adjust as needed */
+  justify-content: flex-start;
+  margin-bottom: 5px; /* Adjust as needed */
 }
 
 .event-input {
   text-align: center;
 }
+
+.delete-button-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 5px;
+}
+.delete-button {
+  text-align: center;
+}
+
 
 button.date {
   font-family: 'Adumu', sans-serif;
@@ -45,8 +55,10 @@ button.date {
 
 .outer-calendar-container {
   display: flex;
+  flex-direction: column; /* Change to column layout */
   align-items: center; /* Center items horizontally */
   justify-content: center; /* Center items vertically */
+ 
 }
 
 .calendar-container {
@@ -59,7 +71,7 @@ button.date {
   align-items: center;
   justify-content: center;
   height: 40px !important;
-  background: #17405d;
+  background:rgb(167, 141, 194);
 }
 
 .rbc-allday-cell {
@@ -67,11 +79,12 @@ button.date {
 }
 
 .rbc-time-header-cell .rbc-today {
-  background-color: #04aa6d !important;
+  background-color: #d0b8ee !important;
 }
 
 .rbc-time-slot {
   color: #000000;
+  
 }
 
 .rbc-time-slot:not(.rbc-today .rbc-time-slot) {
@@ -106,6 +119,7 @@ button.date {
   text-overflow: ellipsis;
   white-space: wrap;
   font-size: 11px;
+  background-color: rgb(108, 80, 168); /* Change this to your desired color */
 }
 
 .toolbar {
@@ -147,6 +161,7 @@ button.today{
 .react-datepicker__input-container {
   opacity: 0;
 }
+
 
   /* --- calendar ----*/
   
@@ -350,3 +365,57 @@ button.today{
     .register-option {
       font-size: 14px;
     }
+
+   /* -----dashboard greeting pencil----- */
+.greeting-container {
+  position: absolute;
+  top: 20px;
+  right: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.greeting-text {
+  font-family: 'Adumu', sans-serif;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.pencil-icon {
+  width: 150px;
+  height: 150px;
+}
+   /* -----corner icons----- */
+
+  .bulb-icon,
+  .star-icon,
+  .magnify-icon,
+  .arrow-icon {
+    width: 50px;
+    height: 50px;
+ 
+    position: absolute;
+  }
+  
+  .bulb-icon {
+    top: 350px;
+    left: 20px;
+  
+  }
+  
+  .star-icon {
+    top: 9px;
+    left:260px;
+
+  }
+  
+  .magnify-icon {
+    bottom: 20px;
+    right: 20px;
+
+  }
+  
+  .arrow-icon {
+    bottom: 20px;
+    left: 20px; 
+  }

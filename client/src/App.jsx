@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';// import React library to use its features
 import './App.css';  // import CSS file for styling
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'; // import components from react-router-dom for routing
+import axios from 'axios';
 import Subject from './components/Subject'; // import a component called Subject
 import Dashboard from './components/Dashboard'; // import a component called Dashboard
 import Login from './components/Login';
 import RegisterNewStudent from './components/RegisterNewStudent';
 import ClickableDate from './components/ClickableDate'; // Import the ClickableDate component
-
-
 
 function App() {
   // get today's date and format it
@@ -24,22 +23,43 @@ function App() {
     return storedUserData ? JSON.parse(storedUserData) : null;
   });
 
+
   useEffect(() => {
-    console.log("userData in App.jsx:", userData); // Log userData here
+    // console.log("userData in App.jsx:"); // Log userData here
     if (userData) {
       localStorage.setItem("userData", JSON.stringify(userData));
     }
   }, [userData]);
+
+  // function to get user data from backend
+  const fetchUserData = async () => {
+    try {
+      const token = localStorage.getItem("token"); // retrieve token from local storage
+      const response = await axios.get("/api/student", { // GET request to receive data of one student
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      setUserData(response.data); // update user data state with fetched data
+    } catch(error) {
+      console.error("Error fetching user data", error);
+    }
+  }
   
+  useEffect(() => {
+    fetchUserData(); // fetch user data when component mounts
+  }, []);
+
   return (
     <Router>{/* Router component is used to wrap all our routes */}
       <div>
-            
+
         <Routes>{/* Routes component holds all our defined routes */}
           <Route path="/" element={<Login setUserData = { setUserData }/>} /> 
           {/*Route for main page, which features a login form and the link to registration page if student is not added to database*/}
           <Route path="/RegisterNewStudent" element={<RegisterNewStudent />} />
-          <Route path="/dashboard" element={<Dashboard userData={userData} today={today} />} />
+          <Route path="/dashboard" element={<Dashboard userData={userData} />} />
           {/* Route for Dashboard, which is shown when the student is logged in */}
           <Route path="/:subject" element={<Subject />} /> 
           {/* Route for the Subject component, which is shown when the URL has something after /, like /math or /science */}

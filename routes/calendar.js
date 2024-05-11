@@ -9,22 +9,25 @@ router.use(express.json());
 //Define a function to retrieve events from the database
 const fetchEvents = async (res) => {
     try {
-        const results = await db("SELECT * FROM calendar");
-        if (results.error) {
-            // If there's an error in the query, return a 500 status code
-            return res.status(500).json({ message: results.error });
-        }
-        if (results.data.length === 0) {
+        // Fetch events from the database
+        const events = await db("SELECT * FROM calendar");
+
+        // Check if events were retrieved successfully
+        if (!events || events.length === 0) {
             // If no events found, return a 404 status code
             return res.status(404).json({ message: "No events found." });
         }
+
         // Return fetched events as JSON response
-        res.status(200).json(results.data);
+        res.status(200).json(events);
+        // console.log("events:", events)
     } catch (err) {
-        // Handle any other errors
-        res.status(500).json({ message: err.message });
+        // Handle any errors
+        console.error("Error fetching events:", err);
+        res.status(500).json({ message: "Error fetching events." });
     }
 };
+
 
 // Get all calendar events
 router.get('/', async (req, res) => {
@@ -132,8 +135,8 @@ router.delete('/:id', async (req, res) => {
     const eventId = req.params.id;
 
     try {
-        // Delete the event from the database
-        const result = await db(`DELETE FROM calendar WHERE id = ${eventId}`);
+        // Delete the event from the database using parameterized query
+        const result = await db('DELETE FROM calendar WHERE id = ?', [eventId]);
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: "Event not found." });
         }
@@ -141,9 +144,11 @@ router.delete('/:id', async (req, res) => {
         // Fetch events from the database using the helper function
         await fetchEvents(res);
     } catch (err) {
+        console.error('Error deleting event:', err); // Log the error
         res.status(500).json({ message: err.message });
     }
 });
+
 
 
 module.exports = router;

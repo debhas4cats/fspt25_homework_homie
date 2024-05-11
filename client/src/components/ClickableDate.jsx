@@ -19,9 +19,10 @@ function ClickableDate() {
   const [date, setDate] = useState(new Date());
   const [events, setEvents] = useState([]);
   const [newEventTitle, setNewEventTitle] = useState('');
-  const [showEventInput, setShowEventInput] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [view, setView] = useState(Views.WEEK);
+  
 
   const location = useLocation();
   const isCalendarRoute = location.pathname === '/calendar';
@@ -36,113 +37,95 @@ function ClickableDate() {
           start: new Date(event.start),
           end: new Date(event.end),
         }));
-        // console.log('Fetched events:', fetchedEvents); // Log fetched events
         setEvents(fetchedEvents);
       } catch (error) {
         console.error('Error fetching calendar events:', error);
       }
     };
-    // console.log('isCalendarRoute:', isCalendarRoute); // Log isCalendarRoute
     if (isCalendarRoute) {
       fetchEvents();
     }
-  }, [isCalendarRoute]); // Include isCalendarRoute in the dependency array
-  
+  }, [isCalendarRoute]);
 
   const handleDateChange = newDate => {
     setDate(newDate);
-    setShowEventInput(false);
+    setNewEventTitle('');
+    setSelectedEvent(null);
+    setSelectedSlot(null);
   };
 
-  const handleSelectSlot = useCallback(
-    (slotInfo, events) => {
-      console.log('Slot selected:', slotInfo); // Check if handleSelectSlot is called
-      console.log('Fetched events in handleSelectSlot:', events); // Log the fetched events
-      const slotHasEvent = events.some(event => 
-        moment(slotInfo.start).isSame(moment(event.start), 'minute') &&
-        moment(slotInfo.end).isSame(moment(event.end), 'minute')
-      );
-      if (slotHasEvent) {
-        console.log('Slot has event:', slotInfo);
-        setSelectedSlot(slotInfo);
-        setShowEventInput(true); // Show event input when slot has an event
-        setNewEventTitle(''); // Clear input value
-      } else {
-        console.log('Empty slot selected');
-        setSelectedSlot(slotInfo);
-        setShowEventInput(true); // Show event input even for empty slot
-      }
-    },
-    []
-  );
-  
-  
+  const handleSelectEvent = event => {
+    setSelectedEvent(event);
+    setSelectedSlot(null);
+  };
+
+  const handleSelectSlot = slotInfo => {
+    setSelectedSlot(slotInfo);
+    setSelectedEvent(null);
+  };
 
   const handleAddEvent = async () => {
     if (newEventTitle.trim() !== '' && selectedSlot) {
-      const newEvent = {
-        title: newEventTitle,
-        start: selectedSlot.start,
-        end: selectedSlot.end,
-      };
+        const newEvent = {
+            title: newEventTitle,
+            start: selectedSlot.start,
+            end: selectedSlot.end,
+        };
   
-      try {
-        await axios.post('/api/calendar', newEvent);
-        setEvents([...events, newEvent]);
-        setShowEventInput(false);
-        setSelectedSlot(null);
-      } catch (error) {
-        console.error('Error adding event:', error);
-      }
+        try {
+            const response = await axios.post('/api/calendar', newEvent);
+            // console.log("Server Response:", response.data); // Log the server response
+            
+            // Get the ID of the newly created event from the last element of the data array
+            const newEventId = response.data.data[response.data.data.length - 1].id;
+            console.log("New Event ID:", newEventId); // Log the ID of the created event
+            
+            // Create the event object with the received ID
+            const createdEvent = {
+                ...newEvent,
+                id: newEventId
+            };
+
+            // Update the events array with the newly created event
+            setEvents([...events, createdEvent]);
+            setNewEventTitle('');
+            setSelectedEvent(createdEvent); // Set the selected event immediately
+            setSelectedSlot(null);
+        } catch (error) {
+            console.error('Error adding event:', error);
+        }
     } else {
-      alert('Event title cannot be empty!');
+        alert('Event title cannot be empty!');
     }
-  };
+};
 
-  const handleDeleteEvent = async eventId => {
+
+  
+  
+  const handleDeleteEvent = async eventIdToDelete => {
     try {
-      if (eventId) {
-        const url = `/api/calendar/${eventId}`;
-        console.log('Delete URL:', url);
-        await axios.delete(url);
-        const updatedEvents = events.filter(event => event.id !== eventId);
-        setEvents(updatedEvents);
-        console.log('Event deleted successfully');
-      } else {
-        console.error('Event ID is undefined');
-      }
+        console.log("Deleting Event with ID:", eventIdToDelete); // Log the ID
+        if (eventIdToDelete) {
+            await axios.delete(`/api/calendar/${eventIdToDelete}`);
+            setEvents(prevEvents => prevEvents.filter(event => event.id !== eventIdToDelete));
+            setSelectedEvent(null);
+            setSelectedSlot(null);
+        }
     } catch (error) {
-      console.error('Error deleting event:', error);
+        console.error('Error deleting event:', error);
     }
   };
-
-
-  const eventComponents = events.map(event => ({
-    ...event,
-    id: event.id,
-    title: event.title,
-    start: event.start,
-    end: event.end,
-    onClick: () => handleDeleteEvent(event.id),
-    buttonLabel: 'Delete',
-  }));
+  
 
   const renderDeleteButton = () => {
-    if (selectedSlot && selectedSlot.id) {
-      console.log('Delete button is rendering');
-      return (
-        <button onClick={() => {
-          console.log('Delete button clicked');
-          handleDeleteEvent(selectedSlot.id);
-        }}>Delete</button>
-      );
-    } else if (showEventInput) {
-      return null; // Hide delete button when adding new event
+    if (selectedEvent) {
+      return <button onClick={() => handleDeleteEvent(selectedEvent.id)}>Delete</button>;
     } else {
-      return null; // Hide delete button otherwise
+      return null;
     }
   };
-
+  
+  
 
   const handleViewChange = newView => {
     setView(newView);
@@ -202,7 +185,7 @@ function ClickableDate() {
       </div>
 
       <div className='event-input-container'>
-        {showEventInput && (
+        {selectedSlot && (
           <div className='event-input'>
             <input
               type="text"
@@ -216,7 +199,9 @@ function ClickableDate() {
       </div>
   
       <div className='delete-button-container'>
-        {renderDeleteButton()}
+        <div className='delete-button'>
+          {renderDeleteButton(selectedEvent ? selectedEvent.id : null)}
+        </div>
       </div>
 
       <div className='outer-calendar-container'>
@@ -244,7 +229,7 @@ function ClickableDate() {
                 {dateText}
               </div>
                  
-              <button className='today'onClick={handleTodayClick}>Today</button>
+              <button className='today' onClick={handleTodayClick}>Today</button>
               <div className='custom-date-picker'>
                 <DatePicker
                   selected={date}
@@ -255,10 +240,11 @@ function ClickableDate() {
 
             <Calendar
               localizer={localizer}
-              events={eventComponents}
+              events={events}
               defaultDate={date}
               defaultView={view}
-              onSelectSlot={slotInfo => handleSelectSlot(slotInfo, events)}
+              onSelectEvent={handleSelectEvent}
+              onSelectSlot={handleSelectSlot}
               selectable
               toolbar={false}
               view={view}
