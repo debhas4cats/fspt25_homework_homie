@@ -22,6 +22,16 @@ body {
 }
 
 
+.delete-button-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 5px;
+}
+.delete-button {
+  text-align: center;
+}
+
+
 button.date {
   font-family: 'Adumu', sans-serif;
   display: inline-block;
@@ -162,11 +172,12 @@ button.today{
 }
 
 .rbc-time-header-cell .rbc-today {
-  background-color: #04aa6d !important;
+  background-color: #d0b8ee !important;
 }
 
 .rbc-time-slot {
   color: #000000;
+  
 }
 
 .rbc-time-slot:not(.rbc-today .rbc-time-slot) {
@@ -201,6 +212,7 @@ button.today{
   text-overflow: ellipsis;
   white-space: wrap;
   font-size: 11px;
+  background-color: rgb(108, 80, 168); /* Change this to your desired color */
 }
 
 .toolbar {
@@ -243,13 +255,6 @@ button.today{
   opacity: 0;
 }
 
-.delete-button-container {
-  text-align: center;
-}
-
-.delete-button {
-  display: inline-block;
-}
 
   /* --- calendar ----*/
   
