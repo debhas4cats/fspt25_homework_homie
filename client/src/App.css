@@ -20,24 +20,6 @@ body {
   position: relative; /* Set position to relative */
 
 }
-.event-input-container {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 5px; /* Adjust as needed */
-}
-
-.event-input {
-  text-align: center;
-}
-
-.delete-button-container {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 5px;
-}
-.delete-button {
-  text-align: center;
-}
 
 
 button.date {
@@ -58,11 +40,13 @@ button.date {
   flex-direction: column; /* Change to column layout */
   align-items: center; /* Center items horizontally */
   justify-content: center; /* Center items vertically */
- 
+  width: 1600px;
+  margin: 5px auto;
 }
 
 .calendar-container {
  background-color: #eff4f7;
+ width: 100%;
 }
 
 .rbc-header {
@@ -123,29 +107,30 @@ button.date {
 }
 
 .toolbar {
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 50px;
+}
+
+.event-input-container {
+  margin-left: 20px;
 }
 
 
-.custom-date-arrow {
-  display: flex;
+.delete-button-container {
+  margin-left: 20px;
 }
+
 
 .custom-date-arrow button {
-  margin-right: 40px;
-}
-
-.day-or-week-button {
-  display: flex;
-}
-button.today{
   margin-right: 20px;
 }
+
 .day-or-week-button button {
+  margin-right: 20px;
+}
+
+button.today{
   margin-right: 20px;
 }
 
@@ -154,8 +139,18 @@ button.today{
   margin-left: 50px;
 }
 .custom-date-picker {
-  border: 1px solid #3a1010;
+  position: relative;
+  border: #000000 solid 2px;
   cursor: pointer;
+  border-radius: 20px;
+  text-align: center;
+}
+.custom-text-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .react-datepicker__input-container {

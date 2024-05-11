@@ -53,7 +53,7 @@ router.get('/', async (req, res) => {
 // Add a new calendar event
 // Add a new calendar event
 router.post('/', async (req, res) => {
-    const { title, start, end, description } = req.body;
+    const { title, start, end } = req.body;
     if (!title || !start || !end) {
         return res.status(400).json({ message: "Title, start, and end are required." });
     }
@@ -69,7 +69,7 @@ router.post('/', async (req, res) => {
         const formattedEnd = adjustedEnd.toISOString().slice(0, 19).replace('T', ' ');
 
         // Insert the new event into the database
-        await db(`INSERT INTO calendar (title, start, end, description) VALUES (?, ?, ?, ?)`, [title, formattedStart, formattedEnd, description]);
+        await db(`INSERT INTO calendar (title, start, end) VALUES (?, ?, ?)`, [title, formattedStart, formattedEnd ]);
         
         // Fetch events from the database using the helper function
         await fetchEvents(res);
@@ -80,14 +80,13 @@ router.post('/', async (req, res) => {
 
 
 
-// Update a calendar event
 router.put('/:id', async (req, res) => {
     const eventId = req.params.id;
-    const { title, start, end, description } = req.body;
+    const { title, start, end } = req.body;
 
     // Check if at least one field is provided for updating
-    if (!title && !start && !end && !description) {
-        return res.status(400).json({ message: "At least one field (title, start, end, description) is required for updating." });
+    if (!title && !start && !end) {
+        return res.status(400).json({ message: "At least one field (title, start, end) is required for updating." });
     }
 
     try {
@@ -100,16 +99,16 @@ router.put('/:id', async (req, res) => {
             updateValues.push(title);
         }
         if (start) {
+            // Format the start datetime to 'YYYY-MM-DD HH:MM:SS'
+            const formattedStart = new Date(start).toISOString().slice(0, 19).replace('T', ' ');
             updateQuery += " start = ?,";
-            updateValues.push(start);
+            updateValues.push(formattedStart);
         }
         if (end) {
+            // Format the end datetime to 'YYYY-MM-DD HH:MM:SS'
+            const formattedEnd = new Date(end).toISOString().slice(0, 19).replace('T', ' ');
             updateQuery += " end = ?,";
-            updateValues.push(end);
-        }
-        if (description) {
-            updateQuery += " description = ?,";
-            updateValues.push(description);
+            updateValues.push(formattedEnd);
         }
 
         // Remove the trailing comma from the query string
@@ -128,6 +127,7 @@ router.put('/:id', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
 
 
 // Delete a calendar event
