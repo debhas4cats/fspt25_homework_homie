@@ -40,7 +40,9 @@ router.post("/", upload.single("imagefile"), async (req, res) => {
     await fs.rename(tmp_path, target_path);
 
     // store image in the DB
-    await db(`INSERT INTO images (path) VALUES ("${filename}");`);
+    const query = `INSERT INTO student_homework_images (student_id, homework_id, image_data) VALUES (${studentId}, ${homeworkId}, ${filename} )`;
+    const result = await db(query, [req.body.studentId, req.body.homeworkId, target_path]);
+    // await db(`INSERT INTO images (path) VALUES ("${filename}");`);
     getImages(req, res);
   } catch (err) {
     res.status(500).send(err);
