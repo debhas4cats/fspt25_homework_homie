@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
+import Subject from "./Subject";
 import Scoreboard from "./Scoreboard"; //Import the scoreboard
 import HomeworkAlertContainer from "./HomeworkAlertContainer"; //Import the Homework Alert Boxes
 import ClickableDate from './ClickableDate'; // Import the ClickableDate component
 import PencilSVG from '../assets/pencil.svg'; // Import the pencil SVG
 // Import other icons
 import { BulbSVG, StarSVG, MagnifySVG, ArrowSVG } from './Icons'; // Changed the import path
-
 import axios from "axios";
-import Subject from "./Subject";
 
 function Dashboard({ userData }) { // receiving the userdata as prop
   //refactoring the subjects state variable to take in the data from the GET subjects endpoint
   const [subjects, setSubjects] = useState([]);
-
- 
-
  
   const fetchSubjects = async (studentId) => { // Define fetchSubjects outside of useEffect
     try {
@@ -79,8 +75,6 @@ function Dashboard({ userData }) { // receiving the userdata as prop
     }
   };
 
-
-
   return (
     <div className="outer-container">
       <div className="corner-icons">
@@ -111,7 +105,7 @@ function Dashboard({ userData }) { // receiving the userdata as prop
             What's up, {userData.firstname}!
           </div>
         </div>
-        
+
       </div>
 
       <div className="outer-title-container">
@@ -125,7 +119,6 @@ function Dashboard({ userData }) { // receiving the userdata as prop
 
       <HomeworkAlertContainer subjects={subjects} />
     
-   
     </div>
   );
 }
