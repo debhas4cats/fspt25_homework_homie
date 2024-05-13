@@ -4,8 +4,6 @@ const db = require("../model/helper");
 var bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-
-
 //endpoint to get all students
 // code snippet for testing in Postman: localhost:5000/api/student
 router.get("/", async function(req, res, next) {
