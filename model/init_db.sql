@@ -46,7 +46,23 @@ CREATE TABLE students_subjects_homeworks (
     FOREIGN KEY (teacherID) REFERENCES teachers(id)
 );
 
+-- Create calendar table
+CREATE TABLE IF NOT EXISTS calendar (
+    id INT PRIMARY KEY,
+    title VARCHAR(255),
+    start DATETIME,
+    end DATETIME
+);
 
+-- Create student_homework_images table
+CREATE TABLE IF NOT EXISTS student_homework_images (
+    image_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id BIGINT,
+    homework_id BIGINT,
+    image_data BLOB,
+    FOREIGN KEY (student_id) REFERENCES students(id),
+    FOREIGN KEY (homework_id) REFERENCES homeworks(id)
+);
 
 -- ADD CONSTRAINTS (already included in table creation)
 
@@ -94,10 +110,6 @@ INSERT INTO homeworks (assignment, description, due_date, priority, completed, p
 ('Art Appreciation Presentation', 'Prepare a presentation discussing a famous artwork and its significance.', '2024-04-29', 'High', 0, 0);
 
 -- Insert into students_subjects_homeworks table
-<<<<<<< HEAD
-=======
-
->>>>>>> baa6708 (Added Login component and CSS. POST login endpoint in auth.js file. Updated init db file.)
 -- Add entries for Math subject (ID: 1)
 INSERT INTO students_subjects_homeworks (studentID, subjectID, homeworkID, teacherID)
 VALUES
