@@ -49,8 +49,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-
-// Add a new calendar event
 // Add a new calendar event
 router.post('/', async (req, res) => {
     const { title, start, end } = req.body;
