@@ -22,16 +22,6 @@ body {
 }
 
 
-.delete-button-container {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 5px;
-}
-.delete-button {
-  text-align: center;
-}
-
-
 button.date {
   font-family: 'Adumu', sans-serif;
   display: inline-block;
@@ -161,94 +151,6 @@ button.today{
   left: 0;
   right: 0;
   bottom: 0;
-}
-
-.react-datepicker__input-container {
-  opacity: 0;
-}
-
-.rbc-allday-cell {
-  display: none;
-}
-
-.rbc-time-header-cell .rbc-today {
-  background-color: #d0b8ee !important;
-}
-
-.rbc-time-slot {
-  color: #000000;
-  
-}
-
-.rbc-time-slot:not(.rbc-today .rbc-time-slot) {
-  background-color: #ffffff;
-}
-
-.rbc-event,
-.rbc-background-event {
-  padding: 0px !important;
-  border: none !important;
-}
-
-.rbc-event-label {
-  display: none !important;
-}
-
-.rbc-events-container {
-  width: 100% !important;
-}
-
-.rbc-day-slot .rbc-time-slot:after {
-  content: "";
-  width: 100%;
-  border-top: 1px solid #aba6b6;
-  display: block;
-}
-
-.rbc-time-content .rbc-event {
-  text-align: center;
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: wrap;
-  font-size: 11px;
-  background-color: rgb(108, 80, 168); /* Change this to your desired color */
-}
-
-.toolbar {
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 50px;
-}
-
-
-.custom-date-arrow {
-  display: flex;
-}
-
-.custom-date-arrow button {
-  margin-right: 40px;
-}
-
-.day-or-week-button {
-  display: flex;
-}
-button.today{
-  margin-right: 20px;
-}
-.day-or-week-button button {
-  margin-right: 20px;
-}
-
-.date-text {
-  margin-right: 50px;
-  margin-left: 50px;
-}
-.custom-date-picker {
-  border: 1px solid #3a1010;
-  cursor: pointer;
 }
 
 .react-datepicker__input-container {
@@ -462,7 +364,7 @@ button.today{
    /* -----dashboard greeting pencil----- */
 .greeting-container {
   position: absolute;
-  top: 20px;
+  top: 5px;
   right: 50px;
   display: flex;
   align-items: center;
@@ -475,8 +377,8 @@ button.today{
 }
 
 .pencil-icon {
-  width: 150px;
-  height: 150px;
+  width: 175px;
+  height: 175px;
 }
    /* -----corner icons----- */
 
@@ -484,9 +386,8 @@ button.today{
   .star-icon,
   .magnify-icon,
   .arrow-icon {
-    width: 50px;
-    height: 50px;
- 
+    width: 100px;
+    height: 100px;
     position: absolute;
   }
   
@@ -497,7 +398,7 @@ button.today{
   }
   
   .star-icon {
-    top: 9px;
+    top: 5px;
     left:260px;
 
   }
@@ -512,3 +413,5 @@ button.today{
     bottom: 20px;
     left: 20px; 
   }
+
+     /* -----logout button----- */

@@ -54,6 +54,7 @@ function App() {
   return (
     <Router>{/* Router component is used to wrap all our routes */}
       <div>
+
         <Routes>{/* Routes component holds all our defined routes */}
           <Route path="/" element={<Login setUserData = { setUserData }/>} /> 
           {/*Route for main page, which features a login form and the link to registration page if student is not added to database*/}

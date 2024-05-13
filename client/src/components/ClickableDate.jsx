@@ -55,7 +55,7 @@ function ClickableDate() {
     if (isCalendarRoute) {
       fetchEvents();
     }
-  }, [isCalendarRoute]);
+  }, []);
 
   // Handles date change
   const handleDateChange = newDate => {
@@ -120,12 +120,6 @@ function ClickableDate() {
           selected: null
         }));
       }
-  
-      await axios.delete(`/api/calendar/${eventIdToDelete}`);
-      const updatedEvents = events.filter((event) => event.id !== eventIdToDelete);
-      setEvents(updatedEvents);
-      setSelectedEvent(null); // Reset selected event
-      setSelectedSlot(null); // Reset selected slot
     } catch (error) {
       console.error('Error deleting event:', error);
     }

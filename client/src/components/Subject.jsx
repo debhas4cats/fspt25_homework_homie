@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link, useParams, useLocation} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import '../App.css';
 
 function SubjectComponent() {
@@ -80,20 +80,15 @@ function SubjectComponent() {
   const deleteHomework = async (id) => {
     console.log('Deleting homework with ID:', id);
     try {
-      const response = await fetch(`http://localhost:4000/homework/homeworks/${id}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete homework');
-      }
-      // Remove the deleted homework from the state
-      setHomework(homework.filter(hw => hw.id !== id));
+      // Logic to delete homework with the specified ID
     } catch (error) {
       console.error('Error deleting homework:', error);
     }
+  };
 
   return (
-    <div><Link to="/dashboard">
+    <div>
+      <Link to="/dashboard">
         <button className="home-rounded-button">HOME</button>
       </Link>
       <div className="container">
@@ -119,7 +114,6 @@ function SubjectComponent() {
       </div>
     </div>
   );
-}
 }
 
 export default SubjectComponent;

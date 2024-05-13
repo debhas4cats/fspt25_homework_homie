@@ -6,6 +6,7 @@ import ClickableDate from './ClickableDate'; // Import the ClickableDate compone
 import PencilSVG from '../assets/pencil.svg'; // Import the pencil SVG
 // Import other icons
 import { BulbSVG, StarSVG, MagnifySVG, ArrowSVG } from './Icons'; // Changed the import path
+
 import axios from "axios";
 
 function Dashboard({ userData }) { // receiving the userdata as prop
@@ -75,22 +76,9 @@ function Dashboard({ userData }) { // receiving the userdata as prop
     }
   };
 
-  function isLate(dueDate) {
-    const today = new Date();
-    return dueDate < today && !isSameDay(dueDate, today);
-  }
-  
-  function isSameDay(date1, date2) {
-    return (
-      date1.getFullYear() === date2.getFullYear() &&
-      date1.getMonth() === date2.getMonth() &&
-      date1.getDate() === date2.getDate()
-    );
-  }
-  
+
 
   return (
-    <>
     <div className="outer-container">
       <div className="corner-icons">
         {/* Bulb SVG */}
@@ -117,7 +105,7 @@ function Dashboard({ userData }) { // receiving the userdata as prop
           {/* Greeting div */}
           <div className="greeting-text">
             {/* Display greeting with username */}
-            What's up, {userData.username}!
+            What's up, {userData.firstname}!
           </div>
         </div>
         
@@ -134,55 +122,9 @@ function Dashboard({ userData }) { // receiving the userdata as prop
 
       <HomeworkAlertContainer subjects={subjects} />
 
-              <ul>
-                {subject.assignments &&
-                  subject.assignments.length > 0 &&
-                  subject.assignments
-                    .slice()
-                    .sort((a, b) => new Date(a.due_date) - new Date(b.due_date))
-                    .slice(0, 3)
-                    .map((assignment, index) => {
-                      const dueDate = new Date(assignment.due_date);
-                      const today = new Date();
-                      const isLate = dueDate < today && !isSameDay(dueDate, today);
-                      return (
-                      <li
-                        // li can have different styles based on whether the assignment is late or not
-                        // if due date is in the past (is true), assigns the li class 'late'
-                        // if due date is not in the past (is false) -- no additional li class will be added
-                        className={`assignment-message ${isLate ? "late" : ""}`}
-                        key={index}
-                        onMouseEnter={() => {
-                          setHoveredAssignment(assignment);
-                          setShowFloatingDiv(true);
-                        }}
-                        onMouseLeave={() => setShowFloatingDiv(false)}>
-                        {createMessage([assignment])}
-                      </li>
-                       );
-                    })}
-              </ul>
-            </div>
-
-      {/* "post it" note containing details of assignment based on where user hovers */}
-      <div className="floating-div-outer-container">
-        {/* Floating div */}
-        {showFloatingDiv && hoveredAssignment && (
-          // floating div can have different styles based on whether the assignment is late or not
-          // if due date is in the past (is true), assigns the div class 'late'
-          // if due date is not in the past (is false) -- no additional div class will be added
-          <div className={`floating-div ${isLate(new Date(hoveredAssignment.due_date)) ? "late" : ""}`}>
-            <h3>{hoveredAssignment.assignment}</h3>
-            <p>{hoveredAssignment.description}</p>
-            <p>Teacher: {hoveredAssignment.teacher_name}</p>
-            <p className="assignment-due">
-              Due: {new Date(hoveredAssignment.due_date).toLocaleDateString()}
-            </p>
-          </div>
-        )}
-      </div>
-    </>
-  )
+    
+    </div>
+  );
 }
 
 export default Dashboard;
