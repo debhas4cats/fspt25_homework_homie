@@ -20,15 +20,7 @@ body {
   position: relative; /* Set position to relative */
 
 }
-.event-input-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px; /* Adjust as needed */
-}
 
-.event-input {
-  text-align: center;
-}
 
 button.date {
   font-family: 'Adumu', sans-serif;
@@ -45,12 +37,16 @@ button.date {
 
 .outer-calendar-container {
   display: flex;
+  flex-direction: column; /* Change to column layout */
   align-items: center; /* Center items horizontally */
   justify-content: center; /* Center items vertically */
+  width: 1600px;
+  margin: 5px auto;
 }
 
 .calendar-container {
  background-color: #eff4f7;
+ width: 100%;
 }
 
 .rbc-header {
@@ -59,7 +55,7 @@ button.date {
   align-items: center;
   justify-content: center;
   height: 40px !important;
-  background: #17405d;
+  background:rgb(167, 141, 194);
 }
 
 .rbc-allday-cell {
@@ -67,11 +63,12 @@ button.date {
 }
 
 .rbc-time-header-cell .rbc-today {
-  background-color: #04aa6d !important;
+  background-color: #d0b8ee !important;
 }
 
 .rbc-time-slot {
   color: #000000;
+  
 }
 
 .rbc-time-slot:not(.rbc-today .rbc-time-slot) {
@@ -106,32 +103,34 @@ button.date {
   text-overflow: ellipsis;
   white-space: wrap;
   font-size: 11px;
+  background-color: rgb(108, 80, 168); /* Change this to your desired color */
 }
 
 .toolbar {
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 50px;
+}
+
+.event-input-container {
+  margin-left: 20px;
 }
 
 
-.custom-date-arrow {
-  display: flex;
+.delete-button-container {
+  margin-left: 20px;
 }
+
 
 .custom-date-arrow button {
-  margin-right: 40px;
-}
-
-.day-or-week-button {
-  display: flex;
-}
-button.today{
   margin-right: 20px;
 }
+
 .day-or-week-button button {
+  margin-right: 20px;
+}
+
+button.today{
   margin-right: 20px;
 }
 
@@ -140,13 +139,24 @@ button.today{
   margin-left: 50px;
 }
 .custom-date-picker {
-  border: 1px solid #3a1010;
+  position: relative;
+  border: #000000 solid 2px;
   cursor: pointer;
+  border-radius: 20px;
+  text-align: center;
+}
+.custom-text-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .react-datepicker__input-container {
   opacity: 0;
 }
+
 
   /* --- calendar ----*/
   
@@ -350,3 +360,58 @@ button.today{
     .register-option {
       font-size: 14px;
     }
+
+   /* -----dashboard greeting pencil----- */
+.greeting-container {
+  position: absolute;
+  top: 5px;
+  right: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.greeting-text {
+  font-family: 'Adumu', sans-serif;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.pencil-icon {
+  width: 175px;
+  height: 175px;
+}
+   /* -----corner icons----- */
+
+  .bulb-icon,
+  .star-icon,
+  .magnify-icon,
+  .arrow-icon {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+  }
+  
+  .bulb-icon {
+    top: 350px;
+    left: 20px;
+  
+  }
+  
+  .star-icon {
+    top: 5px;
+    left:260px;
+
+  }
+  
+  .magnify-icon {
+    bottom: 20px;
+    right: 20px;
+
+  }
+  
+  .arrow-icon {
+    bottom: 20px;
+    left: 20px; 
+  }
+
+     /* -----logout button----- */
