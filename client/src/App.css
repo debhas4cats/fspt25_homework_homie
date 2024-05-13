@@ -364,7 +364,7 @@ button.today{
    /* -----dashboard greeting pencil----- */
 .greeting-container {
   position: absolute;
-  top: 20px;
+  top: 5px;
   right: 50px;
   display: flex;
   align-items: center;
@@ -377,8 +377,8 @@ button.today{
 }
 
 .pencil-icon {
-  width: 150px;
-  height: 150px;
+  width: 175px;
+  height: 175px;
 }
    /* -----corner icons----- */
 
@@ -386,9 +386,8 @@ button.today{
   .star-icon,
   .magnify-icon,
   .arrow-icon {
-    width: 50px;
-    height: 50px;
- 
+    width: 100px;
+    height: 100px;
     position: absolute;
   }
   
@@ -399,7 +398,7 @@ button.today{
   }
   
   .star-icon {
-    top: 9px;
+    top: 5px;
     left:260px;
 
   }

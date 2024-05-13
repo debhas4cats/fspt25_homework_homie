@@ -55,7 +55,7 @@ function ClickableDate() {
     if (isCalendarRoute) {
       fetchEvents();
     }
-  }, [isCalendarRoute]);
+  }, []);
 
   // Handles date change
   const handleDateChange = newDate => {

@@ -105,7 +105,7 @@ function Dashboard({ userData }) { // receiving the userdata as prop
           {/* Greeting div */}
           <div className="greeting-text">
             {/* Display greeting with username */}
-            What's up, {userData.username}!
+            What's up, {userData.firstname}!
           </div>
         </div>
         

@@ -27,7 +27,8 @@ const supersecret = process.env.SUPER_SECRET;
         const tokenPayload = {
           user_id,
           username: user.username,
-          avatar: user.avatar
+          avatar: user.avatar,
+          firstname: user.firstname,
         };
   
         var token = jwt.sign(tokenPayload, supersecret);
