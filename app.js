@@ -9,6 +9,7 @@ const authRouter = require('./routes/auth');
 const homeworkRouter = require('./routes/homework');
 const studentRouter = require('./routes/student');
 const calendarRouter = require('./routes/calendar'); // Assuming your router file is named calendarRouter.js
+const ImagesRouter = require('./routes/images'); // Import the new router
 
 const app = express();
 
@@ -18,11 +19,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static("public"));
 app.use('/', indexRouter);
 app.use("/api/auth", authRouter);
 app.use('/homework', homeworkRouter);
 app.use('/api/student', studentRouter);
-
+app.use('/api/images', ImagesRouter);
 app.use('/api/calendar', calendarRouter); // Use the calendarRouter for /api/calendar routes
 
 app.use((req, res, next) => {

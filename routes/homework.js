@@ -10,15 +10,16 @@ router.use(express.json());
 router.get('/', function(req, res, next) {
   res.send({ title: 'this is the homepage' });
 });
-//THIS ENDPOINT WILL BE MODIFIED WITH STUDENT SPECIFIC HOMEWORK
+//THIS ENDPOINT MODIFIED WITH STUDENT SPECIFIC HOMEWORK
 // Endpoint to get homework for a specific subject
 //this will be the endpoint needed for the individual subject pages
-//snippet needed for Postman test: localhost:5000/homework/subjects/6/homework
+//snippet needed for Postman test: localhost:4000/homework/subjects/5/students/1/homework
 router.get('/subjects/:subjectId/students/:studentId/homework', async (req, res) => {
   const subjectId = req.params.subjectId;
   //for after authentication is implemented
   const studentId = req.params.studentId;
-  const query = `SELECT h.assignment, h.description, h.due_date, h.priority, h.completed, h.pastdue,
+  console.log('THIS IS THE STUDENTID', studentId)
+  const query = `SELECT h.id,h.assignment, h.description, h.due_date, h.priority, h.completed, h.pastdue,
     CONCAT(t.firstname, ' ', t.lastname) AS teacher_name
     FROM students_subjects_homeworks ssh
     JOIN homeworks h ON ssh.homeworkID = h.id
@@ -28,7 +29,8 @@ router.get('/subjects/:subjectId/students/:studentId/homework', async (req, res)
     
      //WHERE statement needs to be hard coded with studentID 1 until after authentication is implemented
   try {
-    const results = await db(query);
+    const results = await db(query, [subjectId, studentId]);
+    console.log('THIS IS THE RESULTS', query)
     res.status(200).json({ data: results.data });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -42,7 +44,7 @@ router.get('/subjects/:subjectId/students/:studentId/homework', async (req, res)
 router.get('/students/:studentId/homework', async (req, res) => {
   const studentId = req.params.studentId;
  //WHERE statement needs to be hard coded with studentID 1 until after authentication is implemented
-  const query = `SELECT h.assignment, h.description, h.due_date, h.priority, h.completed, h.pastdue,
+  const query = `SELECT  h.assignment, h.description, h.due_date, h.priority, h.completed, h.pastdue,
     CONCAT(t.firstname, ' ', t.lastname) AS teacher_name
     FROM students_subjects_homeworks ssh
     JOIN homeworks h ON ssh.homeworkID = h.id

@@ -6,14 +6,13 @@ import ClickableDate from './ClickableDate'; // Import the ClickableDate compone
 import PencilSVG from '../assets/pencil.svg'; // Import the pencil SVG
 // Import other icons
 import { BulbSVG, StarSVG, MagnifySVG, ArrowSVG } from './Icons'; // Changed the import path
-
 import axios from "axios";
 
 function Dashboard({ userData }) { // receiving the userdata as prop
   //refactoring the subjects state variable to take in the data from the GET subjects endpoint
   const [subjects, setSubjects] = useState([]);
 
- 
+
   const fetchSubjects = async (studentId) => { // Define fetchSubjects outside of useEffect
     try {
       const response = await fetch("http://localhost:4000/homework/subjects");
@@ -121,8 +120,8 @@ function Dashboard({ userData }) { // receiving the userdata as prop
       </div>
 
       <HomeworkAlertContainer subjects={subjects} />
-
     
+   
     </div>
   );
 }

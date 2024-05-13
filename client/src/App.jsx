@@ -9,6 +9,13 @@ import RegisterNewStudent from './components/RegisterNewStudent';
 import ClickableDate from './components/ClickableDate'; // Import the ClickableDate component
 
 function App() {
+
+  const [selectedSubjectId, setSelectedSubjectId] = useState(null);
+
+  // Function to handle subject selection
+  const handleSubjectClick = (subjectId) => {
+    setSelectedSubjectId(subjectId);
+  };
   // get today's date and format it
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const today = new Date().toLocaleDateString(undefined, options);
@@ -61,7 +68,7 @@ function App() {
           <Route path="/RegisterNewStudent" element={<RegisterNewStudent />} />
           <Route path="/dashboard" element={<Dashboard userData={userData} />} />
           {/* Route for Dashboard, which is shown when the student is logged in */}
-          <Route path="/:subject" element={<Subject />} /> 
+          <Route path="/:subject/:subjectId" element={<Subject />} /> 
           {/* Route for the Subject component, which is shown when the URL has something after /, like /math or /science */}
           {/* :subject captures whatever comes after the route, so you can grab values from the URL */}
           <Route path="/calendar" element={<ClickableDate inline />} /> {/* Route for ClickableDate */}
