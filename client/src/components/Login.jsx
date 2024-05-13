@@ -44,6 +44,10 @@ export default function Login({setUserData}) {
         }
     };
 
+    const logout = async () => {
+        
+    }
+
     return (
         <>
             <h3>Login</h3>
