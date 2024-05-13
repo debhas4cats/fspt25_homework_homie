@@ -46,6 +46,14 @@ CREATE TABLE students_subjects_homeworks (
     FOREIGN KEY (teacherID) REFERENCES teachers(id)
 );
 
+-- Create calendar table
+CREATE TABLE IF NOT EXISTS calendar (
+    id INT PRIMARY KEY,
+    title VARCHAR(255),
+    start DATETIME,
+    end DATETIME
+);
+
 -- Create student_homework_images table
 CREATE TABLE IF NOT EXISTS student_homework_images (
     image_id INT AUTO_INCREMENT PRIMARY KEY,
