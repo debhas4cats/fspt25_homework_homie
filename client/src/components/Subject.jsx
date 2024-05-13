@@ -143,7 +143,7 @@ function Subject() {
 
 console.log('THIS IS MY FORMDATA',formData);
 
-      const response = await axios.post('/api/images', formData, {
+      const response = await axios.post(`/api/images/${homeworkId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -191,7 +191,7 @@ console.log('Image uploaded:', response.data);
                  <input
                  type="checkbox"
                  checked={homeworkCompleted[hw.id] || hw.completed} 
-                 onClick={() => handleCheckboxClick(hw.id)} // This line of code will be for the homework upload Feature Extension.
+                 onChange={() => handleCheckboxClick(hw.id)} // This line of code will be for the homework upload Feature Extension.
                  //Call function insdie handleCheckbox click when the checkbox value changes
                  />
                 </p>
@@ -201,6 +201,9 @@ console.log('Image uploaded:', response.data);
               <input type="file" onChange={onFileChange} />
               <button onClick={onFileUpload}>Upload</button>
               {/* I will add code here to display mini preview of uploaded images */}
+              {/* {previewUrl && (
+      <img src={previewUrl} alt="Uploaded Image" style={{ width: '50px', height: '50px', marginLeft: '10px' }} />
+    )} */}
               </div>
                 )}
                 <button className="btn btn-danger" onClick={() => deleteHomework(hw.id)}>Delete</button>
