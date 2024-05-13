@@ -7,7 +7,7 @@ const { v4: uuidv4 } = require("uuid");
 const mime = require("mime-types");
 const multer = require("multer");
 const upload = multer({ dest: "public/img/" });
-const studentIsLoggedIn = require("../guards/studentLoggedIn");
+const studentIsLoggedIn = require("../guards/studentIsLoggedIn");
 
 const getImages = async (req, res) => {
   try {

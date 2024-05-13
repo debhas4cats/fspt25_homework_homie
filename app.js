@@ -25,6 +25,7 @@ app.use("/api/auth", authRouter);
 app.use('/homework', homeworkRouter);
 app.use('/api/student', studentRouter);
 app.use('/api/images', ImagesRouter);
+
 app.use('/api/calendar', calendarRouter); // Use the calendarRouter for /api/calendar routes
 
 app.use((req, res, next) => {

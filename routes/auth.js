@@ -25,11 +25,10 @@ const supersecret = process.env.SUPER_SECRET;
         if (!correctPassword) throw new Error("Incorrect password");
 
         const tokenPayload = {
-          id: user_id,
+          user_id,
           username: user.username,
+          avatar: user.avatar,
           firstname: user.firstname,
-          lastname: user.lastname,
-          avatar: user.avatar
         };
   
         var token = jwt.sign(tokenPayload, supersecret);
