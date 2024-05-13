@@ -4,10 +4,9 @@ import Scoreboard from "./Scoreboard"; //Import the scoreboard
 import HomeworkAlertContainer from "./HomeworkAlertContainer"; //Import the Homework Alert Boxes
 import ClickableDate from './ClickableDate'; // Import the ClickableDate component
 import PencilSVG from '../assets/pencil.svg'; // Import the pencil SVG
-import StarSVG from '../assets/star.svg'; // Import the star SVG
-import MagnifySVG from '../assets/magnify.svg'; // Import the magnifying glass SVG
-import BulbSVG from '../assets/lightbulb.svg'; // Import the lightbulb SVG
-import ArrowSVG from '../assets/arrow.svg'; // Import the arrow SVG
+// Import other icons
+import { BulbSVG, StarSVG, MagnifySVG, ArrowSVG } from './Icons'; // Changed the import path
+
 import axios from "axios";
 
 function Dashboard({ userData }) { // receiving the userdata as prop

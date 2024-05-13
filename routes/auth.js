@@ -25,8 +25,10 @@ const supersecret = process.env.SUPER_SECRET;
         if (!correctPassword) throw new Error("Incorrect password");
 
         const tokenPayload = {
-          user_id,
+          id: user_id,
           username: user.username,
+          firstname: user.firstname,
+          lastname: user.lastname,
           avatar: user.avatar
         };
   

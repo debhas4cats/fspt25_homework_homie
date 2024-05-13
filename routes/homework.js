@@ -228,4 +228,4 @@ JOIN teachers ON students_subjects_homeworks.teacherID = teachers.id;
   }
 });
 
-module.exports = router;ß
+module.exports = router;

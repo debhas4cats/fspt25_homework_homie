@@ -30,7 +30,9 @@ The following technologies were used to develop Homework Homie:
 
 ***
 
-### Setup
+## Setup
+
+- Fork this repository
 
 - Clone this repo to your local machine.
 
@@ -39,6 +41,13 @@ The following technologies were used to develop Homework Homie:
 - To install the project dependencies, type and run: `npm install`.
 
 - In the same terminal window, `cd client` and run `npm install` to install dependencies related to React (the client).
+
+### Dependencies
+
+Please install the following dependencies in the client folder:
+
+- `npm install react-big-calendar`
+- `npm install react-datepicker`
 
 ### Run Your Development Servers
 
