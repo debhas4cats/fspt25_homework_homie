@@ -1,96 +1,103 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import DatePicker from "react-datepicker";
+// Importing necessary dependencies
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import DatePicker from "react-datepicker"; // React date picker component
 import "react-datepicker/dist/react-datepicker.css";
-import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
+import { Calendar, momentLocalizer, Views } from 'react-big-calendar'; // Provides a calendar component
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import moment from 'moment';
-import { Link, useLocation } from 'react-router-dom';
-import axios from 'axios';
+import moment from 'moment'; // 'moment' library, used for parsing, validating, manipulating, and formatting dates
+import { Link, useLocation } from 'react-router-dom'; // For navigation in React applications
+import axios from 'axios'; // HTTP client for making requests
 import "../App.css";
 
+// Initialize momentLocalizer, which adapts 'moment' for use with 'react-big-calendar'
 const localizer = momentLocalizer(moment);
 
-export const viewOptions = [
+// Array of objects defining the options for the calendar views (day and week)
+const viewOptions = [
   { id: Views.DAY, label: "Day" },
   { id: Views.WEEK, label: "Week" },
 ];
 
 function ClickableDate() {
-  const [date, setDate] = useState(new Date());
-  const [events, setEvents] = useState([]);
-  const [newEventTitle, setNewEventTitle] = useState('');
-  const [showEventInput, setShowEventInput] = useState(false);
-  const [selectedSlot, setSelectedSlot] = useState(null);
-  const [view, setView] = useState(Views.WEEK);
+  // State management
+  const [state, setState] = useState({
+    date: new Date(),
+    events: [],
+    newEventTitle: '',
+    selected: null,
+    view: Views.WEEK
+  });
 
+  // Hook to get the current location
   const location = useLocation();
+  // Check if the current location is '/calendar'
   const isCalendarRoute = location.pathname === '/calendar';
+  // Ref that references the date picker component
+  const datepickerRef = useRef(null);
 
+  // Effect hook to fetch events when the component mounts or when the isCalendarRoute value changes
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const response = await axios.get('/api/calendar');
+        // Transform fetched data to the required format and update the state
         const fetchedEvents = response.data.map(event => ({
           id: event.id,
           title: event.title,
           start: new Date(event.start),
           end: new Date(event.end),
         }));
-        // console.log('Fetched events:', fetchedEvents); // Log fetched events
-        setEvents(fetchedEvents);
+        setState(prevState => ({ ...prevState, events: fetchedEvents }));
       } catch (error) {
         console.error('Error fetching calendar events:', error);
       }
     };
-    // console.log('isCalendarRoute:', isCalendarRoute); // Log isCalendarRoute
     if (isCalendarRoute) {
       fetchEvents();
     }
-  }, [isCalendarRoute]); // Include isCalendarRoute in the dependency array
-  
+  }, [isCalendarRoute]);
 
+  // Handles date change
   const handleDateChange = newDate => {
-    setDate(newDate);
-    setShowEventInput(false);
+    setState(prevState => ({
+      ...prevState,
+      date: newDate,
+      newEventTitle: '',
+      selected: null
+    }));
   };
 
-  const handleSelectSlot = useCallback(
-    (slotInfo, events) => {
-      console.log('Slot selected:', slotInfo); // Check if handleSelectSlot is called
-      console.log('Fetched events in handleSelectSlot:', events); // Log the fetched events
-      const slotHasEvent = events.some(event => 
-        moment(slotInfo.start).isSame(moment(event.start), 'minute') &&
-        moment(slotInfo.end).isSame(moment(event.end), 'minute')
-      );
-      if (slotHasEvent) {
-        console.log('Slot has event:', slotInfo);
-        setSelectedSlot(slotInfo);
-        setShowEventInput(true); // Show event input when slot has an event
-        setNewEventTitle(''); // Clear input value
-      } else {
-        console.log('Empty slot selected');
-        setSelectedSlot(slotInfo);
-        setShowEventInput(true); // Show event input even for empty slot
-      }
-    },
-    []
-  );
-  
-  
+  // Handles selecting an event
+  const handleSelectEvent = event => {
+    setState(prevState => ({ ...prevState, selected: event }));
+  };
 
+  // Handles selecting a time slot
+  const handleSelectSlot = slotInfo => {
+    setState(prevState => ({ ...prevState, selected: slotInfo }));
+  };
+
+  // Adds a new event
   const handleAddEvent = async () => {
-    if (newEventTitle.trim() !== '' && selectedSlot) {
+    const { newEventTitle, selected, events } = state;
+    if (newEventTitle.trim() !== '' && selected) {
       const newEvent = {
         title: newEventTitle,
-        start: selectedSlot.start,
-        end: selectedSlot.end,
+        start: selected.start,
+        end: selected.end,
       };
-  
+
       try {
-        await axios.post('/api/calendar', newEvent);
-        setEvents([...events, newEvent]);
-        setShowEventInput(false);
-        setSelectedSlot(null);
+        // POST request to add a new event
+        const response = await axios.post('/api/calendar', newEvent);
+        const newEventId = response.data.data[response.data.data.length - 1].id;
+        const createdEvent = { ...newEvent, id: newEventId };
+        setState(prevState => ({
+          ...prevState,
+          events: [...events, createdEvent],
+          newEventTitle: '',
+          selected: createdEvent
+        }));
       } catch (error) {
         console.error('Error adding event:', error);
       }
@@ -99,95 +106,99 @@ function ClickableDate() {
     }
   };
 
-  const handleDeleteEvent = async eventId => {
+  // Deletes an event
+  const handleDeleteEvent = async eventIdToDelete => {
+    const { events } = state;
     try {
-      if (eventId) {
-        const url = `/api/calendar/${eventId}`;
-        console.log('Delete URL:', url);
-        await axios.delete(url);
-        const updatedEvents = events.filter(event => event.id !== eventId);
-        setEvents(updatedEvents);
-        console.log('Event deleted successfully');
-      } else {
-        console.error('Event ID is undefined');
+      console.log("Deleting Event with ID:", eventIdToDelete);
+      if (eventIdToDelete) {
+        // DELETE request to delete an event
+        await axios.delete(`/api/calendar/${eventIdToDelete}`);
+        setState(prevState => ({
+          ...prevState,
+          events: prevState.events.filter(event => event.id !== eventIdToDelete),
+          selected: null
+        }));
       }
     } catch (error) {
       console.error('Error deleting event:', error);
     }
   };
 
-
-  const eventComponents = events.map(event => ({
-    ...event,
-    id: event.id,
-    title: event.title,
-    start: event.start,
-    end: event.end,
-    onClick: () => handleDeleteEvent(event.id),
-    buttonLabel: 'Delete',
-  }));
-
-  const renderDeleteButton = () => {
-    if (selectedSlot && selectedSlot.id) {
-      console.log('Delete button is rendering');
-      return (
-        <button onClick={() => {
-          console.log('Delete button clicked');
-          handleDeleteEvent(selectedSlot.id);
-        }}>Delete</button>
-      );
-    } else if (showEventInput) {
-      return null; // Hide delete button when adding new event
-    } else {
-      return null; // Hide delete button otherwise
-    }
-  };
-
-
-  const handleViewChange = newView => {
-    setView(newView);
-  };
-
-  const handleNavigate = (newDate, view, action) => {
-    setDate(newDate);
-  };
-
-  const onPrevClick = useCallback(() => {
-    if (view === Views.DAY) {
-      setDate(moment(date).subtract(1, "d").toDate());
-    } else if (view === Views.WEEK) {
-      setDate(moment(date).subtract(1, "w").toDate());
-    } else {
-      setDate(moment(date).subtract(1, "M").toDate());
-    }
-  }, [view, date]);
+  // Edits an event
+  const handleEditEvent = useCallback(async () => {
+    const { newEventTitle, selected, events } = state;
+    if (newEventTitle.trim() !== '' && selected) {
+      const updatedEvent = {
+        ...selected,
+        title: newEventTitle,
+      };
   
-  const onNextClick = useCallback(() => {
-    if (view === Views.DAY) {
-      setDate(moment(date).add(1, "d").toDate());
-    } else if (view === Views.WEEK) {
-      setDate(moment(date).add(1, "w").toDate());
+      try {
+        // PUT request to update an event
+        await axios.put(`/api/calendar/${selected.id}`, updatedEvent);
+        // Update the events array with the updated event
+        setState(prevState => ({
+          ...prevState,
+          events: prevState.events.map(event => (event.id === selected.id ? updatedEvent : event)),
+          newEventTitle: '',
+          selected: null
+        }));
+      } catch (error) {
+        console.error('Error editing event:', error);
+      }
     } else {
-      setDate(moment(date).add(1, "M").toDate());
+      alert('Event title cannot be empty!');
     }
-  }, [view, date]);
+  }, [state]);
 
-  const dateText = useMemo(() => {
+  // Handles view change
+  const handleViewChange = newView => {
+    setState(prevState => ({ ...prevState, view: newView }));
+  };
+
+  // Handles navigating to a new date
+  const handleNavigate = (newDate, view, action) => {
+    setState(prevState => ({ ...prevState, date: newDate }));
+  };
+
+  // Handles clicking the Today button
+  const handleTodayClick = () => {
+    setState(prevState => ({ ...prevState, date: new Date() }));
+  };
+
+  // Handles clicking the navigation buttons
+  const onPrevNextClick = (amount, unit) => {
+    setState(prevState => ({
+      ...prevState,
+      date: moment(state.date).add(amount, unit).toDate()
+    }));
+  };
+
+  // Renders the delete button
+  const renderDeleteButton = () => {
+    const { selected } = state;
+    return selected && <button onClick={() => handleDeleteEvent(selected.id)}>Delete</button>;
+  };
+
+  // Destructure the state object for more concise access to properties
+  const { date, events, newEventTitle, selected, view } = state;
+
+  // Generates the text to display the current date or date range based on the selected view
+  const dateText = (() => {
     if (view === Views.DAY) return moment(date).format("dddd, MMMM DD");
     if (view === Views.WEEK) {
       const from = moment(date).startOf("week");
       const to = moment(date).endOf("week");
       return `${from.format("MMMM DD")} to ${to.format("MMMM DD")}`;
     }
-  }, [view, date]);
+  })();
 
-  const handleTodayClick = () => {
-    setDate(new Date());
-  };
-
+  // Render the component
   return (
     <div className="clickable-date">
       <div>
+        {/* Conditional rendering for the HOME and date buttons */}
         {isCalendarRoute ? (
           <Link to="/dashboard">
             <button className="home-rounded-button">HOME</button>
@@ -201,64 +212,84 @@ function ClickableDate() {
         )}
       </div>
 
-      <div className='event-input-container'>
-        {showEventInput && (
-          <div className='event-input'>
-            <input
-              type="text"
-              value={newEventTitle}
-              onChange={e => setNewEventTitle(e.target.value)}
-              placeholder="Enter event title..."
-            />
-            <button onClick={handleAddEvent}>Add Event</button>
-          </div>
-        )}
-      </div>
-  
-      <div className='delete-button-container'>
-        {renderDeleteButton()}
-      </div>
-
-      <div className='outer-calendar-container'>
+      <div className="outer-calendar-container">
         {isCalendarRoute && (
           <div className="calendar-container">
             <div className="toolbar">
+              {/* Navigation buttons */}
               <div className='custom-date-arrow'>
-                <button onClick={onPrevClick}>{'<'}</button>
-                <button onClick={onNextClick}>{'>'}</button>
+                <button onClick={() => onPrevNextClick(-1, view === Views.DAY ? "d" : (view === Views.WEEK ? "w" : "M"))}>{'<'}</button>
+                <button onClick={() => onPrevNextClick(1, view === Views.DAY ? "d" : (view === Views.WEEK ? "w" : "M"))}>{'>'}</button>
               </div>
-               
+
+              {/* Day or week buttons */}
               <div className='day-or-week-button'>
                 {viewOptions.map(option => (
                   <button
                     key={option.id}
                     className={view === option.id ? 'active' : ''}
-                    onClick={() => setView(option.id)}
+                    onClick={() => handleViewChange(option.id)}
                   >
                     {option.label}
                   </button>
                 ))}
               </div>
-                
+
+              {/* Display date or date range */}
               <div className='date-text'>
                 {dateText}
               </div>
-                 
-              <button className='today'onClick={handleTodayClick}>Today</button>
+
+              {/* Today button */}
+              <button className='today' onClick={handleTodayClick}>Today</button>
+
+              {/* Custom date picker */}
               <div className='custom-date-picker'>
+                <div className="custom-text-container" onClick={() => datepickerRef.current.focus()}>
+                  View Entire Month
+                </div>
                 <DatePicker
                   selected={date}
                   onChange={handleDateChange}
+                  ref={datepickerRef}
                 />
+              </div>
+
+              {/* Event input */}
+              <div className='event-input-container'>
+                {selected && (
+                  <div className='event-input'>
+                    <input
+                      type="text"
+                      value={newEventTitle}
+                      onChange={e => setState(prevState => ({ ...prevState, newEventTitle: e.target.value }))}
+                      placeholder="Enter........"
+                    />
+                    {selected.id ? (
+                      <button onClick={handleEditEvent}>Edit & Save Event</button>
+                    ) : (
+                      <button onClick={handleAddEvent}>Add Event</button>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Delete button */}
+              <div className='delete-button-container'>
+                <div className='delete-button'>
+                  {renderDeleteButton()}
+                </div>
               </div>
             </div>
 
+            {/* Calendar component */}
             <Calendar
               localizer={localizer}
-              events={eventComponents}
+              events={events}
               defaultDate={date}
               defaultView={view}
-              onSelectSlot={slotInfo => handleSelectSlot(slotInfo, events)}
+              onSelectEvent={handleSelectEvent}
+              onSelectSlot={handleSelectSlot}
               selectable
               toolbar={false}
               view={view}

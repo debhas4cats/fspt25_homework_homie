@@ -35,7 +35,7 @@ function Subject() {
     // Fetch homework data for the subject
     const fetchHomeworkForSubject = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/homework/subjects/${subjectId}/students/${studentId}/homework`, {
+        const response = await axios.get(`http://localhost:4000/homework/subjects/${subjectId}/students/1/homework`, {
           headers: {
             authorization: "Bearer " + localStorage.getItem("token"),
           },

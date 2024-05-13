@@ -45,7 +45,7 @@ export default function Login({setUserData}) {
     };
 
     const logout = async () => {
-        
+
     }
 
     return (
