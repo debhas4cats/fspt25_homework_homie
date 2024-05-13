@@ -46,7 +46,15 @@ CREATE TABLE students_subjects_homeworks (
     FOREIGN KEY (teacherID) REFERENCES teachers(id)
 );
 
-
+-- Create student_homework_images table
+CREATE TABLE IF NOT EXISTS student_homework_images (
+    image_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id BIGINT,
+    homework_id BIGINT,
+    image_data BLOB,
+    FOREIGN KEY (student_id) REFERENCES students(id),
+    FOREIGN KEY (homework_id) REFERENCES homeworks(id)
+);
 
 -- ADD CONSTRAINTS (already included in table creation)
 

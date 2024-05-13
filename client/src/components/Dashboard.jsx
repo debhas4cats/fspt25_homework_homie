@@ -4,12 +4,14 @@ import Scoreboard from "./Scoreboard"; //Import the scoreboard
 import HomeworkAlertContainer from "./HomeworkAlertContainer"; //Import the Homework Alert Boxes
 import ClickableDate from './ClickableDate'; // Import the ClickableDate component
 import axios from "axios";
-import SubjectComponent from "./Subject";
+import Subject from "./Subject";
 
 function Dashboard() {
 
   //refactoring the subjects state variable to take in the data from the GET subjects endpoint
   const [subjects, setSubjects] = useState([]);
+
+ 
 
   useEffect(() => {
     // Fetch subjects data from backend
@@ -93,9 +95,8 @@ function Dashboard() {
       </div>
 
       <HomeworkAlertContainer subjects={subjects} />
-
     
-      <SubjectComponent />
+   
     </div>
   );
 }

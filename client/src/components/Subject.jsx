@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css';
 
 
 
-function SubjectComponent() {
-  
+function Subject() {
+ 
   const {subject, subjectId} = useParams();
-  // console.log(subject);
-  // console.log(subjectId);
+  console.log('THIS IS MY SUBJECT',subject);
+  console.log('THIS IS MY SUBJECTID',subjectId);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const teacher = searchParams.get('teacher');
   const studentId = searchParams.get('studentId'); // Extract studentId from query params
   console.log(teacher);
-
-
-  
-  
- 
     
   const [homework, setHomework] = useState([]);
+
   const [newHomework, setNewHomework] = useState({
     assignment: '',
     description: '',
@@ -30,24 +26,25 @@ function SubjectComponent() {
     completed: false,
     pastdue: false,
   });
-  // const { subject } = useParams();
+ 
   useEffect(() => {
-    fetchHomeworkForSubjects();
-  }, []);
-
-  async function fetchHomeworkForSubjects() {
-    try {
-      const response = await fetch(`/api/homework/subjects/6/students/studentId/homework`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch homework data');
+    // Fetch homework data for the subject
+    const fetchHomeworkForSubject = async () => {
+      try {
+        const response = await axios.get(`http://localhost:4000/homework/subjects/${subjectId}/students/1/homework`, {
+          headers: {
+            authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        });
+    console.log('THIS IS MY RESPONSE',response);
+        setHomework(response.data.data); // Update state with fetched homework data
+      } catch (error) {
+        console.error('Error fetching homework data:', error);
       }
-      const data = await response.json();
-      setHomework(data.data);
-      console.log(`Homework ID: ${homework.id}, Subject: ${homework.subject}, Description: ${homework.description}`);
-    } catch (error) {
-      console.error('Error fetching homework data:', error);
-    }
-  }
+    };
+
+    fetchHomeworkForSubject(); // Call the fetch function
+  }, [subjectId]); // Run effect when subjectId changes
 
   const handleInputChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -95,13 +92,25 @@ function SubjectComponent() {
     }
   };
 
-  const deleteHomework = async (id) => {
-    console.log('Deleting homework with ID:', id);
+  const deleteHomework = async (homeworkId) => {
+    console.log('THIS IS MY homeworkId:', homeworkId); 
     try {
-      // Logic to delete homework with the specified ID
+      // Make a DELETE request to the backend endpoint
+      await axios.delete(`api/homeworks/${homeworkId}`);
+      // If the request is successful, remove the homework assignment from the local state
+      setHomework(homework.filter(hw => hw.id !== homeworkId));
+      console.log('Homework assignment deleted successfully');
     } catch (error) {
       console.error('Error deleting homework:', error);
+      // Handle errors, e.g., display an error message to the user
     }
+  };
+  //This function is for helping to update completed in the database, when homework is uploaded.
+  //I need to complete the coding for uploading homework. The homework upload will trigger the function
+  //to change homework.completed to true in the database.
+  const handleCheckboxClick = (id) => {
+    // Implement the logic to handle checkbox click event
+    console.log(`Checkbox with ID ${id} clicked`);
   };
 
   return (
@@ -110,7 +119,13 @@ function SubjectComponent() {
         <button className="home-rounded-button">HOME</button>
       </Link>
       <div className="container">
+      <h2>{subject} Component</h2>
+      <p>Your {subject} teacher is:</p>
+      <p>{teacher}</p>
+        <div className="container">
         <h1 className="text-primary">Homework Tracker</h1>
+      </div>
+       
         <form onSubmit={handleSubmit}>
           {/* Form inputs */}
         </form>
@@ -124,6 +139,15 @@ function SubjectComponent() {
               <div>
                 <p>Due Date: {hw.dueDate}</p>
                 <p>Priority: {hw.priority}</p>
+                <p>
+                 Completed: 
+                 <input
+                 type="checkbox"
+                 checked={hw.completed} 
+                 onClick={() => handleCheckboxClick(hw.id)} // This line of code will be for the homework upload Feature Extension.
+                 //Call function insdie handleCheckbox click when the checkbox value changes
+                 />
+                </p>
                 <button className="btn btn-danger" onClick={() => deleteHomework(hw.id)}>Delete</button>
               </div>
             </li>
@@ -137,5 +161,5 @@ function SubjectComponent() {
   );
 };
 
-export default SubjectComponent;
+export default Subject;
 

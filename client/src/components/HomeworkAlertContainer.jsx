@@ -46,7 +46,7 @@ function HomeworkAlertContainer({ subjects }) {
                         converting the subject name to lowercase, ensures that the URL will be consistent and predictable
                         The subject name is displayed as button text. */}
                   <Link
-                    to={`/${subject.name}?teacher=${encodeURIComponent(
+                    to={`/${subject.name}/${subject.id}?subjectId=${subject.id}&teacher=${encodeURIComponent(
                       subject.teacher
                     )}`} // Pass teacher's name as a URL parameter
                     className="rounded-button"

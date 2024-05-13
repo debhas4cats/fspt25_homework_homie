@@ -19,7 +19,7 @@ router.get('/subjects/:subjectId/students/:studentId/homework', async (req, res)
   //for after authentication is implemented
   const studentId = req.params.studentId;
   console.log('THIS IS THE STUDENTID', studentId)
-  const query = `SELECT h.assignment, h.description, h.due_date, h.priority, h.completed, h.pastdue,
+  const query = `SELECT h.id,h.assignment, h.description, h.due_date, h.priority, h.completed, h.pastdue,
     CONCAT(t.firstname, ' ', t.lastname) AS teacher_name
     FROM students_subjects_homeworks ssh
     JOIN homeworks h ON ssh.homeworkID = h.id
