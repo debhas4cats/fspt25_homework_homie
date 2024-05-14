@@ -18,7 +18,7 @@ function Dashboard({ userData }) { // receiving the userdata as prop
  
   const fetchSubjects = async (studentId) => { // Define fetchSubjects outside of useEffect
     try {
-      const response = await fetch("http://localhost:4000/homework/subjects");
+      const response = await fetch("/api/homework/subjects");
       if (!response.ok) {
         throw new Error("Failed to fetch subjects");
       }
@@ -54,7 +54,7 @@ function Dashboard({ userData }) { // receiving the userdata as prop
     // use async/await to fetch data for each subject
     try {
       const { data } = await axios(
-        `http://localhost:4000/homework/subjects/${subjectId}/students/${studentId}/homework`,
+        `/api/homework/subjects/${subjectId}/students/${studentId}/homework`,
         {
           headers: {
             authorization: "Bearer " + localStorage.getItem("token"),

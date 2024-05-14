@@ -43,7 +43,7 @@ const [homeworkCompleted, setHomeworkCompleted] = useState({});
     // Fetch homework data for the subject
     const fetchHomeworkForSubject = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/homework/subjects/${subjectId}/students/1/homework`, { // Use studentId
+        const response = await axios.get(`/api/homework/subjects/${subjectId}/students/1/homework`, { // Use studentId
           headers: {
             authorization: "Bearer " + localStorage.getItem("token"),
           },

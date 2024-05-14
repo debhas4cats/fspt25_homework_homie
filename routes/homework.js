@@ -107,7 +107,7 @@ router.delete('/homeworks/:id', async (req, res) => {
 
 // POST endpoint to add a new homework assignment
 //I want to add new homework to the homeworks table in MySQL database
-//code snippet example needed for Postman test: localhost:5000/homework
+//code snippet example needed for Postman test: localhost:4000/api/homework
 router.post('/', async (req, res) => {
   //I need to collect everything I will need for this in my req.body
   const { assignment, description, due_date, priority, studentId, subjectId, teacherId } = req.body;
