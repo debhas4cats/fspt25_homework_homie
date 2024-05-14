@@ -225,33 +225,48 @@ function Subject() {
         </div>
 
         <div>
-        <form onSubmit={handleSubmit}>
-          <label>
-            Assignment:
-            <input type="text" value={assignment} onChange={(e) => setAssignment(e.target.value)} />
-          </label>
-          <label>
-            Description:
-            <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
-          </label>
-          <label>
-            Due Date:
-            <input type="text" value={dueDate} onChange={handleDueDateChange} />
-          </label>
-          <span style={{ color: 'red' }}>{errorMessage}</span>
-          <label>
-            Priority:
-            <select
-              value={priority}
-              onChange={(e) => setPriority(e.target.value)}>
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
-            </select>
-          </label>
-          <button className="homework-submit" type="submit">Add Homework</button>
-        </form>
-      </div>
+          <form onSubmit={handleSubmit}>
+            <label>
+              Assignment:
+              <input
+                type="text"
+                value={assignment}
+                onChange={(e) => setAssignment(e.target.value)}
+              />
+            </label>
+            <label>
+              Description:
+              <input
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </label>
+            <label>
+              Due Date:
+              <input
+                type="text"
+                value={dueDate}
+                onChange={handleDueDateChange}
+              />
+            </label>
+            <span style={{ color: "red" }}>{errorMessage}</span>
+            <label>
+              Priority:
+              <select
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
+              >
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+            </label>
+            <button className="homework-submit" type="submit">
+              Add Homework
+            </button>
+          </form>
+        </div>
 
         <table className="homework-table-container">
           <thead className="header-container">
@@ -331,47 +346,3 @@ function Subject() {
 }
 
 export default Subject;
-
-// <ul className="list-group mt-3">
-//   {homework.map((hw) => (
-//     <li
-//       key={hw.id}
-//       className="list-group-item d-flex justify-content-between align-items-center"
-//     >
-//       <div>
-//         <h5>{hw.assignment}</h5>
-//         <p>{hw.description}</p>
-//       </div>
-//       <div>
-//         <p>Due Date: {hw.dueDate}</p>
-//         <p>Priority: {hw.priority}</p>
-//         <p>
-//           Completed:
-//           <input
-//             type="checkbox"
-//             checked={homeworkCompleted[hw.id] || hw.completed}
-//             onChange={() => handleCheckboxClick(hw.id)} // This line of code will be for the homework upload Feature Extension.
-//             //Call function insdie handleCheckbox click when the checkbox value changes
-//           />
-//         </p>
-//         {showUpload && hw.id === homeworkId && (
-//           <div>
-//             <h3>Select homework to upload:</h3>
-//             <input type="file" onChange={onFileChange} />
-//             <button onClick={onFileUpload}>Upload</button>
-//             {/* I will add code here to display mini preview of uploaded images */}
-//             {/* {previewUrl && (
-//     <img src={previewUrl} alt="Uploaded Image" style={{ width: '50px', height: '50px', marginLeft: '10px' }} />
-//   )} */}
-//           </div>
-//         )}
-//         <button
-//           className="btn btn-danger"
-//           onClick={() => deleteHomework(hw.id)}
-//         >
-//           Delete
-//         </button>
-//       </div>
-//     </li>
-//   ))}
-// </ul>;
