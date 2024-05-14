@@ -4,7 +4,7 @@ const db = require("../model/helper"); //imports a module named helper from the 
 // Express middleware to parse JSON request bodies
 router.use(express.json());
 
-// internal server url = http://localhost:5000/homework
+// internal server url = http://localhost:4000/homework
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

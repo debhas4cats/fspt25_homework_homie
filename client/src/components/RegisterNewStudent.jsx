@@ -14,10 +14,11 @@ export default function newStudent () {
     });
 
     const addNewStudent = async () => {
+
         try {
         const response = await fetch("/", { 
-            method: POST,
-            header: {
+            method: "POST",
+            headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(newStudent)
@@ -38,15 +39,15 @@ export default function newStudent () {
 const handleChange = (e) => {
     const { name, value } = e.target;
     console.log("This is my handleChange function:", name, value);
-    setNewPlayer(prevState => ({
+    setNewStudent(prevState => ({
         ...prevState,
         [name]: value
     }));
 }
 //handleSumbit for adding new student input into the addStudent function
 const handleSubmit = async (e) => {
-  e.preventDefault();
-  await addNewStudent(newStudent);
+    e.preventDefault();
+    await addNewStudent();
 }
 
 // LINK TO LOGIN FORM
@@ -55,18 +56,18 @@ const handleNavigateToLogin = () => {  // moves the user to the login page if th
   }
 
   return (
-    <div>
-        <h3>Registration Form</h3>
-        <h5>Please add your information below to get started.</h5>
+    <div className="regi-outer">
+        <h3 className="regi-title">Registration Form</h3>
+        <h5 className="regi-tag">Please add your information below to get started.</h5>
         <form onSubmit={handleSubmit}>
             <div className = "registration-form">
                 <ul className="registration-form">
-                <li><input type="text" name="firstname" placeholder="First Name" onChange={handleChange} /></li>
-                <li><input type="text" name="lastname" placeholder="Last Name"onChange={handleChange} /></li>
-                <li><input type="text" name="email" placeholder="Email address" onChange={handleChange} /></li>
-                <li><input type="text" name="username" placeholder="Username" onChange={handleChange} /></li>
-                <li><input type="text" name="avatar" list="avatar" placeholder="Profile Picture"onChange={handleChange}/></li>
-                <li><input type="text" name="password" list="password" placeholder="Password" onChange={handleChange} /></li>
+                <li><input type="text" className="regi-input" name="firstname" placeholder="First Name" onChange={handleChange} /></li>
+                <li><input type="text" className="regi-input" name="lastname" placeholder="Last Name"onChange={handleChange} /></li>
+                <li><input type="text" className="regi-input" name="email" placeholder="Email address" onChange={handleChange} /></li>
+                <li><input type="text" className="regi-input" name="username" placeholder="Username" onChange={handleChange} /></li>
+                <li><input type="text" className="regi-input" name="avatar" list="avatar" placeholder="Profile Picture"onChange={handleChange}/></li>
+                <li><input type="text" className="regi-input" name="password" list="password" placeholder="Password" onChange={handleChange} /></li>
             </ul>
     </div>
     <div>
@@ -74,7 +75,7 @@ const handleNavigateToLogin = () => {  // moves the user to the login page if th
     </div>
     <div className ="new-acct-submit-iconbutton">
         <h5>Make sure your password is secure - don't share it with anyone else!</h5>
-        <button name="submit" type="submit" >Register</button>
+        <button className="register-button" type="submit" onClick={handleSubmit}>Register</button>
         </div>
         </form>
     </div>
