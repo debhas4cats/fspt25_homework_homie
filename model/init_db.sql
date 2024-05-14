@@ -1,3 +1,12 @@
+DROP TABLE IF EXISTS students_subjects_homeworks;
+DROP TABLE IF EXISTS student_homework_images;
+DROP TABLE IF EXISTS calendar;
+DROP TABLE IF EXISTS students;
+DROP TABLE IF EXISTS subjects;
+DROP TABLE IF EXISTS teachers;
+DROP TABLE IF EXISTS homeworks;
+
+
 -- Create homeworks table
 CREATE TABLE homeworks (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -10,16 +19,7 @@ CREATE TABLE homeworks (
 );
 
 -- Create students table
-CREATE TABLE students (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    firstname VARCHAR(255),
-    lastname VARCHAR(255),
-    email VARCHAR(255),
-    username VARCHAR(255),
-    avatar VARCHAR(255),
-    password VARCHAR(255) NOT NULL
-);
-
+s
 -- Create subjects table
 CREATE TABLE subjects (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
