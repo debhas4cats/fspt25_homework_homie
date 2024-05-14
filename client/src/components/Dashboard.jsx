@@ -79,6 +79,11 @@ function Dashboard({ userData }) { // receiving the userdata as prop
     }
   };
 
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate ("/");
+  };
+
 
 
   return (
@@ -111,8 +116,10 @@ function Dashboard({ userData }) { // receiving the userdata as prop
             What's up, {userData.firstname}!
           </div>
         </div>
-        
-      </div>
+       </div>
+       <div className="logout">
+          <button className="logout-button" onClick={logout}>Log out</button>
+        </div>
 
       <div className="outer-title-container">
         <div className="title-container">

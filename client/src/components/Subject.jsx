@@ -144,20 +144,33 @@ function Subject({ studentId }) {
       const response = await axios.post(`/api/images/${homeworkId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${localStorage.getItem("token")}`, // Add authorization header if needed
         },
       });
   
-      // Get the filename from the response
-      const filename = response.data.filename;
+      // Ensure that response.data contains the image data
+      if (response.data && response.data.length > 0) {
+        // Assuming response.data is an array of image objects
+        const newImages = response.data.map(image => ({
+          id: image.id, // Assuming you have an id in your image object
+          src: `http://localhost:4000/img/${image.imagefile}`, // Adjust the src according to your data structure
+          alt: "Uploaded"
+        }));
+        console.log(newImages)
+        
+        // Update the state to include the new images
+        setImages([...images, ...newImages]);
   
-      // Update the state to include the new image filename
-      setImages([...images, filename]);
-  
-      // Update the state to indicate that the homework is completed
-      setHomeworkCompleted((prevState) => ({
-        ...prevState,
-        [homeworkId]: true,
-      }));
+        // Update the state to indicate that the homework is completed
+        setHomeworkCompleted(prevState => ({
+          ...prevState,
+          [homeworkId]: true,
+        }));
+        
+        console.log('Images uploaded:', newImages);
+      } else {
+        console.error('No image data received in the response');
+      }
     } catch (error) {
       console.error('Error uploading image:', error);
     }
@@ -173,7 +186,7 @@ function Subject({ studentId }) {
     <div className="container">
       <div className='subject-title-outer-container'>
         <div className='subject-title-container'>
-          <h2>{subject} Class Homework Tracker</h2>
+          <h2>{subject} Homework Tracker</h2>
           <p>{teacher} is your {subject} teacher.</p>
         </div>
       </div>

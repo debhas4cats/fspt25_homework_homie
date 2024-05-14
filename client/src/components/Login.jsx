@@ -46,8 +46,8 @@ export default function Login({setUserData}) {
 
     return (
         <>
-            <h3>Login</h3>
-            <div className="login">
+           <div className="login">
+            <h3 className='login-head'>Login</h3>
                 <div className="login-form">
                     <form>
                         <input
@@ -55,16 +55,16 @@ export default function Login({setUserData}) {
                             onChange={handleChange}
                             name="username"
                             type="text"
-                            className="form-control mb-2"
+                            className="login-input"
                             placeholder='username'
                             autoComplete='off'
-                        />
+                        /> 
                         <input
                             value={password}
                             onChange={handleChange}
                             name="password"
                             type="password"
-                            className="form-control mb-2"
+                            className="login-input"
                             placeholder='password'
                             autoComplete='off'
                         />

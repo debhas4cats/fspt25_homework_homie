@@ -341,15 +341,38 @@ button.today{
     margin-bottom: 20px;
     }
   
-    /* -----login page----- */
-  
-    .login-button {
-      background-color: black;
-      color: white;
-      border: 1px solid black;
-      border-radius: 10px;
-      margin: 5px;
-    }
+ /* -----login page----- */
+    
+ .login {
+  position: absolute;
+  display: flex;
+  top: 300px;
+  right: 420px;
+}
+
+.login-head {
+  font-family: 'Adumu', sans-serif;
+  font-size: 24px;
+  text-transform: uppercase;
+  margin: 10px;
+}
+
+.login-input {
+  width: 50%;
+  padding: 8px 10px;
+  margin: 10px 20px;
+  box-sizing: border-box;
+}
+
+.login-button {
+  position: relative;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 20px;
+  padding: 5px 10px;
+  margin: 5px;
+  font-family: 'Adumu', sans-serif;
+}
   
     /* -----registration page----- */
   
@@ -430,6 +453,7 @@ button.today{
     
     .header-container th {
       padding: 10px; /* Adjust padding as needed */
+      background-color: rgb(167, 141, 194);
     }
     .center-cell {
       padding-left: 50px;
