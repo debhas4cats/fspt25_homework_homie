@@ -4,25 +4,27 @@
 
 ## Project Objectives
 
-- Create a user-friendly homework platform, with fifth graders in mind
+- Create a user-friendly homework platform, with fifth graders in mind.
+- Integrate a homework management tool to help students keep track of homework outside of class.
+- Include an authentication function to ensure student information is protected and more personalised.
 
 ## Technologies
 
 The following technologies were used to develop Homework Homie:
 
-## Languages
+### Languages
 
 - HTML
 - CSS
 - JavaScript
 
-## Libraries & Frameworks
+### Libraries & Frameworks
 
 - React (JavaScript library for building user interfaces)
 - Express (backend framework for Node.js)
 - MySQL (database technology)
 
-## Tools
+### Tools
 
 - Vite (frontend build tool)
 - Node.js (server-side JavaScript execution environment)
@@ -32,7 +34,7 @@ The following technologies were used to develop Homework Homie:
 
 ## Setup
 
-- Fork this repository
+- Fork this repo
 - Clone this repo to your local machine.
 - Open a new terminal window and `cd` into the root of your **PROJECT FOLDER**.
 - To install the project dependencies, type and run: `npm install`.
@@ -58,6 +60,24 @@ Please install the following individual dependencies in the client folder:
 - `npm install react-big-calendar`
 - `npm install react-datepicker`
 
+### Database migration
+
+- Access your MySQL interface
+- Create a new database for the users: CREATE DATABASE homework_homie;
+- Ensure the 'migrate' script is within the package.json file of your main project folder
+- Run 'npm run migrate' to get all the tables in the initial database model.
+- Add a .env file to the project folder containing the MySQL authentication:
+
+```bash
+DB_HOST=localhost
+DB_USER=root
+DB_NAME=user
+DB_PASS=YOURPASSWORD
+SUPER_SECRET=shhhhhhh
+```
+
+> Note: Make sure to add your .env file to .gitignore to protect your local server data and password!
+
 ### Run Your Development Servers
 
 - Open a new terminal window and `cd` into the root of your **PROJECT FOLDER**.
@@ -66,6 +86,8 @@ Please install the following individual dependencies in the client folder:
 - Once in the client folder, run `npm run dev` to start client server in development mode with hot reloading in port 5173.
 - You can test your client app in `http://localhost:5173`
 - You can test the backend in Postman with the following: `http://localhost:4000/homework`
+
+***
 
 ## Future Features
 
