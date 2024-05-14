@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from "react-router-dom";
 import "../App.css";
-import Subject from "./Subject";
 import Scoreboard from "./Scoreboard"; //Import the scoreboard
 import HomeworkAlertContainer from "./HomeworkAlertContainer"; //Import the Homework Alert Boxes
-import ClickableDate from './ClickableDate'; // Import the ClickableDate component
-import PencilSVG from '../assets/pencil.svg'; // Import the pencil SVG
+import ClickableDate from "./ClickableDate"; // Import the ClickableDate component
+import PencilSVG from "../assets/pencil.svg"; // Import the pencil SVG
 // Import other icons
-import { BulbSVG, StarSVG, MagnifySVG, ArrowSVG } from './Icons'; // Changed the import path
+import { BulbSVG, StarSVG, MagnifySVG, ArrowSVG } from "./Icons"; // Changed the import path
 import axios from "axios";
+import Subject from "./Subject";
 
-function Dashboard({ userData }) { // receiving the userdata as prop
+function Dashboard({ userData }) {
+  // receiving the userdata as prop
   //refactoring the subjects state variable to take in the data from the GET subjects endpoint
   const [subjects, setSubjects] = useState([]);
 
   const navigate = useNavigate();
- 
-  const fetchSubjects = async (studentId) => { // Define fetchSubjects outside of useEffect
+
+  const fetchSubjects = async (studentId) => {
+    // Define fetchSubjects outside of useEffect
     try {
       const response = await fetch("/api/homework/subjects");
       if (!response.ok) {
@@ -42,7 +44,7 @@ function Dashboard({ userData }) { // receiving the userdata as prop
       console.error("Error fetching subjects:", error);
     }
   };
-  
+
   useEffect(() => {
     if (userData) {
       // Make sure user_id exists before proceeding
@@ -80,7 +82,7 @@ function Dashboard({ userData }) { // receiving the userdata as prop
 
   const logout = () => {
     localStorage.removeItem("token");
-    navigate ("/");
+    navigate("/");
   };
 
   return (
@@ -91,14 +93,18 @@ function Dashboard({ userData }) { // receiving the userdata as prop
         {/* Star SVG */}
         <img src={StarSVG} alt="Star Icon" className="star-icon" />
         {/* Magnify SVG */}
-        <img src={MagnifySVG} alt="Magnifying Glass Icon" className="magnify-icon" />
+        <img
+          src={MagnifySVG}
+          alt="Magnifying Glass Icon"
+          className="magnify-icon"
+        />
         {/* Arrow SVG */}
         <img src={ArrowSVG} alt="Arrow Icon" className="arrow-icon" />
       </div>
-      
+
       <div className="date-container">
-          {/* Render ClickableDate component */}
-          <ClickableDate clickable={true} />
+        {/* Render ClickableDate component */}
+        <ClickableDate clickable={true} />
       </div>
       {/* display the tally of assignments that are late, due today, due tomorrow */}
       <Scoreboard subjects={subjects} />
@@ -106,7 +112,7 @@ function Dashboard({ userData }) { // receiving the userdata as prop
       <div className="greeting-container">
         <div className="greeting">
           {/* Display SVGs */}
-        <img src={PencilSVG} alt="Pencil Icon" className="pencil-icon" />
+          <img src={PencilSVG} alt="Pencil Icon" className="pencil-icon" />
           {/* Greeting div */}
           <div className="greeting-text">
             {/* Display greeting with username */}
@@ -115,9 +121,10 @@ function Dashboard({ userData }) { // receiving the userdata as prop
         </div>
 
         <div className="logout">
-          <button className="logout-button" onClick={logout}>Log out</button>
+          <button className="logout-button" onClick={logout}>
+            Log out
+          </button>
         </div>
-
       </div>
 
       <div className="outer-title-container">
@@ -130,7 +137,6 @@ function Dashboard({ userData }) { // receiving the userdata as prop
       </div>
 
       <HomeworkAlertContainer subjects={subjects} />
-    
     </div>
   );
 }

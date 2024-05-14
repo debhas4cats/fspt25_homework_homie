@@ -45,7 +45,6 @@ function Scoreboard({ subjects }) {
         <div className="due-date">Due Today: {todayCount}</div>
         <div className="due-date">Due Tomorrow: {tomorrowCount}</div>
       </div>
-
     </div>
   );
 }

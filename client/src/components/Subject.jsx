@@ -3,7 +3,7 @@ import { Link, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import "../App.css";
 
-function Subject({ studentId }) {
+function Subject() {
   // const [subject, setSubject] = useState('');
   const [assignment, setAssignment] = useState("");
   const [description, setDescription] = useState("");
@@ -17,7 +17,7 @@ function Subject({ studentId }) {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const teacher = searchParams.get("teacher");
-  // console.log('studentId:', studentId); // Check the value of studentId
+  const studentId = searchParams.get("studentId"); // Extract studentId from query params
   // console.log(teacher);
 
   const [homework, setHomework] = useState([]);
@@ -102,7 +102,6 @@ function Subject({ studentId }) {
         description,
         due_date: dueDate, // Ensure the property name matches the backend
         priority,
-        studentId,
         subjectId,
         teacherId: 1, // Assuming teacherId is 1 for now
       }),
@@ -179,7 +178,6 @@ function Subject({ studentId }) {
       console.log(err);
     }
   }
-
   const onFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
@@ -191,36 +189,21 @@ function Subject({ studentId }) {
       formData.append("studentId", studentId);
       formData.append("homeworkId", homeworkId);
 
+      console.log("THIS IS MY FORMDATA", formData);
+
       const response = await axios.post(`/api/images/${homeworkId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Add authorization header if needed
+          authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
+      console.log("THIS IS MY RESPONSE", response);
+      console.log("Image uploaded:", response.data);
 
-      // Ensure that response.data contains the image data
-      if (response.data && response.data.length > 0) {
-        // Assuming response.data is an array of image objects
-        const newImages = response.data.map((image) => ({
-          id: image.id, // Assuming you have an id in your image object
-          src: `http://localhost:4000/img/${image.imagefile}`, // Adjust the src according to your data structure
-          alt: "Uploaded",
-        }));
-        console.log(newImages);
-
-        // Update the state to include the new images
-        setImages([...images, ...newImages]);
-
-        // Update the state to indicate that the homework is completed
-        setHomeworkCompleted((prevState) => ({
-          ...prevState,
-          [homeworkId]: true,
-        }));
-
-        console.log("Images uploaded:", newImages);
-      } else {
-        console.error("No image data received in the response");
-      }
+      setHomeworkCompleted((prevState) => ({
+        ...prevState,
+        [homeworkId]: true,
+      }));
     } catch (error) {
       console.error("Error uploading image:", error);
     }
@@ -330,7 +313,8 @@ function Subject({ studentId }) {
                       <input
                         type="checkbox"
                         checked={homeworkCompleted[hw.id] || hw.completed}
-                        onChange={() => handleCheckboxClick(hw.id)}
+                        onChange={() => handleCheckboxClick(hw.id)} // This line of code will be for the homework upload Feature Extension.
+                        //Call function insdie handleCheckbox click when the checkbox value changes
                       />
                     </div>
                   </td>
@@ -367,3 +351,47 @@ function Subject({ studentId }) {
 }
 
 export default Subject;
+
+// <ul className="list-group mt-3">
+//   {homework.map((hw) => (
+//     <li
+//       key={hw.id}
+//       className="list-group-item d-flex justify-content-between align-items-center"
+//     >
+//       <div>
+//         <h5>{hw.assignment}</h5>
+//         <p>{hw.description}</p>
+//       </div>
+//       <div>
+//         <p>Due Date: {hw.dueDate}</p>
+//         <p>Priority: {hw.priority}</p>
+//         <p>
+//           Completed:
+//           <input
+//             type="checkbox"
+//             checked={homeworkCompleted[hw.id] || hw.completed}
+//             onChange={() => handleCheckboxClick(hw.id)} // This line of code will be for the homework upload Feature Extension.
+//             //Call function insdie handleCheckbox click when the checkbox value changes
+//           />
+//         </p>
+//         {showUpload && hw.id === homeworkId && (
+//           <div>
+//             <h3>Select homework to upload:</h3>
+//             <input type="file" onChange={onFileChange} />
+//             <button onClick={onFileUpload}>Upload</button>
+//             {/* I will add code here to display mini preview of uploaded images */}
+//             {/* {previewUrl && (
+//     <img src={previewUrl} alt="Uploaded Image" style={{ width: '50px', height: '50px', marginLeft: '10px' }} />
+//   )} */}
+//           </div>
+//         )}
+//         <button
+//           className="btn btn-danger"
+//           onClick={() => deleteHomework(hw.id)}
+//         >
+//           Delete
+//         </button>
+//       </div>
+//     </li>
+//   ))}
+// </ul>;
