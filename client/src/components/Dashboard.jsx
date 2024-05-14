@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from 'react-router-dom';
 import "../App.css";
 import Subject from "./Subject";
 import Scoreboard from "./Scoreboard"; //Import the scoreboard
@@ -12,6 +13,8 @@ import axios from "axios";
 function Dashboard({ userData }) { // receiving the userdata as prop
   //refactoring the subjects state variable to take in the data from the GET subjects endpoint
   const [subjects, setSubjects] = useState([]);
+
+  const navigate = useNavigate();
  
   const fetchSubjects = async (studentId) => { // Define fetchSubjects outside of useEffect
     try {
@@ -75,6 +78,11 @@ function Dashboard({ userData }) { // receiving the userdata as prop
     }
   };
 
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate ("/");
+  };
+
   return (
     <div className="outer-container">
       <div className="corner-icons">
@@ -104,6 +112,10 @@ function Dashboard({ userData }) { // receiving the userdata as prop
             {/* Display greeting with username */}
             What's up, {userData.firstname}!
           </div>
+        </div>
+
+        <div className="logout">
+          <button className="logout-button" onClick={logout}>Log out</button>
         </div>
 
       </div>

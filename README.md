@@ -4,7 +4,7 @@
 
 ## Project Objectives
 
-- Create a user-friendly homework platform, with fifth graders in mind 
+- Create a user-friendly homework platform, with fifth graders in mind
 
 ## Technologies
 
