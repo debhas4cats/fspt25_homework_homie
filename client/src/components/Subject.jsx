@@ -225,53 +225,33 @@ function Subject() {
         </div>
 
         <div>
-          <form onSubmit={handleSubmit}>
-            <label>
-              Assignment:
-              <input
-                type="text"
-                value={assignment}
-                onChange={(e) => setAssignment(e.target.value)}
-              />
-            </label>
-            <label>
-              Description:
-              <input
-                type="text"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </label>
-            <label>
-              Due Date:
-              <input
-                type="date"
-                value={dueDate}
-                onChange={handleDueDateChange}
-              />
-            </label>
-            <span style={{ color: "red" }}>{errorMessage}</span>
-            <label>
-              Priority:
-              <input
-                type="text"
-                value={priority}
-                onChange={(e) => setPriority(e.target.value)}
-              />
-              {/* <select
-                value={priority}
-                onChange={(e) => setPriority(e.target.value)}
-              >
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-              </select> */}
-            </label>
-            <button className="homework-submit" type="submit">
-              Add Homework
-            </button>
-          </form>
-        </div>
+        <form onSubmit={handleSubmit}>
+          <label>
+            Assignment:
+            <input type="text" value={assignment} onChange={(e) => setAssignment(e.target.value)} />
+          </label>
+          <label>
+            Description:
+            <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
+          </label>
+          <label>
+            Due Date:
+            <input type="text" value={dueDate} onChange={handleDueDateChange} />
+          </label>
+          <span style={{ color: 'red' }}>{errorMessage}</span>
+          <label>
+            Priority:
+            <select
+              value={priority}
+              onChange={(e) => setPriority(e.target.value)}>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </label>
+          <button className="homework-submit" type="submit">Add Homework</button>
+        </form>
+      </div>
 
         <table className="homework-table-container">
           <thead className="header-container">
