@@ -118,9 +118,6 @@ const [homeworkCompleted, setHomeworkCompleted] = useState({});
       // Handle error state or display error message to the user
     });
   };
-  
-  
-  
 
   const addHomework = async (data) => {
     try {
@@ -219,8 +216,6 @@ const [homeworkCompleted, setHomeworkCompleted] = useState({});
     }
   };
   
-  
-
   return (
     <div>
       <Link to="/dashboard">
@@ -253,7 +248,7 @@ const [homeworkCompleted, setHomeworkCompleted] = useState({});
             Priority:
             <input type="text" value={priority} onChange={(e) => setPriority(e.target.value)} />
           </label>
-          <button type="submit">Add Homework</button>
+          <button className="homework-submit" type="submit">Add Homework</button>
         </form>
       </div>
 
