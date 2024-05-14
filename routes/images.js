@@ -11,56 +11,37 @@ const studentIsLoggedIn = require("../guards/studentIsLoggedIn");
 
 const getImages = async (req, res) => {
   try {
-    const results = await db("SELECT * FROM student_homework_images;");
-    res.send(results.data);
+    const files = await fs.readdir(path.join(__dirname, "../public/img"));
+    // Send the array of file names as the response
+    res.json(files);
   } catch (err) {
-    res.status(500).send(err);
+    console.error('Error retrieving images:', err);
+    res.status(500).send('Error retrieving images');
   }
 };
 
 router.get("/", getImages);
 
-//add these after you get Kecia's part
-// router.post("/:homeworkId",studentLoggedIn, upload.single("imagefile"), async (req, res) => {
-//     const studentId = req.user_id;
 router.post("/:homeworkId", upload.single("imagefile"), async (req, res) => {
-    const studentId = 1;
-    const homeworkId = req.params.homeworkId;
-    console.log('HOMEWORK ID', req.params.homeworkId)
-  // file is available at req.file
-  const imagefile = req.file;
-console.log('THIS IS THE IMAGE FILE: ', imagefile)
-  // check the extension of the file
-  const extension = mime.extension(imagefile.mimetype);
-console.log('THIS IS THE EXTENSION: ', extension)
-  // create a new random name for the file
-  const filename = uuidv4() + "." + extension;
-console.log('THIS IS THE FILENAME: ', filename)
-  // grab the filepath for the temporary file
-  const tmp_path = imagefile.path;
-console.log('THIS IS THE TMP_PATH: ', tmp_path)
-  // construct the new path for the final file
-  const target_path = path.join(__dirname, "../public/img/") + filename;
-console.log('THIS IS THE TARGET_PATH: ', target_path)
+  const studentId = 1; // Just an example, you should use the actual student ID
+  const homeworkId = req.params.homeworkId;
+
+  // Extract the filename from the request
+  const filename = req.file.filename;
+
+  // Insert the filename into the database
+  const query = `INSERT INTO student_homework_images (student_id, homework_id, image_data) VALUES (${studentId}, ${homeworkId}, '${filename}');`;
+
   try {
-    // rename the file
-  const fsRename =  await fs.rename(tmp_path, target_path);
-    // console.log('THIS IS fs.rename',fsRename);
-    // console.log('Tmp_path: ', tmp_path);
-    console.log('Target_path: ', target_path);
-   
-    // store image in the DB
-    const query = `INSERT INTO student_homework_images (student_id, homework_id, image_data) VALUES (${studentId}, ${homeworkId}, '${filename}');`;
-    console.log('THIS IS THE QUERY: ', query)
-   
     const result = await db(query);
-// console.log('THIS IS THE RESULT: ', result)
-    // await db(`INSERT INTO images (path) VALUES ("${filename}");`);
-    getImages(req, res);
+
+    // Send the filename back to the client
+    res.status(200).json({ filename: filename }); // Send the filename as JSON
   } catch (err) {
-    console.log('Error renaming file: ', err);
-    res.status(500).send(err);
+    console.error('Error inserting image into database:', err);
+    res.status(500).send('Error inserting image into database');
   }
 });
+
 
 module.exports = router;

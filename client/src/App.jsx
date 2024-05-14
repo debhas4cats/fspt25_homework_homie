@@ -68,7 +68,11 @@ function App() {
           <Route path="/RegisterNewStudent" element={<RegisterNewStudent />} />
           <Route path="/dashboard" element={<Dashboard userData={userData} />} />
           {/* Route for Dashboard, which is shown when the student is logged in */}
-          <Route path="/:subject/:subjectId" element={<Subject />} /> 
+          <Route
+            path="/:subject/:subjectId"
+            element={<Subject studentId={userData ? userData.user_id : null} />}
+            // checks if userData exists and contains the id property. If it does, it passes the id as studentId, otherwise, it passes null.
+/>
           {/* Route for the Subject component, which is shown when the URL has something after /, like /math or /science */}
           {/* :subject captures whatever comes after the route, so you can grab values from the URL */}
           <Route path="/calendar" element={<ClickableDate inline />} /> {/* Route for ClickableDate */}

@@ -5,7 +5,7 @@ import '../App.css';
 
 
 
-function Subject() {
+function Subject({ studentId }) {
  
   const {subject, subjectId} = useParams();
   // console.log('THIS IS MY SUBJECT',subject);
@@ -13,7 +13,7 @@ function Subject() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const teacher = searchParams.get('teacher');
-  const studentId = searchParams.get('studentId'); // Extract studentId from query params
+  // console.log('studentId:', studentId); // Check the value of studentId
   // console.log(teacher);
     
   const [homework, setHomework] = useState([]);
@@ -37,12 +37,12 @@ function Subject() {
     // Fetch homework data for the subject
     const fetchHomeworkForSubject = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/homework/subjects/${subjectId}/students/1/homework`, {
+        const response = await axios.get(`http://localhost:4000/homework/subjects/${subjectId}/students/${studentId}/homework`, { // Use studentId
           headers: {
             authorization: "Bearer " + localStorage.getItem("token"),
           },
         });
-    // console.log('THIS IS MY RESPONSE',response);
+        // console.log('Fetched Homework Data:', response.data); // Logging the fetched data
         setHomework(response.data.data); // Update state with fetched homework data
       } catch (error) {
         console.error('Error fetching homework data:', error);
@@ -51,7 +51,7 @@ function Subject() {
 
     fetchHomeworkForSubject(); // Call the fetch function
     // getImages(); // calling the getImages function to fetch images
-  }, [subjectId]); // Run effect when subjectId changes
+  }, [subjectId, studentId]); // Run effect when subjectId changes
 
   const handleInputChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -140,17 +140,20 @@ function Subject() {
       formData.append('imagefile', selectedFile, selectedFile.name);
       formData.append('studentId', studentId);
       formData.append('homeworkId', homeworkId);
-
-console.log('THIS IS MY FORMDATA',formData);
-
+  
       const response = await axios.post(`/api/images/${homeworkId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-console.log('THIS IS MY RESPONSE',response);
-console.log('Image uploaded:', response.data);
-     
+  
+      // Get the filename from the response
+      const filename = response.data.filename;
+  
+      // Update the state to include the new image filename
+      setImages([...images, filename]);
+  
+      // Update the state to indicate that the homework is completed
       setHomeworkCompleted((prevState) => ({
         ...prevState,
         [homeworkId]: true,
@@ -159,64 +162,90 @@ console.log('Image uploaded:', response.data);
       console.error('Error uploading image:', error);
     }
   };
+  
+  
 
   return (
     <div>
-      <Link to="/dashboard">
-        <button className="home-rounded-button">HOME</button>
-      </Link>
-      <div className="container">
-      <h2>{subject} Component</h2>
-      <p>Your {subject} teacher is:</p>
-      <p>{teacher}</p>
-        <div className="container">
-        <h1 className="text-primary">Homework Tracker</h1>
+    <Link to="/dashboard">
+      <button className="home-rounded-button">HOME</button>
+    </Link>
+    <div className="container">
+      <div className='subject-title-outer-container'>
+        <div className='subject-title-container'>
+          <h2>{subject} Class Homework Tracker</h2>
+          <p>{teacher} is your {subject} teacher.</p>
+        </div>
       </div>
-       
-        <form onSubmit={handleSubmit}>
-          {/* Form inputs */}
-        </form>
-        <ul className="list-group mt-3">
-          {homework.map((hw) => (
-            <li key={hw.id} className="list-group-item d-flex justify-content-between align-items-center">
-              <div>
-                <h5>{hw.assignment}</h5>
-                <p>{hw.description}</p>
-              </div>
-              <div>
-                <p>Due Date: {hw.dueDate}</p>
-                <p>Priority: {hw.priority}</p>
-                <p>
-                 Completed: 
-                 <input
-                 type="checkbox"
-                 checked={homeworkCompleted[hw.id] || hw.completed} 
-                 onChange={() => handleCheckboxClick(hw.id)} // This line of code will be for the homework upload Feature Extension.
-                 //Call function insdie handleCheckbox click when the checkbox value changes
-                 />
-                </p>
-                {showUpload && hw.id === homeworkId && (
-                <div>
-              <h3>Select homework to upload:</h3>
-              <input type="file" onChange={onFileChange} />
-              <button onClick={onFileUpload}>Upload</button>
-              {/* I will add code here to display mini preview of uploaded images */}
-              {/* {previewUrl && (
-      <img src={previewUrl} alt="Uploaded Image" style={{ width: '50px', height: '50px', marginLeft: '10px' }} />
-    )} */}
-              </div>
-                )}
-                <button className="btn btn-danger" onClick={() => deleteHomework(hw.id)}>Delete</button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+      
+      <table className="homework-table-container">
+        <thead className='header-container'>
+            <tr>
+              <th className="header">Assignment</th>
+              <th className="header">Description</th>
+              <th className="header">Due Date</th>
+              <th className="header">Priority</th>
+              <th className="header">Completed</th>
+              <th className="header">Actions</th>
+            </tr>
+          </thead>
+        <tbody>
+          {homework
+            .slice() // Create a shallow copy of the original array
+            .sort((a, b) => new Date(a.due_date) - new Date(b.due_date)) // Sort the copied array by due date
+            .map((hw) => (
+              <tr key={hw.id}>
+                <td>
+                  <div className="table-cell">{hw.assignment}</div>
+                </td>
+                <td>
+                  <div className="table-cell">{hw.description}</div>
+                </td>
+                <td>
+                  <div className="table-cell">{new Date(hw.due_date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}</div>
+                </td>
+                <td>
+                  <div className="table-cell">{hw.priority}</div>
+                </td>
+                  <td className="center-cell">
+                    <div className="table-checkbox-cell">
+                      <input
+                        type="checkbox"
+                        checked={homeworkCompleted[hw.id] || hw.completed}
+                        onChange={() => handleCheckboxClick(hw.id)}
+                      />
+                    </div>
+                  </td>
+                  <td>
+                    <div className="table-cell">
+                      {showUpload && hw.id === homeworkId && (
+                        <div>
+                          <p>Select homework to upload:</p>
+                          <input type="file" onChange={onFileChange} />
+                          <button onClick={onFileUpload}>Upload</button>
+                          {/* Displaying uploaded images */}
+                          <div className='homework-image'>
+                            {images.map(img => {
+                              console.log('Image URL:', `http://localhost:4000/img/${img.imagefile}`);
+                              return (
+                                <img key={img.id} src={`http://localhost:4000/img/${img.imagefile}`} alt="Uploaded" />
+                              );
+                            })}
+                          </div>
 
-     
-  
+                        </div>
+                      )}
+                      <button className="btn btn-danger" onClick={() => deleteHomework(hw.id)}>Delete</button>
+                    </div>
+                  </td>
+              </tr>
+            ))}
+        </tbody>
+
+      </table>
     </div>
+  </div>
   );
-};
+}
 
 export default Subject;
