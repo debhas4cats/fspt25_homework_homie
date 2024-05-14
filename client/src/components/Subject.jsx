@@ -245,7 +245,7 @@ function Subject() {
             <label>
               Due Date:
               <input
-                type="text"
+                type="date"
                 value={dueDate}
                 onChange={handleDueDateChange}
               />

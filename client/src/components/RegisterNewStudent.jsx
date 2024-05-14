@@ -23,12 +23,13 @@ export default function newStudent() {
         body: JSON.stringify(newStudent),
       });
 
-      if (response.ok) {
-        // LINK TO LOGIN FORM
-        navigate("/");
-      } else {
-        console.error("Failed to add student");
-      }
+      console.log("this is my response from addNewStudent!", response);
+      //   if (response.ok) {
+      //     const data = await response.json();
+      //     navigate("../");
+      //   } else {
+      //     console.error("Failed to add student");
+      //   }
     } catch (error) {
       console.log("Error adding new student", error);
     }
@@ -47,19 +48,22 @@ export default function newStudent() {
     addNewStudent();
   };
 
+  // LINK TO LOGIN FORM
+  const handleNavigateToLogin = () => {
+    // moves the user to the login page if they have an account already
+    navigate("./");
+  };
+
   return (
-    <div className="regi-outer">
-      <h3 className="regi-title">Registration Form</h3>
-      <h5 className="regi-tag">
-        Please add your information below to get started.
-      </h5>
+    <div>
+      <h3>Registration Form</h3>
+      <h5>Please add your information below to get started.</h5>
       <form onSubmit={handleSubmit}>
         <div className="registration-form">
           <ul className="registration-form">
             <li>
               <input
                 type="text"
-                className="regi-input"
                 name="firstname"
                 placeholder="First Name"
                 onChange={handleChange}
@@ -68,7 +72,6 @@ export default function newStudent() {
             <li>
               <input
                 type="text"
-                className="regi-input"
                 name="lastname"
                 placeholder="Last Name"
                 onChange={handleChange}
@@ -77,7 +80,6 @@ export default function newStudent() {
             <li>
               <input
                 type="text"
-                className="regi-input"
                 name="email"
                 placeholder="Email address"
                 onChange={handleChange}
@@ -86,7 +88,6 @@ export default function newStudent() {
             <li>
               <input
                 type="text"
-                className="regi-input"
                 name="username"
                 placeholder="Username"
                 onChange={handleChange}
@@ -95,7 +96,6 @@ export default function newStudent() {
             <li>
               <input
                 type="text"
-                className="regi-input"
                 name="avatar"
                 list="avatar"
                 placeholder="Profile Picture"
@@ -105,7 +105,6 @@ export default function newStudent() {
             <li>
               <input
                 type="text"
-                className="regi-input"
                 name="password"
                 list="password"
                 placeholder="Password"
@@ -113,23 +112,6 @@ export default function newStudent() {
               />
             </li>
           </ul>
-        </div>
-        <div>
-          <Link to="/" className="link-to-login">
-            Oops, I have an account.
-          </Link>
-        </div>
-        <div className="new-acct-submit-iconbutton">
-          <h5>
-            Make sure your password is secure - don't share it with anyone else!
-          </h5>
-          <button
-            className="register-button"
-            type="submit"
-            onClick={handleSubmit}
-          >
-            Register
-          </button>
         </div>
         <div>
           <Link to="/" className="link-to-login">
