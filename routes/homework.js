@@ -5,7 +5,7 @@ const db = require("../model/helper"); //imports a module named helper from the 
 router.use(express.json());
 let studentIsLoggedIn = require("../guards/studentIsLoggedIn");
 
-// internal server url = http://localhost:5000/homework
+// internal server url = http://localhost:4000/homework
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
