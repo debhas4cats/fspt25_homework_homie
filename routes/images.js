@@ -18,15 +18,16 @@ const getImages = async (req, res) => {
   }
 };
 
-router.get("/", getImages);
+router.get("/", studentIsLoggedIn, getImages);
 
-//add these after you get Kecia's part
+// add these after you get Kecia's part
 // router.post("/:homeworkId",studentLoggedIn, upload.single("imagefile"), async (req, res) => {
-//     const studentId = req.user_id;
-router.post("/:homeworkId", upload.single("imagefile"), async (req, res) => {
-    const studentId = 1;
-    const homeworkId = req.params.homeworkId;
-    console.log('HOMEWORK ID', req.params.homeworkId)
+// const studentId = req.user_id;
+router.post("/:homeworkId", studentIsLoggedIn, upload.single("imagefile"), async (req, res) => {
+  const studentId = req.student_id;
+  const homeworkId = req.params.homeworkId;
+  console.log('HOMEWORK ID', req.params.homeworkId)
+
   // file is available at req.file
   const imagefile = req.file;
 console.log('THIS IS THE IMAGE FILE: ', imagefile)
@@ -42,7 +43,8 @@ console.log('THIS IS THE TMP_PATH: ', tmp_path)
   // construct the new path for the final file
   const target_path = path.join(__dirname, "../public/img/") + filename;
 console.log('THIS IS THE TARGET_PATH: ', target_path)
-  try {
+  
+try {
     // rename the file
   const fsRename =  await fs.rename(tmp_path, target_path);
     // console.log('THIS IS fs.rename',fsRename);

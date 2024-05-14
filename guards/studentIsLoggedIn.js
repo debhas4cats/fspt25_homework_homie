@@ -4,7 +4,7 @@ const supersecret = process.env.SUPER_SECRET;
 
 function studentIsLoggedIn(req, res, next) {
   //get the token from the header
-  const headers = req.headers('authorization');
+  const headers = req.headers["authorization"];
   const token = req.headers["authorization"].replace(/^Bearer\s/, "");
   console.log("THIS IS MY TOKEN", token)
 //if there is no token, return an error

@@ -3,9 +3,14 @@ import { Link, useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css';
 
+function Subject({ studentId }) {
 
-
-function Subject() {
+  // const [subject, setSubject] = useState('');
+  const [assignment, setAssignment] = useState('');
+  const [description, setDescription] = useState('');
+  const [dueDate, setDueDate] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [priority, setPriority] = useState('');
  
   const {subject, subjectId} = useParams();
   // console.log('THIS IS MY SUBJECT',subject);
@@ -13,7 +18,7 @@ function Subject() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const teacher = searchParams.get('teacher');
-  const studentId = searchParams.get('studentId'); // Extract studentId from query params
+  // console.log('studentId:', studentId); // Check the value of studentId
   // console.log(teacher);
     
   const [homework, setHomework] = useState([]);
@@ -26,23 +31,24 @@ function Subject() {
     completed: false,
     pastdue: false,
   });
- const [selectedFile, setSelectedFile] = useState(null);
- const [images, setImages] = useState([]);
- const [homeworkId, setHomeworkId] = useState(null);
- const [showUpload, setShowUpload] = useState(false);
-  const [homeworkCompleted, setHomeworkCompleted] = useState({});
+
+const [selectedFile, setSelectedFile] = useState(null);
+const [images, setImages] = useState([]);
+const [homeworkId, setHomeworkId] = useState(null);
+const [showUpload, setShowUpload] = useState(false);
+const [homeworkCompleted, setHomeworkCompleted] = useState({});
 
 
   useEffect(() => {
     // Fetch homework data for the subject
     const fetchHomeworkForSubject = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/homework/subjects/${subjectId}/students/1/homework`, {
+        const response = await axios.get(`http://localhost:4000/homework/subjects/${subjectId}/students/1/homework`, { // Use studentId
           headers: {
             authorization: "Bearer " + localStorage.getItem("token"),
           },
         });
-    // console.log('THIS IS MY RESPONSE',response);
+        // console.log('Fetched Homework Data:', response.data); // Logging the fetched data
         setHomework(response.data.data); // Update state with fetched homework data
       } catch (error) {
         console.error('Error fetching homework data:', error);
@@ -51,7 +57,7 @@ function Subject() {
 
     fetchHomeworkForSubject(); // Call the fetch function
     // getImages(); // calling the getImages function to fetch images
-  }, [subjectId]); // Run effect when subjectId changes
+  }, [subjectId, studentId]); // Run effect when subjectId changes
 
   const handleInputChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -61,23 +67,60 @@ function Subject() {
     }));
   };
 
-  const handleSubmit = async (event) => {
+  const handleDueDateChange = (event) => {
+    const inputDate = event.target.value;
+    // Here you can implement your logic to validate the due date
+    // For now, let's just update the due date without validation
+    setDueDate(inputDate);
+    setErrorMessage('');
+  }
+
+  const handleSubmit = (event) => {
     event.preventDefault();
-    try {
-      const addedHomework = await addHomework(newHomework);
-      setHomework([...homework, addedHomework]);
-      setNewHomework({
-        assignment: '',
-        description: '',
-        dueDate: '',
-        priority: '',
-        completed: false,
-        pastdue: false,
-      });
-    } catch (error) {
-      console.error('Error adding homework:', error);
-    }
+    console.log("Submitting homework...");
+    console.log("Data to be sent:", {
+      assignment: assignment,
+      description: description,
+      due_date: dueDate, // Ensure the property name matches the backend
+      priority: priority
+    });
+  
+    fetch('/api/homework', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        assignment: assignment,
+        description: description,
+        due_date: dueDate, // Ensure the property name matches the backend
+        priority: priority
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to submit homework');
+      }
+      // Optionally, you can reset the form fields after successful submission
+      setAssignment('');
+      setDescription('');
+      setDueDate('');
+      setPriority('');
+      setErrorMessage('');
+      console.log("Homework submitted successfully.");
+      return response.json();
+    })
+    .then(data => {
+      console.log("Response from server:", data); // Log the response from the server
+    })
+    .catch(error => {
+      console.error('Error submitting homework:', error);
+      // Handle error state or display error message to the user
+    });
   };
+  
+  
+  
 
   const addHomework = async (data) => {
     try {
@@ -140,25 +183,43 @@ function Subject() {
       formData.append('imagefile', selectedFile, selectedFile.name);
       formData.append('studentId', studentId);
       formData.append('homeworkId', homeworkId);
-
-console.log('THIS IS MY FORMDATA',formData);
-
+  
       const response = await axios.post(`/api/images/${homeworkId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${localStorage.getItem("token")}`, // Add authorization header if needed
         },
       });
-console.log('THIS IS MY RESPONSE',response);
-console.log('Image uploaded:', response.data);
-     
-      setHomeworkCompleted((prevState) => ({
-        ...prevState,
-        [homeworkId]: true,
-      }));
+  
+      // Ensure that response.data contains the image data
+      if (response.data && response.data.length > 0) {
+        // Assuming response.data is an array of image objects
+        const newImages = response.data.map(image => ({
+          id: image.id, // Assuming you have an id in your image object
+          src: `http://localhost:4000/img/${image.imagefile}`, // Adjust the src according to your data structure
+          alt: "Uploaded"
+        }));
+        console.log(newImages)
+        
+        // Update the state to include the new images
+        setImages([...images, ...newImages]);
+  
+        // Update the state to indicate that the homework is completed
+        setHomeworkCompleted(prevState => ({
+          ...prevState,
+          [homeworkId]: true,
+        }));
+        
+        console.log('Images uploaded:', newImages);
+      } else {
+        console.error('No image data received in the response');
+      }
     } catch (error) {
       console.error('Error uploading image:', error);
     }
   };
+  
+  
 
   return (
     <div>
@@ -166,57 +227,100 @@ console.log('Image uploaded:', response.data);
         <button className="home-rounded-button">HOME</button>
       </Link>
       <div className="container">
-      <h2>{subject} Component</h2>
-      <p>Your {subject} teacher is:</p>
-      <p>{teacher}</p>
-        <div className="container">
-        <h1 className="text-primary">Homework Tracker</h1>
-      </div>
-       
+        <div className='subject-title-outer-container'>
+          <div className='subject-title-container'>
+            <h2>{subject} Homework Tracker</h2>
+            <p>{teacher} is your {subject} teacher.</p>
+          </div>
+        </div>
+
+        <div>
         <form onSubmit={handleSubmit}>
-          {/* Form inputs */}
+          <label>
+            Assignment:
+            <input type="text" value={assignment} onChange={(e) => setAssignment(e.target.value)} />
+          </label>
+          <label>
+            Description:
+            <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
+          </label>
+          <label>
+            Due Date:
+            <input type="text" value={dueDate} onChange={handleDueDateChange} />
+          </label>
+          <span style={{ color: 'red' }}>{errorMessage}</span>
+          <label>
+            Priority:
+            <input type="text" value={priority} onChange={(e) => setPriority(e.target.value)} />
+          </label>
+          <button type="submit">Add Homework</button>
         </form>
-        <ul className="list-group mt-3">
-          {homework.map((hw) => (
-            <li key={hw.id} className="list-group-item d-flex justify-content-between align-items-center">
-              <div>
-                <h5>{hw.assignment}</h5>
-                <p>{hw.description}</p>
-              </div>
-              <div>
-                <p>Due Date: {hw.dueDate}</p>
-                <p>Priority: {hw.priority}</p>
-                <p>
-                 Completed: 
-                 <input
-                 type="checkbox"
-                 checked={homeworkCompleted[hw.id] || hw.completed} 
-                 onChange={() => handleCheckboxClick(hw.id)} // This line of code will be for the homework upload Feature Extension.
-                 //Call function insdie handleCheckbox click when the checkbox value changes
-                 />
-                </p>
-                {showUpload && hw.id === homeworkId && (
-                <div>
-              <h3>Select homework to upload:</h3>
-              <input type="file" onChange={onFileChange} />
-              <button onClick={onFileUpload}>Upload</button>
-              {/* I will add code here to display mini preview of uploaded images */}
-              {/* {previewUrl && (
-      <img src={previewUrl} alt="Uploaded Image" style={{ width: '50px', height: '50px', marginLeft: '10px' }} />
-    )} */}
-              </div>
-                )}
-                <button className="btn btn-danger" onClick={() => deleteHomework(hw.id)}>Delete</button>
-              </div>
-            </li>
-          ))}
-        </ul>
       </div>
 
-     
-  
+      
+        <table className="homework-table-container">
+          <thead className='header-container'>
+              <tr>
+                <th className="header">Assignment</th>
+                <th className="header">Description</th>
+                <th className="header">Due Date</th>
+                <th className="header">Priority</th>
+                <th className="header">Completed</th>
+                <th className="header">Actions</th>
+              </tr>
+            </thead>
+          <tbody>
+            {homework
+              .slice()
+              .sort((a, b) => new Date(a.due_date) - new Date(b.due_date))
+              .map((hw) => (
+                <tr key={hw.id}>
+                  <td>
+                    <div className="table-cell">{hw.assignment}</div>
+                  </td>
+                  <td>
+                    <div className="table-cell">{hw.description}</div>
+                  </td>
+                  <td>
+                    <div className="table-cell">{new Date(hw.due_date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}</div>
+                  </td>
+                  <td>
+                    <div className="table-cell">{hw.priority}</div>
+                  </td>
+                    <td className="center-cell">
+                      <div className="table-checkbox-cell">
+                        <input
+                          type="checkbox"
+                          checked={homeworkCompleted[hw.id] || hw.completed}
+                          onChange={() => handleCheckboxClick(hw.id)}
+                        />
+                      </div>
+                    </td>
+                    <td>
+                      <div className="table-cell">
+                        {showUpload && hw.id === homeworkId && (
+                          <div>
+                            <p>Select homework to upload:</p>
+                            <input type="file" onChange={onFileChange} />
+                            <button onClick={onFileUpload}>Upload</button>
+                            {/* Displaying uploaded images */}
+                            <div className='homework-image'>
+                              {images.map(img => (
+                                <img key={img.id} src={img.src} alt={img.alt} />
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        <button className="btn btn-danger" onClick={() => deleteHomework(hw.id)}>Delete</button>
+                      </div>
+                    </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
-};
+}
 
 export default Subject;
