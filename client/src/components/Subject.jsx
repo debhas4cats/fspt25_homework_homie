@@ -6,6 +6,26 @@ import '../App.css';
 
 
 function Subject({ studentId }) {
+
+  const [teacherId, setTeacherId] = useState([
+    { subject: "Mathematics", id: 1 },
+    { subject: "Science", id: 2 },
+    { subject: "German", id: 1 },
+    { subject: "History", id: 2 },
+    { subject: "Art", id: 3 },
+    { subject: "English", id: 4 }
+  ]);
+  
+
+
+  // const [subject, setSubject] = useState('');
+  const [assignment, setAssignment] = useState('');
+  const [description, setDescription] = useState('');
+  const [dueDate, setDueDate] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [priority, setPriority] = useState('');
+
+  //
  
   const {subject, subjectId} = useParams();
   // console.log('THIS IS MY SUBJECT',subject);
@@ -13,6 +33,8 @@ function Subject({ studentId }) {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const teacher = searchParams.get('teacher');
+
+  // const { studentId } = useParams();
   // console.log('studentId:', studentId); // Check the value of studentId
   // console.log(teacher);
     
@@ -61,23 +83,64 @@ function Subject({ studentId }) {
     }));
   };
 
+  const handleDueDateChange = (event) => {
+    const inputDate = event.target.value;
+    // Here you can implement your logic to validate the due date
+    // For now, let’s just update the due date without validation
+    setDueDate(inputDate);
+    setErrorMessage('');
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    
+    // Find the teacherId based on the selected subject
+  const selectedSubject = teacherId.find(item => item.subject === subject);
+  const teacherIdToSend = selectedSubject ? selectedSubject.id : null;
+  
     try {
-      const addedHomework = await addHomework(newHomework);
-      setHomework([...homework, addedHomework]);
-      setNewHomework({
-        assignment: '',
-        description: '',
-        dueDate: '',
-        priority: '',
-        completed: false,
-        pastdue: false,
+      // Make the POST request to add homework
+      const response = await axios.post('http://localhost:4000/homework', {
+        assignment: assignment,
+        description: description,
+        due_date: dueDate,
+        priority: priority,
+        studentId: studentId,
+        subjectId: parseInt(subjectId), // Parse subjectId to integer
+        teacherId: teacherIdToSend
       });
+    
+      // Check if homework was successfully added
+      if (response.status === 201) {
+        console.log("Homework submitted successfully.");
+        
+        // Fetch the updated homework list after adding new homework
+        const updatedHomeworkResponse = await axios.get(`http://localhost:4000/homework/subjects/${subjectId}/students/${studentId}/homework`, {
+          headers: {
+            authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        });
+  
+        // Update the homework state with the new data
+        setHomework(updatedHomeworkResponse.data.data);
+        
+        // Clear the input fields
+        setAssignment('');
+        setDescription('');
+        setDueDate('');
+        setPriority('');
+        setErrorMessage('');
+      } else {
+        console.error('Failed to submit homework');
+      }
     } catch (error) {
-      console.error('Error adding homework:', error);
+      console.error('Error submitting homework:', error);
+      setErrorMessage('Failed to submit homework');
     }
   };
+  
+  
+  
 
   const addHomework = async (data) => {
     try {
@@ -103,7 +166,7 @@ function Subject({ studentId }) {
     console.log('THIS IS MY homeworkId:', homeworkId); 
     try {
       // Make a DELETE request to the backend endpoint
-      await axios.delete(`localhost:4000/homeworks/${homeworkId}`);
+      await axios.delete(`http://localhost:4000/homework/homeworks/${homeworkId}`);
       // If the request is successful, remove the homework assignment from the local state
       setHomework(homework.filter(hw => hw.id !== homeworkId));
       console.log('Homework assignment deleted successfully');
@@ -120,20 +183,31 @@ function Subject({ studentId }) {
     setHomeworkId(id);
     setShowUpload(true);
     console.log(`Checkbox with ID ${id} clicked`);
+      // Reset images state when a new homework is selected
+  setImages([]);
   };
+  
   async function getImages() {
     try {
       const res = await axios.get("/api/images");
-      setImages(res.data);
+      console.log("Images data from backend:", res.data); // Log the received images data
+      setImages(res.data); // Assuming res.data is an array of image objects with correct structure
     } catch (err) {
       console.log(err);
     }
   }
-  
-  const onFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
 
+  useEffect(() => {
+    // Fetch homework data for the subject
+    const fetchHomeworkForSubject = async () => {
+      //...
+    };
+  
+    fetchHomeworkForSubject(); // Call the fetch function
+    getImages(); // Call the function to fetch images
+  }, [subjectId, studentId]);
+  
+  
   const onFileUpload = async () => {
     try {
       const formData = new FormData();
@@ -141,35 +215,26 @@ function Subject({ studentId }) {
       formData.append('studentId', studentId);
       formData.append('homeworkId', homeworkId);
   
-      const response = await axios.post(`/api/images/${homeworkId}`, formData, {
+      const response = await axios.post(`http://localhost:4000/api/images/${homeworkId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${localStorage.getItem("token")}`, // Add authorization header if needed
+          'Authorization': `Bearer ${localStorage.getItem("token")}`,
         },
       });
   
-      // Ensure that response.data contains the image data
       if (response.data && response.data.length > 0) {
-        // Assuming response.data is an array of image objects
-        const newImages = response.data.map(image => ({
-          id: image.id, // Assuming you have an id in your image object
-          src: `http://localhost:4000/img/${image.imagefile}`, // Adjust the src according to your data structure
+        const uploadedImage = response.data[0]; // Take only the first uploaded image
+        const newImage = {
+          id: uploadedImage.id,
+          src: `http://localhost:4000/${uploadedImage.imagefile}`,
           alt: "Uploaded"
-        }));
-        console.log(newImages)
-        
-        // Update the state to include the new images
-        setImages([...images, ...newImages]);
+        };
   
-        // Update the state to indicate that the homework is completed
+        setImages([...images, newImage]); // Add only the uploaded image
         setHomeworkCompleted(prevState => ({
           ...prevState,
           [homeworkId]: true,
         }));
-        
-        console.log('Images uploaded:', newImages);
-      } else {
-        console.error('No image data received in the response');
       }
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -177,49 +242,75 @@ function Subject({ studentId }) {
   };
   
   
+  
+  
 
   return (
     <div>
-    <Link to="/dashboard">
-      <button className="home-rounded-button">HOME</button>
-    </Link>
-    <div className="container">
-      <div className='subject-title-outer-container'>
-        <div className='subject-title-container'>
-          <h2>{subject} Homework Tracker</h2>
-          <p>{teacher} is your {subject} teacher.</p>
+      <Link to="/dashboard">
+        <button className="home-rounded-button">HOME</button>
+      </Link>
+      <div className="container">
+        <div className='subject-title-outer-container'>
+          <div className='subject-title-container'>
+            <h2>{subject} Homework Tracker</h2>
+            <p>{teacher} is your {subject} teacher.</p>
+          </div>
         </div>
+
+        <div>
+        <form onSubmit={handleSubmit}>
+          <label>
+            Assignment:
+            <input type="text" value={assignment} onChange={(e) => setAssignment(e.target.value)} />
+          </label>
+          <label>
+            Description:
+            <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
+          </label>
+          <label>
+            Due Date:
+            <input type="text" value={dueDate} onChange={handleDueDateChange} />
+          </label>
+          <span style={{ color: 'red' }}>{errorMessage}</span>
+          <label>
+            Priority:
+            <input type="text" value={priority} onChange={(e) => setPriority(e.target.value)} />
+          </label>
+          <button type="submit" className='homework-submit'>Add Homework</button>
+        </form>
       </div>
+
       
-      <table className="homework-table-container">
-        <thead className='header-container'>
-            <tr>
-              <th className="header">Assignment</th>
-              <th className="header">Description</th>
-              <th className="header">Due Date</th>
-              <th className="header">Priority</th>
-              <th className="header">Completed</th>
-              <th className="header">Actions</th>
-            </tr>
-          </thead>
-        <tbody>
+        <table className="homework-table-container">
+          <thead className='header-container'>
+              <tr>
+                <th className="header">Assignment</th>
+                <th className="header">Description</th>
+                <th className="header">Due Date</th>
+                <th className="header">Priority</th>
+                <th className="header">Completed</th>
+                <th className="header">Actions</th>
+              </tr>
+            </thead>
+          <tbody>
           {homework
-            .slice() // Create a shallow copy of the original array
-            .sort((a, b) => new Date(a.due_date) - new Date(b.due_date)) // Sort the copied array by due date
-            .map((hw) => (
-              <tr key={hw.id}>
-                <td>
-                  <div className="table-cell">{hw.assignment}</div>
-                </td>
-                <td>
-                  <div className="table-cell">{hw.description}</div>
-                </td>
-                <td>
-                  <div className="table-cell">{new Date(hw.due_date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}</div>
-                </td>
-                <td>
-                  <div className="table-cell">{hw.priority}</div>
-                </td>
+            .slice()
+            .sort((a, b) => new Date(a.due_date) - new Date(b.due_date))
+            .map((hw) => ( // Remove index parameter
+              <tr key={hw.id}> {/* Use hw.id as the key */}
+                  <td>
+                    <div className="table-cell">{hw.assignment}</div>
+                  </td>
+                  <td>
+                    <div className="table-cell">{hw.description}</div>
+                  </td>
+                  <td>
+                    <div className="table-cell">{new Date(hw.due_date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}</div>
+                  </td>
+                  <td>
+                    <div className="table-cell">{hw.priority}</div>
+                  </td>
                   <td className="center-cell">
                     <div className="table-checkbox-cell">
                       <input
@@ -238,26 +329,22 @@ function Subject({ studentId }) {
                           <button onClick={onFileUpload}>Upload</button>
                           {/* Displaying uploaded images */}
                           <div className='homework-image'>
-                            {images.map(img => {
-                              console.log('Image URL:', `http://localhost:4000/img/${img.imagefile}`);
-                              return (
-                                <img key={img.id} src={`http://localhost:4000/img/${img.imagefile}`} alt="Uploaded" />
-                              );
-                            })}
+                            {images.map(img => (
+                              <img key={img.id} src={img.src} alt={img.alt} />
+                            ))}
                           </div>
-
                         </div>
                       )}
                       <button className="btn btn-danger" onClick={() => deleteHomework(hw.id)}>Delete</button>
                     </div>
                   </td>
-              </tr>
-            ))}
-        </tbody>
+                </tr>
+              ))}
 
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
   );
 }
 

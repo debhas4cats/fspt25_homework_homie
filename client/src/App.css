@@ -440,37 +440,71 @@ button.today{
      /* -----subject component----- */
 
 
-     .container {
-      padding-left: 20px; /* Adjust this value to move the text to the right */
-    }
+  /* -----subject component----- */
+  
+  .container {
+    padding-left: 20px; /* Adjust this value to move the text to the right */
+  }
 
-    .subject-title-container {
-      margin-bottom: 50px; /* Adjust this value to move the text to the right */
-    }
-    .subject-title-container p {
-      margin-left: 10px; /* Adjust this value to move the text to the right */
-    }
+  .subject-title-container {
+    margin-bottom: 50px; /* Adjust this value to move the text to the right */
+    font-family: 'Adumu', sans-serif;
+  }
+  .subject-title-container p {
+    margin-left: 10px; /* Adjust this value to move the text to the right */
+  }
+  
+  .header-container th {
+    padding: 10px; /* Adjust padding as needed */
+    background-color: rgb(167, 141, 194);
+  }
+  .center-cell {
+    padding-left: 50px;
+  }
+  
+  table, th, td {
+    border: 1px solid;
+  }
+
+  .table-cell {
+    padding: 20px; /* Adjust padding as needed */
     
-    .header-container th {
-      padding: 10px; /* Adjust padding as needed */
-      background-color: rgb(167, 141, 194);
-    }
-    .center-cell {
-      padding-left: 50px;
-    }
-    
-    table, th, td {
-      border: 1px solid;
-    }
+  }
 
-    .table-cell {
-      padding: 20px; /* Adjust padding as needed */
-      
-    }
+  .homework-image{
+    width: 50px;
+    height: 50px;
+    margin-left: 10px;
+  }
 
-    .homework-image{
-      width: 50px;
-      height: 50px;
-      margin-left: 10px;
-    }
-      /* -----logout button----- */
+  .homework-submit {
+    position: relative;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 5px 10px;
+    margin: 5px;
+    font-family: 'Adumu', sans-serif;
+  }
+ /* -----logout button----- */
+  
+ .logout {
+  position: absolute;
+  top: 220px;
+  right: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.logout-button {
+  border: 2px solid black;
+  background-color: white;
+  border-radius: 20px;
+  padding: 8px 15px;
+  font-family: 'Adumu', sans-serif;
+}
+
+.logout-button:hover {
+  background-color: black;
+  color: white;
+}

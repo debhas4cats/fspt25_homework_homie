@@ -6,15 +6,15 @@ import ClickableDate from './ClickableDate'; // Import the ClickableDate compone
 import PencilSVG from '../assets/pencil.svg'; // Import the pencil SVG
 // Import other icons
 import { BulbSVG, StarSVG, MagnifySVG, ArrowSVG } from './Icons'; // Changed the import path
-
 import axios from "axios";
 import Subject from "./Subject";
+import { useNavigate, Link } from 'react-router-dom';
 
 function Dashboard({ userData }) { // receiving the userdata as prop
   //refactoring the subjects state variable to take in the data from the GET subjects endpoint
   const [subjects, setSubjects] = useState([]);
-
- 
+  const [loading, setLoading] = useState(true); // Add loading state
+  const navigate = useNavigate();
 
  
   const fetchSubjects = async (studentId) => { // Define fetchSubjects outside of useEffect
@@ -76,6 +76,9 @@ function Dashboard({ userData }) { // receiving the userdata as prop
     } catch (error) {
       console.error("Error fetching homework data:", error);
       //  if an error occurs, log it to the console
+    } finally {
+      // After fetching homework data, set loading to false
+      setLoading(false);
     }
   };
 
@@ -116,10 +119,12 @@ function Dashboard({ userData }) { // receiving the userdata as prop
             What's up, {userData.firstname}!
           </div>
         </div>
+          <div className="logout">
+            <button className="logout-button" onClick={logout}>Log out</button>
+          </div>
        </div>
-       <div className="logout">
-          <button className="logout-button" onClick={logout}>Log out</button>
-        </div>
+
+      
 
       <div className="outer-title-container">
         <div className="title-container">
@@ -130,7 +135,8 @@ function Dashboard({ userData }) { // receiving the userdata as prop
         </div>
       </div>
 
-      <HomeworkAlertContainer subjects={subjects} />
+ {/* renders only when subjects have been fetched and assignments are available */}
+      {!loading && <HomeworkAlertContainer subjects={subjects} />}
     
    
     </div>
