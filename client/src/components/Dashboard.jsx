@@ -16,7 +16,6 @@ function Dashboard({ userData }) { // receiving the userdata as prop
   const [loading, setLoading] = useState(true); // Add loading state
   const navigate = useNavigate();
 
- 
   const fetchSubjects = async (studentId) => { // Define fetchSubjects outside of useEffect
     try {
       const response = await fetch("http://localhost:4000/homework/subjects");

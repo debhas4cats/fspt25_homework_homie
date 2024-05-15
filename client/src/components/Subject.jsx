@@ -15,8 +15,6 @@ function Subject({ studentId }) {
     { subject: "Art", id: 3 },
     { subject: "English", id: 4 }
   ]);
-  
-
 
   // const [subject, setSubject] = useState('');
   const [assignment, setAssignment] = useState('');
@@ -139,9 +137,6 @@ function Subject({ studentId }) {
     }
   };
   
-  
-  
-
   const addHomework = async (data) => {
     try {
       const response = await fetch('/api/homework', {
@@ -275,7 +270,13 @@ function Subject({ studentId }) {
           <span style={{ color: 'red' }}>{errorMessage}</span>
           <label>
             Priority:
-            <input type="text" value={priority} onChange={(e) => setPriority(e.target.value)} />
+            <select
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
           </label>
           <button type="submit" className='homework-submit'>Add Homework</button>
         </form>
