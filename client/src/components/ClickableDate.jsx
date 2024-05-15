@@ -1,12 +1,12 @@
 // Importing necessary dependencies
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import DatePicker from "react-datepicker"; // React date picker component
 import "react-datepicker/dist/react-datepicker.css";
-import { Calendar, momentLocalizer, Views } from "react-big-calendar"; // Provides a calendar component
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import moment from "moment"; // 'moment' library, used for parsing, validating, manipulating, and formatting dates
-import { Link, useLocation } from "react-router-dom"; // For navigation in React applications
-import axios from "axios"; // HTTP client for making requests
+import { Calendar, momentLocalizer, Views } from 'react-big-calendar'; // Provides a calendar component
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import moment from 'moment'; // 'moment' library, used for parsing, validating, manipulating, and formatting dates
+import { Link, useLocation } from 'react-router-dom'; // For navigation in React applications
+import axios from 'axios'; // HTTP client for making requests
 import "../App.css";
 
 // Initialize momentLocalizer, which adapts 'moment' for use with 'react-big-calendar'
@@ -23,15 +23,15 @@ function ClickableDate() {
   const [state, setState] = useState({
     date: new Date(),
     events: [],
-    newEventTitle: "",
+    newEventTitle: '',
     selected: null,
-    view: Views.WEEK,
+    view: Views.WEEK
   });
 
   // Hook to get the current location
   const location = useLocation();
   // Check if the current location is '/calendar'
-  const isCalendarRoute = location.pathname === "/calendar";
+  const isCalendarRoute = location.pathname === '/calendar';
   // Ref that references the date picker component
   const datepickerRef = useRef(null);
 
@@ -39,17 +39,17 @@ function ClickableDate() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get("/api/calendar");
+        const response = await axios.get('/api/calendar');
         // Transform fetched data to the required format and update the state
-        const fetchedEvents = response.data.map((event) => ({
+        const fetchedEvents = response.data.map(event => ({
           id: event.id,
           title: event.title,
           start: new Date(event.start),
           end: new Date(event.end),
         }));
-        setState((prevState) => ({ ...prevState, events: fetchedEvents }));
+        setState(prevState => ({ ...prevState, events: fetchedEvents }));
       } catch (error) {
-        console.error("Error fetching calendar events:", error);
+        console.error('Error fetching calendar events:', error);
       }
     };
     if (isCalendarRoute) {
@@ -58,29 +58,29 @@ function ClickableDate() {
   }, []);
 
   // Handles date change
-  const handleDateChange = (newDate) => {
-    setState((prevState) => ({
+  const handleDateChange = newDate => {
+    setState(prevState => ({
       ...prevState,
       date: newDate,
-      newEventTitle: "",
-      selected: null,
+      newEventTitle: '',
+      selected: null
     }));
   };
 
   // Handles selecting an event
-  const handleSelectEvent = (event) => {
-    setState((prevState) => ({ ...prevState, selected: event }));
+  const handleSelectEvent = event => {
+    setState(prevState => ({ ...prevState, selected: event }));
   };
 
   // Handles selecting a time slot
-  const handleSelectSlot = (slotInfo) => {
-    setState((prevState) => ({ ...prevState, selected: slotInfo }));
+  const handleSelectSlot = slotInfo => {
+    setState(prevState => ({ ...prevState, selected: slotInfo }));
   };
 
   // Adds a new event
   const handleAddEvent = async () => {
     const { newEventTitle, selected, events } = state;
-    if (newEventTitle.trim() !== "" && selected) {
+    if (newEventTitle.trim() !== '' && selected) {
       const newEvent = {
         title: newEventTitle,
         start: selected.start,
@@ -89,104 +89,96 @@ function ClickableDate() {
 
       try {
         // POST request to add a new event
-        const response = await axios.post("/api/calendar", newEvent);
+        const response = await axios.post('/api/calendar', newEvent);
         const newEventId = response.data.data[response.data.data.length - 1].id;
         const createdEvent = { ...newEvent, id: newEventId };
-        setState((prevState) => ({
+        setState(prevState => ({
           ...prevState,
           events: [...events, createdEvent],
-          newEventTitle: "",
-          selected: createdEvent,
+          newEventTitle: '',
+          selected: createdEvent
         }));
       } catch (error) {
-        console.error("Error adding event:", error);
+        console.error('Error adding event:', error);
       }
     } else {
-      alert("Event title cannot be empty!");
+      alert('Event title cannot be empty!');
     }
   };
 
   // Deletes an event
-  const handleDeleteEvent = async (eventIdToDelete) => {
+  const handleDeleteEvent = async eventIdToDelete => {
     const { events } = state;
     try {
       console.log("Deleting Event with ID:", eventIdToDelete);
       if (eventIdToDelete) {
         // DELETE request to delete an event
         await axios.delete(`/api/calendar/${eventIdToDelete}`);
-        setState((prevState) => ({
+        setState(prevState => ({
           ...prevState,
-          events: prevState.events.filter(
-            (event) => event.id !== eventIdToDelete
-          ),
-          selected: null,
+          events: prevState.events.filter(event => event.id !== eventIdToDelete),
+          selected: null
         }));
       }
     } catch (error) {
-      console.error("Error deleting event:", error);
+      console.error('Error deleting event:', error);
     }
   };
 
   // Edits an event
   const handleEditEvent = useCallback(async () => {
     const { newEventTitle, selected, events } = state;
-    if (newEventTitle.trim() !== "" && selected) {
+    if (newEventTitle.trim() !== '' && selected) {
       const updatedEvent = {
         ...selected,
         title: newEventTitle,
       };
-
+  
       try {
         // PUT request to update an event
         await axios.put(`/api/calendar/${selected.id}`, updatedEvent);
         // Update the events array with the updated event
-        setState((prevState) => ({
+        setState(prevState => ({
           ...prevState,
-          events: prevState.events.map((event) =>
-            event.id === selected.id ? updatedEvent : event
-          ),
-          newEventTitle: "",
-          selected: null,
+          events: prevState.events.map(event => (event.id === selected.id ? updatedEvent : event)),
+          newEventTitle: '',
+          selected: null
         }));
       } catch (error) {
-        console.error("Error editing event:", error);
+        console.error('Error editing event:', error);
       }
     } else {
-      alert("Event title cannot be empty!");
+      alert('Event title cannot be empty!');
     }
   }, [state]);
 
   // Handles view change
-  const handleViewChange = (newView) => {
-    setState((prevState) => ({ ...prevState, view: newView }));
+  const handleViewChange = newView => {
+    setState(prevState => ({ ...prevState, view: newView }));
   };
 
   // Handles navigating to a new date
   const handleNavigate = (newDate, view, action) => {
-    setState((prevState) => ({ ...prevState, date: newDate }));
+    setState(prevState => ({ ...prevState, date: newDate }));
   };
 
   // Handles clicking the Today button
   const handleTodayClick = () => {
-    setState((prevState) => ({ ...prevState, date: new Date() }));
+    setState(prevState => ({ ...prevState, date: new Date() }));
   };
 
   // Handles clicking the navigation buttons
   const onPrevNextClick = (amount, unit) => {
-    setState((prevState) => ({
+    setState(prevState => ({
       ...prevState,
-      date: moment(state.date).add(amount, unit).toDate(),
+      date: moment(state.date).add(amount, unit).toDate()
     }));
   };
 
   // Renders the delete button
   const renderDeleteButton = () => {
     const { selected } = state;
-    return (
-      selected && (
-        <button onClick={() => handleDeleteEvent(selected.id)}>Delete</button>
-      )
-    );
+    return selected && <button onClick={() => handleDeleteEvent(selected.id)}>Delete</button>;
   };
 
   // Destructure the state object for more concise access to properties
@@ -214,7 +206,7 @@ function ClickableDate() {
         ) : (
           <Link to="/calendar">
             <button className="date">
-              {moment(date).format("dddd, MMMM Do YYYY")}
+              {moment(date).format('dddd, MMMM Do YYYY')}
             </button>
           </Link>
         )}
@@ -225,35 +217,17 @@ function ClickableDate() {
           <div className="calendar-container">
             <div className="toolbar">
               {/* Navigation buttons */}
-              <div className="custom-date-arrow">
-                <button
-                  onClick={() =>
-                    onPrevNextClick(
-                      -1,
-                      view === Views.DAY ? "d" : view === Views.WEEK ? "w" : "M"
-                    )
-                  }
-                >
-                  {"<"}
-                </button>
-                <button
-                  onClick={() =>
-                    onPrevNextClick(
-                      1,
-                      view === Views.DAY ? "d" : view === Views.WEEK ? "w" : "M"
-                    )
-                  }
-                >
-                  {">"}
-                </button>
+              <div className='custom-date-arrow'>
+                <button onClick={() => onPrevNextClick(-1, view === Views.DAY ? "d" : (view === Views.WEEK ? "w" : "M"))}>{'<'}</button>
+                <button onClick={() => onPrevNextClick(1, view === Views.DAY ? "d" : (view === Views.WEEK ? "w" : "M"))}>{'>'}</button>
               </div>
 
               {/* Day or week buttons */}
-              <div className="day-or-week-button">
-                {viewOptions.map((option) => (
+              <div className='day-or-week-button'>
+                {viewOptions.map(option => (
                   <button
                     key={option.id}
-                    className={view === option.id ? "active" : ""}
+                    className={view === option.id ? 'active' : ''}
                     onClick={() => handleViewChange(option.id)}
                   >
                     {option.label}
@@ -262,19 +236,16 @@ function ClickableDate() {
               </div>
 
               {/* Display date or date range */}
-              <div className="date-text">{dateText}</div>
+              <div className='date-text'>
+                {dateText}
+              </div>
 
               {/* Today button */}
-              <button className="today" onClick={handleTodayClick}>
-                Today
-              </button>
+              <button className='today' onClick={handleTodayClick}>Today</button>
 
               {/* Custom date picker */}
-              <div className="custom-date-picker">
-                <div
-                  className="custom-text-container"
-                  onClick={() => datepickerRef.current.focus()}
-                >
+              <div className='custom-date-picker'>
+                <div className="custom-text-container" onClick={() => datepickerRef.current.focus()}>
                   View Entire Month
                 </div>
                 <DatePicker
@@ -285,24 +256,17 @@ function ClickableDate() {
               </div>
 
               {/* Event input */}
-              <div className="event-input-container">
+              <div className='event-input-container'>
                 {selected && (
-                  <div className="event-input">
+                  <div className='event-input'>
                     <input
                       type="text"
                       value={newEventTitle}
-                      onChange={(e) =>
-                        setState((prevState) => ({
-                          ...prevState,
-                          newEventTitle: e.target.value,
-                        }))
-                      }
+                      onChange={e => setState(prevState => ({ ...prevState, newEventTitle: e.target.value }))}
                       placeholder="Enter........"
                     />
                     {selected.id ? (
-                      <button onClick={handleEditEvent}>
-                        Edit & Save Event
-                      </button>
+                      <button onClick={handleEditEvent}>Edit & Save Event</button>
                     ) : (
                       <button onClick={handleAddEvent}>Add Event</button>
                     )}
@@ -311,8 +275,10 @@ function ClickableDate() {
               </div>
 
               {/* Delete button */}
-              <div className="delete-button-container">
-                <div className="delete-button">{renderDeleteButton()}</div>
+              <div className='delete-button-container'>
+                <div className='delete-button'>
+                  {renderDeleteButton()}
+                </div>
               </div>
             </div>
 

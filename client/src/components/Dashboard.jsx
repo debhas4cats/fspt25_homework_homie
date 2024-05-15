@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from 'react-router-dom';
 import "../App.css";
+import Subject from "./Subject";
 import Scoreboard from "./Scoreboard"; //Import the scoreboard
 import HomeworkAlertContainer from "./HomeworkAlertContainer"; //Import the Homework Alert Boxes
 import ClickableDate from './ClickableDate'; // Import the ClickableDate component
@@ -7,8 +9,6 @@ import PencilSVG from '../assets/pencil.svg'; // Import the pencil SVG
 // Import other icons
 import { BulbSVG, StarSVG, MagnifySVG, ArrowSVG } from './Icons'; // Changed the import path
 import axios from "axios";
-import Subject from "./Subject";
-import { useNavigate, Link } from 'react-router-dom';
 
 function Dashboard({ userData }) { // receiving the userdata as prop
   //refactoring the subjects state variable to take in the data from the GET subjects endpoint
@@ -87,8 +87,6 @@ function Dashboard({ userData }) { // receiving the userdata as prop
     navigate ("/");
   };
 
-
-
   return (
     <div className="outer-container">
       <div className="corner-icons">
@@ -123,8 +121,6 @@ function Dashboard({ userData }) { // receiving the userdata as prop
             <button className="logout-button" onClick={logout}>Log out</button>
           </div>
        </div>
-
-      
 
       <div className="outer-title-container">
         <div className="title-container">
