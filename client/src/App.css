@@ -415,3 +415,37 @@ button.today{
   }
 
      /* -----logout button----- */
+    
+
+     /* -----login page----- */
+    
+    .login {
+      position: absolute;
+      display: flex;
+      top: 300px;
+      right: 420px;
+    }
+    
+    .login-head {
+      font-family: 'Adumu', sans-serif;
+      font-size: 24px;
+      text-transform: uppercase;
+      margin: 10px;
+    }
+
+    .login-input {
+      width: 50%;
+      padding: 8px 10px;
+      margin: 10px 20px;
+      box-sizing: border-box;
+    }
+
+    .login-button {
+      position: relative;
+      background-color: white;
+      border: 2px solid black;
+      border-radius: 20px;
+      padding: 5px 10px;
+      margin: 5px;
+      font-family: 'Adumu', sans-serif;
+    }

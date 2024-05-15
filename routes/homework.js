@@ -80,7 +80,7 @@ router.get('/subjects/:subjectId', async (req, res) => {
 });
 
 // DELETE endpoint to delete a homework assignment
-// code snippet example needed for Postman test: localhost:5000/homework/homeworks/14
+// code snippet example needed for Postman test: localhost:4000/homework/homeworks/14
 router.delete('/homeworks/:id', async (req, res) => {
   const homeworkId = req.params.id;
 
@@ -88,15 +88,17 @@ router.delete('/homeworks/:id', async (req, res) => {
  
     const deleteJunctionQuery = `
       DELETE FROM students_subjects_homeworks
-      WHERE homeworkID = ${homeworkId}`;
+      WHERE homeworkID = ${homeworkId};`;
 
     await db(deleteJunctionQuery);
+    console.log('THIS IS THE DELETEJUNCTIONQUERY', deleteJunctionQuery)
 
     const deleteHomeworkQuery = `
       DELETE FROM homeworks
-      WHERE id = ${homeworkId}`;
+      WHERE id = ${homeworkId};`;
 
     await db(deleteHomeworkQuery);
+    console.log('THIS IS THE DELETEHOMEWORKQUERY', deleteHomeworkQuery)
 
     res.status(200).json({ message: 'Homework assignment deleted successfully' });
   } catch (error) {
@@ -112,7 +114,7 @@ router.post('/', async (req, res) => {
   //I need to collect everything I will need for this in my req.body
   const { assignment, description, due_date, priority, studentId, subjectId, teacherId } = req.body;
 
-// console.log('THIS IS THE REQ.BODY:', req.body);
+console.log('THIS IS THE REQ.BODY:', req.body);
 
   try {
     //I will await db() a new variable that I will use to insert the new homework into the homeworks table
@@ -121,8 +123,8 @@ router.post('/', async (req, res) => {
     VALUES ('${assignment}', '${description}', '${due_date}', '${priority}');
     SELECT LAST_INSERT_ID() AS id;
    `);
-// console.log('This is my ADDHOMEWORKRESULT', addHomeworkResult);
-// console.log('This is my addHomeworkResultID', addHomeworkResult.data[0].id);
+console.log('This is my ADDHOMEWORKRESULT', addHomeworkResult);
+console.log('This is my addHomeworkResultID', addHomeworkResult.data[0].id);
 
 //if the homework wasn't successfully added, I will throw an error with a message that the homework wasn't successfully added
     if (addHomeworkResult.error) {
@@ -217,10 +219,18 @@ router.put('/:id', async (req, res) => {
 
 router.get('/subjects', async (req, res) => {
   const query = `
-  SELECT DISTINCT subjects.id  AS subjectID, subjects.name AS subject_name, teachers.firstname, teachers.lastname
-FROM students_subjects_homeworks
-JOIN subjects ON students_subjects_homeworks.subjectID = subjects.id
-JOIN teachers ON students_subjects_homeworks.teacherID = teachers.id;
+    SELECT DISTINCT 
+      subjects.id AS subjectID, 
+      subjects.name AS subject_name, 
+      teachers.firstname, 
+      teachers.lastname, 
+      teachers.id AS teacherID
+    FROM 
+      students_subjects_homeworks
+    JOIN 
+      subjects ON students_subjects_homeworks.subjectID = subjects.id
+    JOIN 
+      teachers ON students_subjects_homeworks.teacherID = teachers.id;
   `;
   try {
     const results = await db(query);

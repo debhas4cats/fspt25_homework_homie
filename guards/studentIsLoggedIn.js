@@ -4,8 +4,8 @@ const supersecret = process.env.SUPER_SECRET;
 
 function studentIsLoggedIn(req, res, next) {
   //get the token from the header
-  const headers = req.headers('authorization');
-  const token = req.headers["authorization"].replace(/^Bearer\s/, "");
+  let headers = req.headers['authorization'];
+  let token = req.headers["authorization"].replace(/^Bearer\s/, "");
   console.log("THIS IS MY TOKEN", token)
 //if there is no token, return an error
     if (headers && headers.startsWith('Bearer')) {
@@ -27,6 +27,7 @@ function studentIsLoggedIn(req, res, next) {
             req.user_id = user_id;
             req.username = username;
             req.avatar = avatar;
+            
           //I can do this by adding a new property to the req object and the value will be the user_id decoded from the token
         //I want to call the next function.  
           next();

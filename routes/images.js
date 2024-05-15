@@ -7,7 +7,7 @@ const { v4: uuidv4 } = require("uuid");
 const mime = require("mime-types");
 const multer = require("multer");
 const upload = multer({ dest: "public/img/" });
-const studentLoggedIn = require("../guards/studentLoggedIn");
+const studentIsLoggedIn = require("../guards/studentIsLoggedIn");
 
 const getImages = async (req, res) => {
   try {
@@ -21,10 +21,10 @@ const getImages = async (req, res) => {
 router.get("/", getImages);
 
 //add these after you get Kecia's part
-// router.post("/:homeworkId",studentLoggedIn, upload.single("imagefile"), async (req, res) => {
-//     const studentId = req.user_id;
 router.post("/:homeworkId", upload.single("imagefile"), async (req, res) => {
     const studentId = 1;
+    console.log('THIS IS THE STUDENT ID: ', studentId)
+
     const homeworkId = req.params.homeworkId;
     console.log('HOMEWORK ID', req.params.homeworkId)
   // file is available at req.file
