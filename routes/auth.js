@@ -5,6 +5,7 @@ var studentIsLoggedIn = require("../guards/studentIsLoggedIn");
 var db = require("../model/helper");
 require("dotenv").config();
 var bcrypt = require("bcrypt");
+
 const supersecret = process.env.SUPER_SECRET;
 
   // POST: LOGIN student

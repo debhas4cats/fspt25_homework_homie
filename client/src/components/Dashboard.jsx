@@ -1,26 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import "../App.css";
 import Scoreboard from "./Scoreboard"; //Import the scoreboard
 import HomeworkAlertContainer from "./HomeworkAlertContainer"; //Import the Homework Alert Boxes
-import ClickableDate from "./ClickableDate"; // Import the ClickableDate component
-import PencilSVG from "../assets/pencil.svg"; // Import the pencil SVG
+import ClickableDate from './ClickableDate'; // Import the ClickableDate component
+import PencilSVG from '../assets/pencil.svg'; // Import the pencil SVG
 // Import other icons
-import { BulbSVG, StarSVG, MagnifySVG, ArrowSVG } from "./Icons"; // Changed the import path
+import { BulbSVG, StarSVG, MagnifySVG, ArrowSVG } from './Icons'; // Changed the import path
 import axios from "axios";
 import Subject from "./Subject";
+import { useNavigate, Link } from 'react-router-dom';
 
-function Dashboard({ userData }) {
-  // receiving the userdata as prop
+function Dashboard({ userData }) { // receiving the userdata as prop
   //refactoring the subjects state variable to take in the data from the GET subjects endpoint
   const [subjects, setSubjects] = useState([]);
-
+  const [loading, setLoading] = useState(true); // Add loading state
   const navigate = useNavigate();
 
-  const fetchSubjects = async (studentId) => {
-    // Define fetchSubjects outside of useEffect
+ 
+  const fetchSubjects = async (studentId) => { // Define fetchSubjects outside of useEffect
     try {
-      const response = await fetch("/api/homework/subjects");
+      const response = await fetch("http://localhost:4000/homework/subjects");
       if (!response.ok) {
         throw new Error("Failed to fetch subjects");
       }
@@ -44,7 +43,7 @@ function Dashboard({ userData }) {
       console.error("Error fetching subjects:", error);
     }
   };
-
+  
   useEffect(() => {
     if (userData) {
       // Make sure user_id exists before proceeding
@@ -56,7 +55,7 @@ function Dashboard({ userData }) {
     // use async/await to fetch data for each subject
     try {
       const { data } = await axios(
-        `/api/homework/subjects/${subjectId}/students/${studentId}/homework`,
+        `http://localhost:4000/homework/subjects/${subjectId}/students/${studentId}/homework`,
         {
           headers: {
             authorization: "Bearer " + localStorage.getItem("token"),
@@ -77,13 +76,18 @@ function Dashboard({ userData }) {
     } catch (error) {
       console.error("Error fetching homework data:", error);
       //  if an error occurs, log it to the console
+    } finally {
+      // After fetching homework data, set loading to false
+      setLoading(false);
     }
   };
 
   const logout = () => {
     localStorage.removeItem("token");
-    navigate("/");
+    navigate ("/");
   };
+
+
 
   return (
     <div className="outer-container">
@@ -93,18 +97,14 @@ function Dashboard({ userData }) {
         {/* Star SVG */}
         <img src={StarSVG} alt="Star Icon" className="star-icon" />
         {/* Magnify SVG */}
-        <img
-          src={MagnifySVG}
-          alt="Magnifying Glass Icon"
-          className="magnify-icon"
-        />
+        <img src={MagnifySVG} alt="Magnifying Glass Icon" className="magnify-icon" />
         {/* Arrow SVG */}
         <img src={ArrowSVG} alt="Arrow Icon" className="arrow-icon" />
       </div>
-
+      
       <div className="date-container">
-        {/* Render ClickableDate component */}
-        <ClickableDate clickable={true} />
+          {/* Render ClickableDate component */}
+          <ClickableDate clickable={true} />
       </div>
       {/* display the tally of assignments that are late, due today, due tomorrow */}
       <Scoreboard subjects={subjects} />
@@ -112,20 +112,19 @@ function Dashboard({ userData }) {
       <div className="greeting-container">
         <div className="greeting">
           {/* Display SVGs */}
-          <img src={PencilSVG} alt="Pencil Icon" className="pencil-icon" />
+        <img src={PencilSVG} alt="Pencil Icon" className="pencil-icon" />
           {/* Greeting div */}
           <div className="greeting-text">
             {/* Display greeting with username */}
             What's up, {userData.firstname}!
           </div>
         </div>
+          <div className="logout">
+            <button className="logout-button" onClick={logout}>Log out</button>
+          </div>
+       </div>
 
-        <div className="logout">
-          <button className="logout-button" onClick={logout}>
-            Log out
-          </button>
-        </div>
-      </div>
+      
 
       <div className="outer-title-container">
         <div className="title-container">
@@ -136,7 +135,10 @@ function Dashboard({ userData }) {
         </div>
       </div>
 
-      <HomeworkAlertContainer subjects={subjects} />
+ {/* renders only when subjects have been fetched and assignments are available */}
+      {!loading && <HomeworkAlertContainer subjects={subjects} />}
+    
+   
     </div>
   );
 }
