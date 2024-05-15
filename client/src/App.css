@@ -437,8 +437,6 @@ button.today{
     left: 20px; 
   }
 
-     /* -----subject component----- */
-
 
   /* -----subject component----- */
   
@@ -447,13 +445,23 @@ button.today{
   }
 
   .subject-title-container {
-    margin-bottom: 50px; /* Adjust this value to move the text to the right */
+    margin-bottom: 30px; /* Adjust this value to move the text to the right */
     font-family: 'Adumu', sans-serif;
   }
   .subject-title-container p {
     margin-left: 10px; /* Adjust this value to move the text to the right */
   }
   
+  div.homework-add-form {
+    margin-bottom: 20px;
+  }
+
+  label{
+    padding: 20px;
+ 
+  }
+  
+
   .header-container th {
     padding: 10px; /* Adjust padding as needed */
     background-color: rgb(167, 141, 194);

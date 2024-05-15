@@ -218,8 +218,8 @@ function ClickableDate() {
             <div className="toolbar">
               {/* Navigation buttons */}
               <div className='custom-date-arrow'>
-                <button onClick={() => onPrevNextClick(-1, view === Views.DAY ? "d" : (view === Views.WEEK ? "w" : "M"))}>{'<'}</button>
-                <button onClick={() => onPrevNextClick(1, view === Views.DAY ? "d" : (view === Views.WEEK ? "w" : "M"))}>{'>'}</button>
+                <button onClick={() => onPrevNextClick(-1, view === Views.DAY ? "d" : (view === Views.WEEK ? "w" : "M"))}>{'< Prev'}</button>
+                <button onClick={() => onPrevNextClick(1, view === Views.DAY ? "d" : (view === Views.WEEK ? "w" : "M"))}>{'Next >'}</button>
               </div>
 
               {/* Day or week buttons */}

@@ -16,8 +16,6 @@ function Subject({ studentId }) {
     { subject: "English", id: 4 }
   ]);
   
-
-
   // const [subject, setSubject] = useState('');
   const [assignment, setAssignment] = useState('');
   const [description, setDescription] = useState('');
@@ -25,7 +23,6 @@ function Subject({ studentId }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [priority, setPriority] = useState('');
 
-  //
  
   const {subject, subjectId} = useParams();
   // console.log('THIS IS MY SUBJECT',subject);
@@ -48,11 +45,11 @@ function Subject({ studentId }) {
     completed: false,
     pastdue: false,
   });
- const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
  const [images, setImages] = useState([]);
  const [homeworkId, setHomeworkId] = useState(null);
  const [showUpload, setShowUpload] = useState(false);
-  const [homeworkCompleted, setHomeworkCompleted] = useState({});
+ const [homeworkCompleted, setHomeworkCompleted] = useState({});
 
 
   useEffect(() => {
@@ -139,29 +136,6 @@ function Subject({ studentId }) {
     }
   };
   
-  
-  
-
-  const addHomework = async (data) => {
-    try {
-      const response = await fetch('/api/homework', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to add homework');
-      }
-      const responseData = await response.json();
-      return responseData.homework;
-    } catch (error) {
-      console.error('Error adding homework:', error);
-      throw error;
-    }
-  };
-
   const deleteHomework = async (homeworkId) => {
     console.log('THIS IS MY homeworkId:', homeworkId); 
     try {
@@ -175,7 +149,18 @@ function Subject({ studentId }) {
       // Handle errors, e.g., display an error message to the user
     }
   };
-  //This function is for helping to update completed in the database, when homework is uploaded.
+
+  useEffect(() => {
+    // Fetch homework data for the subject
+    const fetchHomeworkForSubject = async () => {
+    };
+  
+    fetchHomeworkForSubject(); // Call the fetch function
+    getImages(); // Call the function to fetch images
+  }, [subjectId, studentId]);
+  
+  
+    //This function is for helping to update completed in the database, when homework is uploaded.
   //I need to complete the coding for uploading homework. The homework upload will trigger the function
   //to change homework.completed to true in the database.
   const handleCheckboxClick = (id) => {
@@ -197,49 +182,94 @@ function Subject({ studentId }) {
     }
   }
 
-  useEffect(() => {
-    // Fetch homework data for the subject
-    const fetchHomeworkForSubject = async () => {
-      //...
-    };
-  
-    fetchHomeworkForSubject(); // Call the fetch function
-    getImages(); // Call the function to fetch images
-  }, [subjectId, studentId]);
-  
+  const onFileChange = (event) => {
+    setSelectedFile(event.target.files[0]); // Update selected file
+  };
+
+  const clearFileInput = () => {
+    // Clear the file input by setting selectedFile to null
+    setSelectedFile(null);
+  };
   
   const onFileUpload = async () => {
-    try {
-      const formData = new FormData();
-      formData.append('imagefile', selectedFile, selectedFile.name);
-      formData.append('studentId', studentId);
-      formData.append('homeworkId', homeworkId);
-  
-      const response = await axios.post(`http://localhost:4000/api/images/${homeworkId}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
-      if (response.data && response.data.length > 0) {
-        const uploadedImage = response.data[0]; // Take only the first uploaded image
-        const newImage = {
-          id: uploadedImage.id,
-          src: `http://localhost:4000/${uploadedImage.imagefile}`,
-          alt: "Uploaded"
-        };
-  
-        setImages([...images, newImage]); // Add only the uploaded image
-        setHomeworkCompleted(prevState => ({
-          ...prevState,
-          [homeworkId]: true,
-        }));
-      }
-    } catch (error) {
-      console.error('Error uploading image:', error);
+    if (!selectedFile || !homeworkId) { // Check if homeworkId is set
+        console.error('No file selected or homeworkId not set');
+        return;
     }
-  };
+
+    try {
+        const formData = new FormData();
+        formData.append('imagefile', selectedFile, selectedFile.name);
+        formData.append('studentId', studentId);
+        formData.append('homeworkId', homeworkId);
+
+        // Log the form data
+        console.log('Form Data:', Object.fromEntries(formData.entries())); // Convert FormData to plain object and log
+
+        // Log the URL with appended homeworkId
+        const uploadUrl = `http://localhost:4000/api/images/${homeworkId}`;
+        console.log("Upload URL:", uploadUrl);
+
+        const response = await axios.post(uploadUrl, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+
+        if (response.data) {
+            console.log("Response data:", response.data); // Log the response data
+
+            // Extract the filenames from the response data
+            const uploadedFilenames = response.data.map(item => {
+                if (item && item.image_data) {
+                    // Convert the array to a Uint8Array and then to a string
+                    const filename = new TextDecoder().decode(new Uint8Array(item.image_data.data));
+                    return filename;
+                } else {
+                    console.error("Error: imagefile not found in response data");
+                    return null; // or any other default value
+                }
+            });
+
+            // Log the uploaded filenames
+            console.log("Uploaded filenames:", uploadedFilenames);
+
+            // Iterate over the uploaded filenames
+            uploadedFilenames.forEach((uploadedFilename, index) => {
+                // Create new image object for each uploaded filename
+                const newImage = {
+                    id: index + 1, // or you might have another way to generate the ID
+                    src: uploadedFilename ? `http://localhost:4000/img/${uploadedFilename}` : "",
+                    alt: "Uploaded"
+                };
+
+                // Log the new image object
+                console.log("New image:", newImage);
+
+                // Update the images state with the new image
+                setImages(prevImages => [...prevImages, newImage]);
+            });
+
+            // Update homework completed state
+            setHomeworkCompleted(prevState => ({
+                ...prevState,
+                [homeworkId]: true,
+            }));
+        }
+
+        clearFileInput();
+    } catch (error) {
+        console.error('Error uploading image:', error);
+    }
+};
+
+
+
+
+
+  
+  
   
   
   
@@ -258,28 +288,37 @@ function Subject({ studentId }) {
           </div>
         </div>
 
-        <div>
-        <form onSubmit={handleSubmit}>
-          <label>
-            Assignment:
-            <input type="text" value={assignment} onChange={(e) => setAssignment(e.target.value)} />
-          </label>
-          <label>
-            Description:
-            <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
-          </label>
-          <label>
-            Due Date:
-            <input type="text" value={dueDate} onChange={handleDueDateChange} />
-          </label>
-          <span style={{ color: 'red' }}>{errorMessage}</span>
-          <label>
-            Priority:
-            <input type="text" value={priority} onChange={(e) => setPriority(e.target.value)} />
-          </label>
-          <button type="submit" className='homework-submit'>Add Homework</button>
-        </form>
-      </div>
+        <div className='homework-add-form'>
+          <form onSubmit={handleSubmit}>
+            <label>
+              Assignment:
+              <input type="text" value={assignment} onChange={(e) => setAssignment(e.target.value)} className="input-field" />
+            </label>
+            <label>
+              Description:
+              <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} className="input-field" />
+            </label>
+            <label>
+              Due Date:
+              <input type="text" value={dueDate} onChange={handleDueDateChange} className="input-field" />
+            </label>
+            <span style={{ color: 'red' }}>{errorMessage}</span>
+            <label>
+              Priority:
+              <select
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
+                className="input-field"
+              >
+                <option value="">Select Priority</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+            </label>
+            <button type="submit" className='homework-submit'>Add Homework</button>
+          </form>
+        </div>
 
       
         <table className="homework-table-container">
@@ -321,23 +360,25 @@ function Subject({ studentId }) {
                     </div>
                   </td>
                   <td>
-                    <div className="table-cell">
-                      {showUpload && hw.id === homeworkId && (
-                        <div>
-                          <p>Select homework to upload:</p>
-                          <input type="file" onChange={onFileChange} />
-                          <button onClick={onFileUpload}>Upload</button>
-                          {/* Displaying uploaded images */}
-                          <div className='homework-image'>
-                            {images.map(img => (
-                              <img key={img.id} src={img.src} alt={img.alt} />
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      <button className="btn btn-danger" onClick={() => deleteHomework(hw.id)}>Delete</button>
-                    </div>
-                  </td>
+  <div className="table-cell">
+    {showUpload && hw.id === homeworkId && (
+      <div>
+        <p>Select homework to upload:</p>
+        <input type="file" onChange={onFileChange} />
+        <button onClick={onFileUpload}>Upload</button>
+        {/* Displaying uploaded images */}
+        <div className='homework-image'>
+          {images
+            .filter(image => image.homework_id === homeworkId) // Filter images for the current homework
+            .map(image => (
+              <img key={image.image_id} src={`http://localhost:4000/img/${image.filename}`} alt={image.alt} />
+            ))}
+        </div>
+      </div>
+    )}
+    <button className="btn btn-danger" onClick={() => deleteHomework(hw.id)}>Delete</button>
+  </div>
+</td>
                 </tr>
               ))}
 
