@@ -7,8 +7,7 @@ import PencilSVG from '../assets/pencil.svg'; // Import the pencil SVG
 // Import other icons
 import { BulbSVG, StarSVG, MagnifySVG, ArrowSVG } from './Icons'; // Changed the import path
 import axios from "axios";
-import Subject from "./Subject";
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard({ userData }) { // receiving the userdata as prop
   //refactoring the subjects state variable to take in the data from the GET subjects endpoint
