@@ -191,89 +191,45 @@ function Subject({ studentId }) {
     setSelectedFile(null);
   };
   
-  const onFileUpload = async () => {
-    if (!selectedFile || !homeworkId) { // Check if homeworkId is set
-        console.error('No file selected or homeworkId not set');
-        return;
-    }
 
-    try {
-        const formData = new FormData();
-        formData.append('imagefile', selectedFile, selectedFile.name);
-        formData.append('studentId', studentId);
-        formData.append('homeworkId', homeworkId);
+const onFileUpload = async () => {
+  if (!selectedFile || !homeworkId) {
+      console.error('No file selected or homeworkId not set');
+      return;
+  }
 
-        // Log the form data
-        console.log('Form Data:', Object.fromEntries(formData.entries())); // Convert FormData to plain object and log
+  try {
+      const formData = new FormData();
+      formData.append('imagefile', selectedFile, selectedFile.name);
+      formData.append('studentId', studentId);
+      formData.append('homeworkId', homeworkId);
 
-        // Log the URL with appended homeworkId
-        const uploadUrl = `http://localhost:4000/api/images/${homeworkId}`;
-        console.log("Upload URL:", uploadUrl);
+      const uploadUrl = `http://localhost:4000/api/images/${homeworkId}`;
+      const response = await axios.post(uploadUrl, formData, {
+          headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': `Bearer ${localStorage.getItem("token")}`,
+          },
+      });
 
-        const response = await axios.post(uploadUrl, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': `Bearer ${localStorage.getItem("token")}`,
-            },
-        });
+      if (response.data) {
+          const newImages = response.data.map((item, index) => ({
+              id: index + 1,
+              src: item && item.image_data ? `http://localhost:4000/img/${new TextDecoder().decode(new Uint8Array(item.image_data.data))}` : "",
+              alt: "Uploaded"
+          }));
+          setImages(prevImages => [...prevImages, ...newImages]);
+          setHomeworkCompleted(prevState => ({ ...prevState, [homeworkId]: true }));
+      }
 
-        if (response.data) {
-            console.log("Response data:", response.data); // Log the response data
-
-            // Extract the filenames from the response data
-            const uploadedFilenames = response.data.map(item => {
-                if (item && item.image_data) {
-                    // Convert the array to a Uint8Array and then to a string
-                    const filename = new TextDecoder().decode(new Uint8Array(item.image_data.data));
-                    return filename;
-                } else {
-                    console.error("Error: imagefile not found in response data");
-                    return null; // or any other default value
-                }
-            });
-
-            // Log the uploaded filenames
-            console.log("Uploaded filenames:", uploadedFilenames);
-
-            // Iterate over the uploaded filenames
-            uploadedFilenames.forEach((uploadedFilename, index) => {
-                // Create new image object for each uploaded filename
-                const newImage = {
-                    id: index + 1, // or you might have another way to generate the ID
-                    src: uploadedFilename ? `http://localhost:4000/img/${uploadedFilename}` : "",
-                    alt: "Uploaded"
-                };
-
-                // Log the new image object
-                console.log("New image:", newImage);
-
-                // Update the images state with the new image
-                setImages(prevImages => [...prevImages, newImage]);
-            });
-
-            // Update homework completed state
-            setHomeworkCompleted(prevState => ({
-                ...prevState,
-                [homeworkId]: true,
-            }));
-        }
-
-        clearFileInput();
-    } catch (error) {
-        console.error('Error uploading image:', error);
-    }
+      clearFileInput();
+  } catch (error) {
+      console.error('Error uploading image:', error);
+  }
 };
 
 
 
-
-
-  
-  
-  
-  
-  
-  
 
   return (
     <div>
@@ -336,8 +292,8 @@ function Subject({ studentId }) {
           {homework
             .slice()
             .sort((a, b) => new Date(a.due_date) - new Date(b.due_date))
-            .map((hw) => ( // Remove index parameter
-              <tr key={hw.id}> {/* Use hw.id as the key */}
+            .map((hw) => (
+              <tr key={hw.id}>
                   <td>
                     <div className="table-cell">{hw.assignment}</div>
                   </td>
@@ -360,25 +316,31 @@ function Subject({ studentId }) {
                     </div>
                   </td>
                   <td>
-  <div className="table-cell">
-    {showUpload && hw.id === homeworkId && (
-      <div>
-        <p>Select homework to upload:</p>
-        <input type="file" onChange={onFileChange} />
-        <button onClick={onFileUpload}>Upload</button>
-        {/* Displaying uploaded images */}
-        <div className='homework-image'>
-          {images
-            .filter(image => image.homework_id === homeworkId) // Filter images for the current homework
-            .map(image => (
-              <img key={image.image_id} src={`http://localhost:4000/img/${image.filename}`} alt={image.alt} />
-            ))}
-        </div>
-      </div>
-    )}
-    <button className="btn btn-danger" onClick={() => deleteHomework(hw.id)}>Delete</button>
-  </div>
-</td>
+                    <div className="table-cell">
+                      {showUpload && hw.id === homeworkId && (
+                        <div>
+                          <p>Select homework to upload:</p>
+                          <input type="file" onChange={onFileChange} />
+                          
+                          <button onClick={onFileUpload}>Upload</button>
+                          {/* Displaying uploaded images */}
+                          <div className="homework-image">
+                          {images
+                            .filter(image => {
+                              console.log('Filtered Image:', image);
+                              return image.id === hw.id;
+                            })
+                            .map(image => (
+                              <img key={image.id} src={image.src} alt={image.alt} />
+                            ))}
+
+                          </div>
+
+                        </div>
+                      )}
+                      <button className="btn btn-danger" onClick={() => deleteHomework(hw.id)}>Delete</button>
+                    </div>
+                  </td>
                 </tr>
               ))}
 

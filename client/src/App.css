@@ -494,6 +494,11 @@ button.today{
     margin: 5px;
     font-family: 'Adumu', sans-serif;
   }
+
+  .homework-image img {
+    max-width: 100%;
+    max-height: 100%;
+  }
  /* -----logout button----- */
   
  .logout {
