@@ -4,7 +4,7 @@
 
 ## Project Objectives
 
-- Create a user-friendly homework platform.
+- Create a user-friendly homework platform. That enables children to organize their school task, homework, upcoming exams and more.
 
 ## Technologies
 
